@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype>
+  <id>GWT</id>
+  <sources>
+    <source>src\main\java\client\GreetingService.java</source>
+    <source>src\main\java\client\__module__.java</source>
+    <source>src\main\java\server\GreetingServiceImpl.java</source>
+    <source>src\main\java\shared\FieldVerifier.java</source>
+  </sources>
+  <testSources>
+    <source>src\test\java\client\__module__Test.java</source>
+    <source>src\test\resources\__module__JUnit.gwt.xml</source>
+  </testSources>
+  <resources>
+    <resource>src\main\resources\__module__.gwt.xml</resource>
+    <resource>src\main\resources\client\Messages.properties</resource>
+    <resource>src\main\resources\client\Messages_fr.properties</resource>
+    <resource>src\main\webapp\WEB-INF\web.xml</resource>
+    <resource>.classpath</resource>
+    <resource>.project</resource>
+    <resource>.settings\.jsdtscope</resource>
+    <resource>.settings\com.google.gdt.eclipse.core.prefs</resource>
+    <resource>.settings\com.google.gwt.eclipse.core.prefs</resource>
+    <resource>.settings\org.eclipse.jdt.core.prefs</resource>
+    <resource>.settings\org.eclipse.wst.common.component</resource>
+    <resource>.settings\org.eclipse.wst.common.project.facet.core.xml</resource>
+    <resource>.settings\org.eclipse.wst.jsdt.ui.superType.container</resource>
+    <resource>.settings\org.maven.ide.eclipse.prefs</resource>
+    <resource>__module__.launch</resource>
+    <resource>__module__.properties</resource>
+    <resource>__module__Test-dev.launch</resource>
+    <resource>__module__Test-prod.launch</resource>
+  </resources>
+</archetype>

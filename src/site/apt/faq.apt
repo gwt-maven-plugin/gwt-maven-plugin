@@ -1,0 +1,31 @@
+ ---
+ Maven 2 GWT Plugin F.A.Q.
+ ---
+ ---
+
+Frequently Asked Questions
+
+* Do I need GWT SDK on my computer to use the plugin ?
+
+  No. The plugin uses maven dependency management to get the required libraries and native components depending on
+  your operating system
+
+* How to set the version of GWT to compile my project ?
+
+  gwt-maven-plugin is tied to a version of GWT SDK. gwt-maven-plugin must match the GWT DSK version.
+  To use Maven with GWT release prior to GWT 2.1, use gwt-maven-plugin 1.2 and read the documentation. 
+
+* Is there any official Google support for maven ?
+
+  GWT guys don't use Maven by themselves but are interested by our work to provide community support. They helped us to make
+  the plugin work with the GWT SDK release candidates.
+
+* I get strange NoSuchMethodError running my application unit tests !
+
+  <<<gwt-dev>>> JAR includes many libraries, including some Apache commons-*. You may use such libs
+  in your project with other recent version. Don't define <<<gwt-dev>>> as a dependency, the plugin will resolve it when
+  necessary for you based on your <<<gwt-user>>> version.
+
+  Some user report same errors as <<<gwt-dev>>> also include and Eclipse JDT compiler. A way to detect this issue is to
+  run mvn dependency:tree and look for any org.eclipse.jdt artifacts listed (GWT's is in the gwt-dev jar added by the
+  <<<gwt:compile>>> task itself) - then exclude it from whichever artifact is bringing it in.

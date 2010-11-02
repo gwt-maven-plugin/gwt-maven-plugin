@@ -1,0 +1,94 @@
+ ------
+ GWT productivity tip for multi-project setup
+ ------
+ Jesper Terkelsen
+ ------
+
+
+Productivity tip for multi-project setup
+
+* Introduction
+
+  Consider the following project setup
+
+  * api (jar) - GWT library
+
+  * gui (war) - GWT gui with endpoint that uses the library.
+
+
+  With this layout, any change to the api (gwt library) must be repackaged as a JAR and the hosted mode
+  must be restarted to see the change in the hosted browser.
+
+  The following tip explains how to use the build-helper-maven-plugin to improve productivity and
+  hack the multi-project wall between modules.
+
+* Build helper
+
+  {{{http://mojo.codehaus.org/build-helper-maven-plugin}Build-helper-maven-plugin}} allow you to setup
+  additional source folders for your project. The idea here is to declare the api source folder to make
+  it "visible" from the war project / hosted mode browser.
+
+  If you add a source path with the build-helper-maven-plugin directly in the gui's pom you will
+  possibly have problems because of 2 issues.
+
+  * At least my IDE (Netbeans) cannot have two open projects that share the same source path.
+    The api module will loose its src/java in the user interface, and the gui will get one ekstra "generated sources" path, this is quite annoying.
+
+  * Because there is no guarantee on how the developer will checkout the code, the gui's pom cannot
+    guess where the api's <<<src/main/java>>> is on the disk.
+
+* Solution
+
+  The solution to those two issues is to create a profile in your pom (or settings.xml)
+  which is only activated when you run the <<<gwt:run>>> target :
+
++---
+<profile>
+   <id>dev</id>
+   <build>
+       <plugins>
+           <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>build-helper-maven-plugin</artifactId>
+               <version>1.4</version>
+               <executions>
+                   <execution>
+                       <id>add-source</id>
+                       <phase>generate-sources</phase>
+                       <goals>
+                           <goal>add-source</goal>
+                       </goals>
+                       <configuration>
+                           <sources>
+                               <source>../api/src/main/java</source>
+                           </sources>
+                       </configuration>
+                   </execution>
+                   <execution>
+                       <id>add-resource</id>
+                       <phase>generate-sources</phase>
+                       <goals>
+                           <goal>add-resource</goal>
+                       </goals>
+                       <configuration>
+                           <resources>
+                               <resource>
+                                   <directory>../api/src/main/resources</directory>
+                                   <targetPath>resources</targetPath>
+                               </resource>
+                           </resources>
+                       </configuration>
+                   </execution>
+               </executions>
+           </plugin>
+       </plugins>
+   </build>
+</profile>
+
++---
+
+  You can then test in development mode and edit files in multible projects by running:
+
+  {{mvn gwt:run -Pdev}}
+
+  In Netbeans it is possible to save such a run target in the user interface.

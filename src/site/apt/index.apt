@@ -1,0 +1,40 @@
+ ------
+ Introduction
+ ------
+ ------
+
+User's Guide
+
+ Welcome to the {{{http://code.google.com/intl/fr/webtoolkit/}Google Web Toolkit}} Maven Plugin
+ User Guide. This documentation will drive you to setup you GWT web application development
+ using Maven as build tool. This guide covers project organisation and setup, integration with
+ development environment, and running GWT SDK tools from maven command line.
+
+ If you're new to GWT or Maven, you miught want to first read the
+ {{{http://code.google.com/intl/fr/webtoolkit/overview.html}GWT documentation}} and get more
+ familiar with Maven by reading at least its
+ {{{http://maven.apache.org/guides/getting-started/index.html}getting started guide}}
+ or by reading the online
+ {{{http://www.sonatype.com/books/mvnref-book/reference/public-book.html}reference book}}.
+
+ * {{{./whats_new.html}What's new in 2.1 ?}}
+
+ * {{{./archetype.html}Using the archetype}}
+
+ * {{{./project.html}Organize project}}
+
+ * {{{./compile.html}Compile and Debug}}
+
+ * {{{./i18n.html}Internationalization}}
+
+ * {{{./testing.html}Testing Support}}
+
+ * {{{./hosted.html}Hosted Mode}}
+
+  * {{{user-guide/async.html}Generate Async interfaces for GWT-RPC}}
+
+ * {{{./plugin-info.html}Goals and Parameters Reference}}
+
+ * {{{./faq.html}Frequently Asked Questions}}
+
+

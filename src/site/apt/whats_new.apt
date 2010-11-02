@@ -1,0 +1,14 @@
+ ------
+ What's new
+ ------
+ ------
+
+What's new in gwt-maven-plugin 2.1
+
+ 1.x releases of gwt-maven-plugin where not tied to a GWT SDK release. This had the benefict that we didn't 
+ have to release the plugin for each minor GWT SDK release, but from GWT 1.4 to GWT 2.0 many options have
+ changed in the SDK and the plugin was more and more complex.
+ 
+ Starting with 2.1.x releases, the gwt-maven-plugin is tied to a GWT release. Google Web Toolkit Team is 
+ activelly collaborating to make GWT and Maven work better together, so it will be easier for us to integrate
+ ehnacements and new features in the plugin and release the plugin few days after a new SDK is out.
