@@ -21,10 +21,13 @@ package org.codehaus.mojo.gwt.shell;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.List;
+
+import junit.textui.TestRunner;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -278,6 +281,8 @@ public class TestMojo
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );
         classpath.add( getClassPathElementFor( ReporterManager.class ) );
+        // MGWT-232 olamy : add automatically gwt-dev jar in the classpath
+        classpath.add( getGwtDevJar() );
     }
 
     /**
@@ -293,7 +298,9 @@ public class TestMojo
             cl = getClass().getClassLoader();
         }
         URL url = cl.getResource( classFile );
+        getLog().debug( "getClassPathElementFor " + clazz.getName() + " file " + url.toString() );
         String path = url.toString();
+    
         if ( path.startsWith( "jar:" ) )
         {
             path = path.substring( 4, path.indexOf( "!" ) );
@@ -305,8 +312,12 @@ public class TestMojo
         if ( path.startsWith( "file:" ) )
         {
             path = path.substring( 5 );
+            // windauze hack with maven 3 we get those !
+            path = path.replace( "%20", " " );
         }
-        return new File( path );
+        File file = new File( path );
+        getLog().debug( "getClassPathElementFor " + clazz.getName() + " file " + file.getPath() );
+        return file;
     }
 
     /**
@@ -317,7 +328,7 @@ public class TestMojo
     protected ClassLoader getProjectClassLoader()
         throws DependencyResolutionRequiredException, MalformedURLException
     {
-        getLog().debug( "AbstractMojo#getProjectClassLoader()" );
+        getLog().debug( "TestMojo#getProjectClassLoader()" );
 
         List<?> compile = getProject().getCompileClasspathElements();
         URL[] urls = new URL[compile.size()];

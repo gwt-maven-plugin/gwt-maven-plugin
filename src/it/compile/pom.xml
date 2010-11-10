@@ -27,32 +27,34 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.1</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
       </plugin>
-       <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>gwt-maven-plugin</artifactId>
-    <version>@pom.version@</version>
-    <configuration>
-      <inplace>true</inplace>
-      <logLevel>INFO</logLevel>
-      <style>OBF</style>
-	  <draftCompile>true</draftCompile>
-    </configuration>
-    <executions>
-      <execution>
-      <goals>
-        <goal>generateAsync</goal>
-        <goal>compile</goal>
-        <goal>mergewebxml</goal>
-      </goals>
-      </execution>
-    </executions>
-    </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <configuration>
+          <inplace>true</inplace>
+          <logLevel>INFO</logLevel>
+          <style>OBF</style>
+          <draftCompile>true</draftCompile>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generateAsync</goal>
+              <goal>compile</goal>
+              <goal>mergewebxml</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
