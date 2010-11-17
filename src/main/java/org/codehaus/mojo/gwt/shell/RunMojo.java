@@ -21,8 +21,12 @@ package org.codehaus.mojo.gwt.shell;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -166,6 +170,22 @@ public class RunMojo
      */
     private boolean copyWebapp;    
 
+    /**
+     * set the appengine sdk to use
+     * @parameter 
+     * @since 2.1.1
+     */
+    private String appEngineVersion;
+    
+    /**
+     * <p>
+     * List of {@link Pattern} jars to exclude from the classPath when running
+     * dev mode
+     * </p>
+     * @parameter 
+     * @since 2.1.1
+     */
+    private List<String> runClasspathExcludes;
 
     public String getRunTarget()
     {
@@ -299,6 +319,52 @@ public class RunMojo
 
         cmd.execute();
     }
+    
+    @Override
+    protected void postProcessClassPath( Collection<File> classPath )
+    {
+        boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
+        List<Pattern> patternsToExclude = new ArrayList<Pattern>();
+        if (runClasspathExcludes != null && !runClasspathExcludes.isEmpty() )
+        {
+            for (String runClasspathExclude : runClasspathExcludes )
+            {
+                patternsToExclude.add( Pattern.compile( runClasspathExclude ) );
+            }
+        }
+        Iterator<File> it = classPath.iterator();
+        while ( it.hasNext() )
+        {
+            String name = it.next().getName();
+            if (!patternsToExclude.isEmpty())
+            {
+                for (Pattern pattern : patternsToExclude)
+                {
+                    if ( pattern.matcher( name ).find() )
+                    {
+                        it.remove();
+                        continue;
+                    }
+                }
+            }
+
+        }
+        if ( isAppEngine )
+        {
+            try
+            {
+                // force addition of appengine SDK in exploded SDK repository location
+                Artifact appEngineSdk = resolve( "com.google.appengine", "appengine-java-sdk", appEngineVersion, "zip", "" );
+                File dir = appEngineSdk.getFile().getParentFile();
+                classPath.add( new File( dir, "appengine-java-sdk-"+ appEngineVersion + "/lib/appengine-tools-api.jar" ) );
+                classPath.add( new File( dir, "appengine-java-sdk-"+ appEngineVersion + "/lib/impl/appengine-local-runtime.jar" ) );
+            }
+            catch ( MojoExecutionException e )
+            {
+                e.printStackTrace();
+            }
+        }
+    }    
 
     private void setupExplodedWar()
         throws MojoExecutionException
