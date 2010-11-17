@@ -133,7 +133,7 @@ public abstract class AbstractGwtMojo
      *
      * @parameter default-value="${basedir}/src/main/webapp"
      */
-    private File warSourceDirectory;
+    protected File warSourceDirectory;
 
     /**
      * Select the place where GWT application is built. In <code>inplace</code> mode, the warSourceDirectory is used to

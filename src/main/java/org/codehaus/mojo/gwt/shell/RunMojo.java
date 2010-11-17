@@ -155,6 +155,16 @@ public class RunMojo
      * @since 1.2
      */
     private Map<String, String> systemProperties;
+    
+    /**
+     * Copies the contents of warSourceDirectory to hostedWebapp.
+     * <p>
+     * Can be set from command line using '-Dgwt.copyWebapp=...'
+     * </p>
+     * @parameter default-value="false" expression="${gwt.copyWebapp}"
+     * @since 2.1.1
+     */
+    private boolean copyWebapp;    
 
 
     public String getRunTarget()
@@ -295,6 +305,18 @@ public class RunMojo
     {
         getLog().info( "create exploded Jetty webapp in " + hostedWebapp );
 
+        if ( copyWebapp && !warSourceDirectory.getAbsolutePath().equals( hostedWebapp.getAbsolutePath() ) )
+        {
+            try
+            {
+                FileUtils.copyDirectoryStructure( warSourceDirectory, hostedWebapp );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Failed to copy warSourceDirectory to " + hostedWebapp, e );
+            }
+        }        
+        
         File classes = new File( hostedWebapp, "WEB-INF/classes" );
         classes.mkdirs();
 
