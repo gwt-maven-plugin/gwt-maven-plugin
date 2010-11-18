@@ -53,7 +53,9 @@
         <configuration>
           <logLevel>INFO</logLevel>
           <runTarget>gwt.Application/Application.html</runTarget>
+          <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
           <soyc>false</soyc>
+          <hostedWebapp>src/main/webapp</hostedWebapp>
         </configuration>
         <executions>
           <execution>

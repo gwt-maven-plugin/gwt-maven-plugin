@@ -297,7 +297,7 @@
                 <goal>integration-test</goal>
               </goals>
               <settingsFile>src/it/settings.xml</settingsFile>
-              <cloneProjectsTo>${project.build.directory}/integration tests</cloneProjectsTo>
+              <cloneProjectsTo>${project.build.directory}/it-tests</cloneProjectsTo>
             </configuration>
             <executions>
               <execution>

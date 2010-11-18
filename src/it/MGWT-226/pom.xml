@@ -16,7 +16,6 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- deployed locally from revision 12957 -->
     <gwt-maven-plugin.version>@pom.version@</gwt-maven-plugin.version>
   </properties>
 

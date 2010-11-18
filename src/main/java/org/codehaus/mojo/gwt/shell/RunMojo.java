@@ -32,6 +32,10 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.UnArchiver;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -172,7 +176,11 @@ public class RunMojo
 
     /**
      * set the appengine sdk to use
-     * @parameter 
+     * <p>
+     * Artifact will be downloaded with groupId : {@link #appEngineGroupId} 
+     * and artifactId {@link #appEngineArtifactId}
+     * <p>
+     * @parameter default-value="1.3.8" expression="${gwt.appEngineVersion}"
      * @since 2.1.1
      */
     private String appEngineVersion;
@@ -186,6 +194,41 @@ public class RunMojo
      * @since 2.1.1
      */
     private List<String> runClasspathExcludes;
+    
+    /**
+     * <p>
+     * Location to find appengine sdk or to unzip downloaded one see {@link #appEngineVersion}
+     * </p>
+     * @parameter default-value="${project.build.directory}/appengine-sdk/" expression="${gwt.appEngineHome}"
+     * @since 2.1.1
+     */    
+    private File appEngineHome;
+    
+    /**
+     * <p>
+     * groupId to download appengine sdk from maven repo
+     * </p>
+     * @parameter default-value="com.google.appengine" expression="${gwt.appEngineGroupId}"
+     * @since 2.1.1
+     */    
+    private String appEngineGroupId;
+    
+    /**
+     * <p>
+     * groupId to download appengine sdk from maven repo
+     * </p>
+     * @parameter default-value="appengine-java-sdk" expression="${gwt.appEngineArtifactId}"
+     * @since 2.1.1
+     */    
+    private String appEngineArtifactId;    
+    
+    
+    /**
+     * To look up Archiver/UnArchiver implementations
+     *  @since 2.1.1
+     * @component
+     */
+    protected ArchiverManager archiverManager;
 
     public String getRunTarget()
     {
@@ -319,15 +362,19 @@ public class RunMojo
 
         cmd.execute();
     }
-    
+
     @Override
     protected void postProcessClassPath( Collection<File> classPath )
     {
         boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
-        List<Pattern> patternsToExclude = new ArrayList<Pattern>();
-        if (runClasspathExcludes != null && !runClasspathExcludes.isEmpty() )
+        if ( !isAppEngine )
         {
-            for (String runClasspathExclude : runClasspathExcludes )
+            return;
+        }
+        List<Pattern> patternsToExclude = new ArrayList<Pattern>();
+        if ( runClasspathExcludes != null && !runClasspathExcludes.isEmpty() )
+        {
+            for ( String runClasspathExclude : runClasspathExcludes )
             {
                 patternsToExclude.add( Pattern.compile( runClasspathExclude ) );
             }
@@ -336,12 +383,13 @@ public class RunMojo
         while ( it.hasNext() )
         {
             String name = it.next().getName();
-            if (!patternsToExclude.isEmpty())
+            if ( !patternsToExclude.isEmpty() )
             {
-                for (Pattern pattern : patternsToExclude)
+                for ( Pattern pattern : patternsToExclude )
                 {
                     if ( pattern.matcher( name ).find() )
                     {
+                        getLog().info( "remove jar " + name + " from system classpath" );
                         it.remove();
                         continue;
                     }
@@ -349,22 +397,84 @@ public class RunMojo
             }
 
         }
+        // TODO refactor this a little 
         if ( isAppEngine )
         {
-            try
+            File appEngineToolsApi = new File( appEngineHome, "/lib/appengine-tools-api.jar" );
+            File appEngineLocalRuntime = new File( appEngineHome, "/lib/impl/appengine-local-runtime.jar" );
+            File appEngineAgent = new File( appEngineHome, "/lib/agent/appengine-agent.jar" );
+            if ( appEngineHome.exists() && appEngineToolsApi.exists() && appEngineLocalRuntime.exists()
+                && appEngineAgent.exists() )
             {
-                // force addition of appengine SDK in exploded SDK repository location
-                Artifact appEngineSdk = resolve( "com.google.appengine", "appengine-java-sdk", appEngineVersion, "zip", "" );
-                File dir = appEngineSdk.getFile().getParentFile();
-                classPath.add( new File( dir, "appengine-java-sdk-"+ appEngineVersion + "/lib/appengine-tools-api.jar" ) );
-                classPath.add( new File( dir, "appengine-java-sdk-"+ appEngineVersion + "/lib/impl/appengine-local-runtime.jar" ) );
+                classPath.add( appEngineToolsApi );
+                classPath.add( appEngineLocalRuntime );
+                classPath.add( appEngineAgent );
             }
-            catch ( MojoExecutionException e )
+            else
             {
-                e.printStackTrace();
+                try
+                {
+                    if ( !appEngineHome.exists() )
+                    {
+                        appEngineHome.mkdirs();
+                        // force addition of appengine SDK in exploded SDK repository location
+                        Artifact appEngineSdk =
+                            resolve( appEngineGroupId, appEngineArtifactId, appEngineVersion, "zip", "" );
+                        // sdk extraction
+                        UnArchiver unArchiver = archiverManager.getUnArchiver( appEngineSdk.getFile() );
+                        unArchiver.setSourceFile( appEngineSdk.getFile() );
+                        unArchiver.setDestDirectory( appEngineHome );
+                        getLog().info( "extract appengine " + appEngineVersion + " sdk to " + appEngineHome.getPath() );
+                        unArchiver.extract();
+                    }
+                    else
+                    {
+                        getLog().info( "use existing appengine sdk from " + appEngineHome.getPath() );
+                    }
+                    appEngineToolsApi =
+                        new File( appEngineHome, "appengine-java-sdk-" + appEngineVersion
+                            + "/lib/appengine-tools-api.jar" );
+                    if ( !appEngineToolsApi.exists() )
+                    {
+                        throw new RuntimeException( appEngineToolsApi.getPath() + " not exists" );
+                    }
+                    classPath.add( appEngineToolsApi );
+                    getLog().debug( "add " + appEngineToolsApi.getPath() + " to the classpath" );
+
+                    appEngineLocalRuntime =
+                        new File( appEngineHome, "appengine-java-sdk-" + appEngineVersion
+                            + "/lib/impl/appengine-local-runtime.jar" );
+                    if ( !appEngineLocalRuntime.exists() )
+                    {
+                        throw new RuntimeException( appEngineLocalRuntime.getPath() + " not exists" );
+                    }
+                    classPath.add( appEngineLocalRuntime );
+                    getLog().debug( "add " + appEngineLocalRuntime.getPath() + " to the classpath" );
+
+                    appEngineAgent =
+                        new File( appEngineHome, "appengine-java-sdk-" + appEngineVersion
+                            + "/lib/agent/appengine-agent.jar" );
+                    classPath.add( appEngineAgent );
+                    getLog().debug( "add " + appEngineAgent.getPath() + " to the classpath" );
+                }
+                catch ( MojoExecutionException e )
+                {
+                    // FIXME add throws MojoExecutionException in postProcessClassPath
+                    throw new RuntimeException( e.getMessage(), e );
+                }
+                catch ( ArchiverException e )
+                {
+                    // FIXME add throws MojoExecutionException in postProcessClassPath
+                    throw new RuntimeException( e.getMessage(), e );
+                }
+                catch ( NoSuchArchiverException e )
+                {
+                    // FIXME add throws MojoExecutionException in postProcessClassPath
+                    throw new RuntimeException( e.getMessage(), e );
+                }
             }
         }
-    }    
+    }  
 
     private void setupExplodedWar()
         throws MojoExecutionException
