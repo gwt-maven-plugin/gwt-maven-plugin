@@ -225,10 +225,21 @@ public class RunMojo
     
     /**
      * To look up Archiver/UnArchiver implementations
-     *  @since 2.1.1
+     * @since 2.1.1
      * @component
      */
     protected ArchiverManager archiverManager;
+    
+    
+    
+     /**
+     * Set GWT shell bindAddress.
+     * <p>
+     * Can be set from command line using '-Dgwt.bindAddress=...'
+     *
+     * @parameter expression="${gwt.bindAddress}"
+     */
+    private String bindAddress;    
 
     public String getRunTarget()
     {
@@ -344,6 +355,11 @@ public class RunMojo
                     getLog().info( "skip sysProps " + key + " with empty value" );
                 }
             }
+        }
+        
+        if ( bindAddress != null && bindAddress.length() > 0 )
+        {
+            cmd.arg( "-bindAddress" ).arg( bindAddress );
         }
 
         if ( !noServer )
