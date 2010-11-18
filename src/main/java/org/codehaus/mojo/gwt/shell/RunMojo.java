@@ -236,7 +236,7 @@ public class RunMojo
      * Set GWT shell bindAddress.
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
-     *
+     * @since 2.1.1
      * @parameter expression="${gwt.bindAddress}"
      */
     private String bindAddress;    
