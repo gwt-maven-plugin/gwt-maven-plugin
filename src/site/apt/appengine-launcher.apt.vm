@@ -54,7 +54,8 @@ Lauch your application in dev mode with AppEngine launcher
 </project>
 +--  
 
-  You can use an already locally installed appengine-sdk
+  You can use an already locally installed appengine-sdk.
+  The recommended way is to use a property and to set the value in your settings.xml
   
 +--
 <project>
@@ -67,7 +68,7 @@ Lauch your application in dev mode with AppEngine launcher
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <appEngineHome>/foo/bar/appengine-sdk-1.3.4</appEngineHome>
+          <appEngineHome>${appEngineSdk}</appEngineHome>
         </configuration>
       </plugin>
       [...]
