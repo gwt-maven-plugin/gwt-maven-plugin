@@ -50,6 +50,7 @@ under the License.
       <item name="Async interfaces" href="user-guide/async.html"/>
       <item name="Comfortable debugging" href="user-guide/comfortable_debugging.html"/>
 	  <item name="Productivity Tips" href="user-guide/productivity.html"/>
+      <item name="Using app Engine launcher in dev mode" href="appengine-launcher.html"/>
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>
