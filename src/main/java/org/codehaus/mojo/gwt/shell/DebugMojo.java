@@ -37,14 +37,14 @@ public class DebugMojo
     /**
      * Port to listen for debugger connection on.
      * 
-     * @parameter default-value="8000"
+     * @parameter default-value="8000" expression="${gwt.debugPort}"
      */
     private int debugPort;
 
     /**
      * Whether or not to suspend execution until a debugger connects.
      *
-     * @parameter default-value="true"
+     * @parameter default-value="true" expression="${gwt.debugSuspend}"
      */
     private boolean debugSuspend;
 
@@ -78,9 +78,9 @@ public class DebugMojo
     {
         String extras = super.getExtraJvmArgs();
         extras += " -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket";
-        extras += ",server=" + ( attachDebugger ? "n " : "y" );
+        extras += ",server=" + ( attachDebugger ? "n" : "y" );
         extras += ",address=" + debugPort;
-        extras += ",suspend=" + ( debugSuspend ? "y " : "n " );
+        extras += ",suspend=" + ( debugSuspend ? "y" : "n" );
         return extras;
     }
 
