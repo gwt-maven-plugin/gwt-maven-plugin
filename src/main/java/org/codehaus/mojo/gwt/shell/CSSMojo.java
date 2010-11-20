@@ -113,7 +113,7 @@ public class CSSMojo
                 
                 if ( content.length() == 0 )
                 {
-                    throw new MojoExecutionException( "Could not find " + file + " in any resource path." );
+                    throw new MojoExecutionException( "cannot generate java source from file " + file + "." );
                 }
             }
         }
