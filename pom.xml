@@ -71,7 +71,7 @@
   <mailingLists>
     <mailingList>
       <name>gwt-maven-plugin User List</name>
-      <subscribe>codehaus-mojo-gwt-maven-plugin-users-subscribe@googlegroups.com</subscribe>
+      <subscribe>codehaus-mojo-gwt-maven-plugin-users+subscribe@googlegroups.com</subscribe>
       <unsubscribe>codehaus-mojo-gwt-maven-plugin-users+unsubscribe@googlegroups.com</unsubscribe>
       <post>codehaus-mojo-gwt-maven-plugin-users@googlegroups.com</post>
       <archive>http://groups.google.com/group/codehaus-mojo-gwt-maven-plugin-users</archive>
