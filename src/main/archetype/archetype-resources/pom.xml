@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <!-- POM file generated with GWT webAppCreator -->
   <modelVersion>4.0.0</modelVersion>
@@ -10,12 +11,12 @@
   <name>GWT Maven Archetype</name>
 
   <properties>
-      <!-- Convenience property to set the GWT version -->
-      <gwtVersion>${project.version}</gwtVersion>
-      <!-- GWT needs at least java 1.5 -->
-      <maven.compiler.source>1.5</maven.compiler.source>
-      <maven.compiler.target>1.5</maven.compiler.target>
-      <webappDirectory>\${project.build.directory}/\${project.build.finalName}</webappDirectory>
+    <!-- Convenience property to set the GWT version -->
+    <gwtVersion>${project.version}</gwtVersion>
+    <!-- GWT needs at least java 1.5 -->
+    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.target>1.5</maven.compiler.target>
+    <webappDirectory>\${project.build.directory}/\${project.build.finalName}</webappDirectory>
   </properties>
 
   <dependencies>
@@ -61,7 +62,7 @@
 
     <plugins>
 
-      <!-- GWT Maven Plugin-->
+      <!-- GWT Maven Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -76,8 +77,8 @@
             </goals>
           </execution>
         </executions>
-        <!-- Plugin configuration. There are many available options,
-             see gwt-maven-plugin documentation at codehaus.org -->
+        <!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
+          documentation at codehaus.org -->
         <configuration>
           <runTarget>\${module}.html</runTarget>
           <hostedWebapp>\${webappDirectory}</hostedWebapp>
@@ -107,7 +108,7 @@
   </build>
 
   <repositories>
-    <!--  until gwt 2.1.0 gets final and deployed on central -->
+    <!-- until gwt 2.1.0 gets final and deployed on central -->
     <repository>
       <id>gwt-repo</id>
       <url>http://google-web-toolkit.googlecode.com/svn/2.1.0.M3/gwt/maven</url>
