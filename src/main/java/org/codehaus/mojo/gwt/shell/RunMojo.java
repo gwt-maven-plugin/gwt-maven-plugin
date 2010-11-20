@@ -433,7 +433,7 @@ public class RunMojo
                     if ( !appEngineHome.exists() )
                     {
                         appEngineHome.mkdirs();
-                        // force addition of appengine SDK in exploded SDK repository location
+                        // force addition of appengine SDK in a exploded SDK repository location
                         Artifact appEngineSdk =
                             resolve( appEngineGroupId, appEngineArtifactId, appEngineVersion, "zip", "" );
                         // sdk extraction
