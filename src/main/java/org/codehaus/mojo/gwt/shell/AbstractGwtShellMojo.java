@@ -239,7 +239,7 @@ public abstract class AbstractGwtShellMojo
     /**
      * A plexus-util StreamConsumer to redirect messages to plugin log
      */
-    private StreamConsumer out = new StreamConsumer()
+    protected StreamConsumer out = new StreamConsumer()
     {
         public void consumeLine( String line )
         {
