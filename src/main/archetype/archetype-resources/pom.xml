@@ -90,7 +90,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.1</version>
+        <version>2.1.1</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -107,12 +107,4 @@
     </plugins>
   </build>
 
-  <repositories>
-    <!-- until gwt 2.1.0 gets final and deployed on central -->
-    <repository>
-      <id>gwt-repo</id>
-      <url>http://google-web-toolkit.googlecode.com/svn/2.1.0.M3/gwt/maven</url>
-      <name>Google Web Toolkit Repository</name>
-    </repository>
-  </repositories>
 </project>
