@@ -36,7 +36,9 @@ import org.codehaus.plexus.util.FileUtils;
  * @goal resources
  * @phase process-resources
  */
-public class GwtResourcesMojo extends GwtResourcesBaseMojo {
+public class GwtResourcesMojo
+    extends GwtResourcesBaseMojo
+{
     /**
      * @parameter expression="${project.build.outputDirectory}"
      * @required
@@ -49,19 +51,27 @@ public class GwtResourcesMojo extends GwtResourcesBaseMojo {
      * 
      * @see org.apache.maven.plugin.Mojo#execute()
      */
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute()
+        throws MojoExecutionException, MojoFailureException
+    {
         Collection<ResourceFile> files = getAllResourceFiles();
-        for (ResourceFile file : files) {
-            File f = new File(file.basedir, file.fileRelativeName);
-            File target = new File(outputDirectory, file.fileRelativeName);
-            try {
-                getLog().debug("copy " + f + " to outputDirectory");
-                if (!target.getParentFile().mkdirs()) {
-                    throw new MojoExecutionException("Failed to create destination directory " + target.getParentFile());
+        for ( ResourceFile file : files )
+        {
+            File f = new File( file.basedir, file.fileRelativeName );
+            File target = new File( outputDirectory, file.fileRelativeName );
+            try
+            {
+                getLog().debug( "copy " + f + " to outputDirectory" );
+                if ( !target.getParentFile().mkdirs() )
+                {
+                    throw new MojoExecutionException( "Failed to create destination directory "
+                        + target.getParentFile() );
                 }
-                FileUtils.copyFile(f, target);
-            } catch (IOException e) {
-                throw new MojoExecutionException("Failed to copy GWT source " + f, e);
+                FileUtils.copyFile( f, target );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Failed to copy GWT source " + f, e );
             }
         }
     }
