@@ -62,10 +62,13 @@ public class GwtResourcesMojo
             try
             {
                 getLog().debug( "copy " + f + " to outputDirectory" );
-                if ( !target.getParentFile().mkdirs() )
+                if ( !target.getParentFile().exists() )
                 {
-                    throw new MojoExecutionException( "Failed to create destination directory "
-                        + target.getParentFile() );
+                    if ( !target.getParentFile().mkdirs() )
+                    {
+                        throw new MojoExecutionException( "Failed to create destination directory "
+                            + target.getParentFile() );
+                    }
                 }
                 FileUtils.copyFile( f, target );
             }
