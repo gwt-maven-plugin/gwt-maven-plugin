@@ -52,7 +52,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author ccollins
  * @author <a href="mailto:nicolas@apache.org">Nicolas De loof</a>
  */
-// @phase prepare-package should be even better to avoid unecessary gwt:compile when used with m2eclipse
 public class CompileMojo
     extends AbstractGwtShellMojo
 {
@@ -72,7 +71,7 @@ public class CompileMojo
     /**
      * On GWT 1.6+, number of parallel processes used to compile GWT premutations. Defaults to
      * platform available processors number.
-     * @parameter
+     * @parameter expression="${gwt.compiler.localWorkers}"
      */
     private int localWorkers;
 
