@@ -20,15 +20,9 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTestingRemoteTesting.html#Remote_Web
