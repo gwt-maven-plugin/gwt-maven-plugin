@@ -21,5 +21,8 @@ assert new File(basedir, 'src/main/webapp/hello').exists();
 assert new File(basedir, 'src/main/webapp/hello/hello.nocache.js').exists();
 assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello').exists();
 assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.google.gwt.sample.hello.Hello.nocache.js').exists();
+assert new File(basedir, 'target/extra').exists();
+assert new File(basedir, 'target/extra/hello/rpcPolicyManifest').exists();
+
 
 return true;

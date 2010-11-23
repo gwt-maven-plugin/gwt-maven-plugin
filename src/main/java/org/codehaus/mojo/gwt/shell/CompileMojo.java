@@ -85,7 +85,9 @@ public class CompileMojo
 
     /**
      * Ask GWT to create the Story of Your Compile (SOYC)
-     *
+     * <p>
+     * Can be unset from command line using '-Dgwt.compiler.soyc=false'.
+     * </p>
      * @parameter expression="${gwt.compiler.soyc}" default-value="true"
      */
     private String soyc;
@@ -107,6 +109,7 @@ public class CompileMojo
      * Logs output in a graphical tree view.
      * <p>
      * Can be set from command line using '-Dgwt.treeLogger=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.treeLogger}"
      */
@@ -116,6 +119,7 @@ public class CompileMojo
      * EXPERIMENTAL: Disables some java.lang.Class methods (e.g. getName()).
      * <p>
      * Can be set from command line using '-Dgwt.disableClassMetadata=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.disableClassMetadata}"
      */
@@ -125,6 +129,7 @@ public class CompileMojo
      * EXPERIMENTAL: Disables run-time checking of cast operations.
      * <p>
      * Can be set from command line using '-Dgwt.disableCastChecking=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.disableCastChecking}"
      */
@@ -134,6 +139,7 @@ public class CompileMojo
      * Validate all source code, but do not compile.
      * <p>
      * Can be set from command line using '-Dgwt.validateOnly=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.validateOnly}"
      */
@@ -143,6 +149,7 @@ public class CompileMojo
      * Enable faster, but less-optimized, compilations.
      * <p>
      * Can be set from command line using '-Dgwt.draftCompile=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.draftCompile}"
      */
@@ -161,6 +168,16 @@ public class CompileMojo
      * @parameter
      */
     private File workDir;
+    
+    /**
+     * add -extra parameter to the compiler command line
+     * <p>
+     * Can be set from command line using '-Dgwt.extraParam=true'.
+     * </p>
+     * @parameter default-value="false" expression="${gwt.extraParam}"
+     * @since 2.1.1
+     */
+    private boolean extraParam;
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -184,6 +201,8 @@ public class CompileMojo
     {
         boolean upToDate = true;
 
+
+        
         JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" )
             .withinScope( Artifact.SCOPE_COMPILE )
             .withinClasspath( getGwtUserJar() )
@@ -200,7 +219,16 @@ public class CompileMojo
             .arg( treeLogger, "-treeLogger" )
             .arg( disableClassMetadata, "-XdisableClassMetadata" )
             .arg( disableCastChecking, "-XdisableCastChecking" );
-
+        
+        if ( extraParam )
+        {
+            if ( !extra.exists() )
+            {
+                extra.mkdirs();
+            }
+            cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
+        }
+        
         addCompileSourceArtifacts( cmd );
 
         if ( workDir != null )
@@ -282,10 +310,16 @@ public class CompileMojo
         }
         else
         {
-            cmd.arg( "-soyc" )
-               .arg( "-extra")
-               .arg( extra.getAbsolutePath() );
-            extra.mkdirs();
+            cmd.arg( "-soyc" );
+            // we force -extra param to the cli even if not asked if not soyc will failed 
+            if ( !extraParam )
+            {
+                if ( !extra.exists() )
+                {
+                    extra.mkdirs();
+                }
+                cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
+            }            
         }
     }
 

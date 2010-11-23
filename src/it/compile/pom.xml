@@ -44,6 +44,8 @@
           <logLevel>INFO</logLevel>
           <style>OBF</style>
           <draftCompile>true</draftCompile>
+          <extraParam>true</extraParam>
+          <soyc>false</soyc>
         </configuration>
         <executions>
           <execution>
