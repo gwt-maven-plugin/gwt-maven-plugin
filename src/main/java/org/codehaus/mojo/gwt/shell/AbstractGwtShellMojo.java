@@ -55,7 +55,7 @@ public abstract class AbstractGwtShellMojo
      * Location on filesystem where GWT will write generated content for review (-gen option to GWTCompiler).
      * <p>
      * Can be set from command line using '-Dgwt.gen=...'
-     *
+     * </p>
      * @parameter default-value="${project.build.directory}/.generated" expression="${gwt.gen}"
      */
     private File gen;
@@ -64,7 +64,7 @@ public abstract class AbstractGwtShellMojo
      * GWT logging level (-logLevel ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL).
      * <p>
      * Can be set from command line using '-Dgwt.logLevel=...'
-     *
+     * </p>
      * @parameter default-value="INFO" expression="${gwt.logLevel}"
      */
     private String logLevel;
@@ -73,7 +73,7 @@ public abstract class AbstractGwtShellMojo
      * GWT JavaScript compiler output style (-style OBF[USCATED], PRETTY, or DETAILED).
      * <p>
      * Can be set from command line using '-Dgwt.style=...'
-     *
+     * </p>
      * @parameter default-value="OBF" expression="${gwt.style}"
      */
     private String style;
@@ -84,6 +84,7 @@ public abstract class AbstractGwtShellMojo
      * <p>
      * Can be set from command line using '-Dgwt.extraJvmArgs=...', defaults to setting max Heap size to be large enough
      * for most GWT use cases.
+     * </p>
      *
      * @parameter expression="${gwt.extraJvmArgs}" default-value="-Xmx512m"
      */

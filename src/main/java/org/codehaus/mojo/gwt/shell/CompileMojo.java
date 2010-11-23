@@ -92,14 +92,16 @@ public class CompileMojo
     private boolean soyc;
 
     /**
+     * 
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
      * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
      * GWT. The plugin will download the source.jar if necessary.
-     * <p>
+     * 
      * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
      * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
      * desirable).
-     *
+     * 
+     * 
      * @parameter
      */
     private String[] compileSourcesArtifacts;
