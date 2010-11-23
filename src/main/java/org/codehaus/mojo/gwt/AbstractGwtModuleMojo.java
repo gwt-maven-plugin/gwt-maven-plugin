@@ -118,7 +118,7 @@ public abstract class AbstractGwtModuleMojo
 
             if ( mods.isEmpty() )
             {
-                getLog().warn( "GWT plugin is configured to detect modules, but none where found." );
+                getLog().warn( "GWT plugin is configured to detect modules, but none were found." );
             }
 
             modules = new String[mods.size()];
