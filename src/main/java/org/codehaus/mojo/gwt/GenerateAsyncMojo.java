@@ -271,13 +271,13 @@ public class GenerateAsyncMojo
                 writer.print( ", " );
             }
 
-            if ( method.getReturns().isVoid() )
+            if ( method.getReturnType().isVoid() )
             {
                 writer.println( "AsyncCallback<Void> callback );" );
             }
-            else if ( method.getReturns().isPrimitive() )
+            else if ( method.getReturnType().isPrimitive() )
             {
-                String primitive = method.getReturns().getGenericValue();
+                String primitive = method.getReturnType().getGenericValue();
                 writer.println( "AsyncCallback<" + WRAPPERS.get( primitive ) + "> callback );" );
             }
             else
@@ -285,9 +285,9 @@ public class GenerateAsyncMojo
                 Type returnType = method.getReturnType( true );
                 String type = returnType.getGenericValue();
 
-                if ( method.getReturns().getDimensions() != method.getReturnType( true ).getDimensions() )
+                if ( method.getReturnType().getDimensions() != method.getReturnType( true ).getDimensions() )
                 {
-                    for ( int dimensions = 0; dimensions < method.getReturns().getDimensions(); dimensions++ )
+                    for ( int dimensions = 0; dimensions < method.getReturnType().getDimensions(); dimensions++ )
                     {
                         type += "[]";
                     }
