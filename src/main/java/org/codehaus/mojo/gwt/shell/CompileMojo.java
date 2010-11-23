@@ -90,7 +90,7 @@ public class CompileMojo
      * </p>
      * @parameter expression="${gwt.compiler.soyc}" default-value="true"
      */
-    private String soyc;
+    private boolean soyc;
 
     /**
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
@@ -304,7 +304,7 @@ public class CompileMojo
 
     private void addSOYC( JavaCommand cmd )
     {
-        if ( soyc != null && Boolean.valueOf( soyc ).booleanValue() == false )
+        if ( !soyc )
         {
             getLog().debug( "SOYC has been disabled by user" );
         }
