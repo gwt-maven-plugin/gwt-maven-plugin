@@ -63,7 +63,9 @@ public class CompileMojo
 
     /**
      * Don't try to detect if GWT compilation is up-to-date and can be skipped.
-     *
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.force=true'.
+     * </p>
      * @parameter expression="${gwt.compiler.force}" default-value="false"
      */
     private boolean force;
@@ -71,6 +73,11 @@ public class CompileMojo
     /**
      * On GWT 1.6+, number of parallel processes used to compile GWT premutations. Defaults to
      * platform available processors number.
+     * 
+     * <p>
+     * Can be unset from command line using '-Dgwt.compiler.localWorkers=n'.
+     * </p>
+     * 
      * @parameter expression="${gwt.compiler.localWorkers}"
      */
     private int localWorkers;
