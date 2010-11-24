@@ -22,20 +22,26 @@ package org.codehaus.mojo.gwt;
 import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -215,6 +221,7 @@ public abstract class AbstractGwtMojo
 
 
     protected File getGwtDevJar()
+        throws IOException
     {
         checkGwtDevAsDependency();
         checkGwtUserVersion();
@@ -222,6 +229,7 @@ public abstract class AbstractGwtMojo
     }
 
     protected File getGwtUserJar()
+        throws IOException
     {
         checkGwtUserVersion();
         return pluginArtifacts.get( "com.google.gwt:gwt-user" ).getFile();
@@ -248,18 +256,34 @@ public abstract class AbstractGwtMojo
     /**
      * Check gwt-user dependency matches plugin version
      */
-    private void checkGwtUserVersion()
+    private void checkGwtUserVersion() throws IOException
     {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream( "org/codehaus/mojo/gwt/mojoGwtVersion.properties" );
+        Properties properties = new Properties();
+        try
+        {
+            properties.load( inputStream );
+
+        }
+        finally
+        {
+            IOUtils.closeQuietly( inputStream );
+        }
         for ( Iterator iterator = getProject().getCompileArtifacts().iterator(); iterator.hasNext(); )
         {
             Artifact artifact = (Artifact) iterator.next();
             if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
                  && "gwt-user".equals( artifact.getArtifactId() ) )
             {
-                if ( !artifact.getVersion().equals( version ) )
+                String mojoGwtVersion = properties.getProperty( "gwt.version" );
+                //ComparableVersion with an up2date maven version
+                ArtifactVersion mojoGwtArtifactVersion = new DefaultArtifactVersion( mojoGwtVersion );
+                ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( artifact.getVersion() );
+                if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
                 {
                     getLog().warn( "You're project declares dependency on gwt-user " + artifact.getVersion()
-                                       + ". This plugin is designed for version " + version );
+                                       + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
                 }
                 break;
             }

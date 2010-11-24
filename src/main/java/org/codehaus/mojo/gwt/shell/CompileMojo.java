@@ -26,6 +26,7 @@ package org.codehaus.mojo.gwt.shell;
 import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -232,70 +233,70 @@ public class CompileMojo
     {
         boolean upToDate = true;
 
+        try
+        {
 
-        
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" )
-            .withinScope( Artifact.SCOPE_COMPILE )
-            .withinClasspath( getGwtUserJar() )
-            .withinClasspath( getGwtDevJar() )
-            .arg( "-gen", getGen().getAbsolutePath() )
-            .arg( "-logLevel", getLogLevel() )
-            .arg( "-style", getStyle() )
-            .arg( "-war", getOutputDirectory().getAbsolutePath() )
-            .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
-            // optional advanced arguments
-            .arg( enableAssertions, "-ea" )
-            .arg( draftCompile, "-draftCompile" )
-            .arg( validateOnly, "-validateOnly" )
-            .arg( treeLogger, "-treeLogger" )
-            .arg( disableClassMetadata, "-XdisableClassMetadata" )
-            .arg( disableCastChecking, "-XdisableCastChecking" );
-        
-        if ( optimizationLevel >= 0 )
-        {
-            cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
-        }
-        
-        //-strict
-        
-        
-        if ( extraParam || compileReport || soyc )
-        {
-            if ( !extra.exists() )
+            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" ).withinScope( Artifact.SCOPE_COMPILE )
+                .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
+                .arg( "-gen", getGen().getAbsolutePath() )
+                .arg( "-logLevel", getLogLevel() )
+                .arg( "-style", getStyle() )
+                .arg( "-war", getOutputDirectory().getAbsolutePath() )
+                .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
+                // optional advanced arguments
+                .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
+                .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
+                .arg( disableClassMetadata, "-XdisableClassMetadata" )
+                .arg( disableCastChecking, "-XdisableCastChecking" );
+
+            if ( optimizationLevel >= 0 )
             {
-                extra.mkdirs();
+                cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
             }
-            cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
-        }
-        
-        if ( compileReport )
-        {
-            cmd.arg( "-compileReport" );
-        }
-        
-        addCompileSourceArtifacts( cmd );
 
-        if ( workDir != null )
-        {
-            cmd.arg( "-workDir" )
-               .arg( String.valueOf( workDir ) );
-        }
+            //-strict
 
-        addSOYC( cmd );
-
-        for ( String target : modules )
-        {
-            if ( !compilationRequired( target, getOutputDirectory() ) )
+            if ( extraParam || compileReport || soyc )
             {
-                continue;
+                if ( !extra.exists() )
+                {
+                    extra.mkdirs();
+                }
+                cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
             }
-            cmd.arg( target );
-            upToDate = false;
+
+            if ( compileReport )
+            {
+                cmd.arg( "-compileReport" );
+            }
+
+            addCompileSourceArtifacts( cmd );
+
+            if ( workDir != null )
+            {
+                cmd.arg( "-workDir" ).arg( String.valueOf( workDir ) );
+            }
+
+            addSOYC( cmd );
+
+            for ( String target : modules )
+            {
+                if ( !compilationRequired( target, getOutputDirectory() ) )
+                {
+                    continue;
+                }
+                cmd.arg( target );
+                upToDate = false;
+            }
+            if ( !upToDate )
+            {
+                cmd.execute();
+            }
         }
-        if ( !upToDate )
+        catch ( IOException e )
         {
-            cmd.execute();
-        }
+            throw new MojoExecutionException( e.getMessage(), e );
+        }        
     }
 
     /**

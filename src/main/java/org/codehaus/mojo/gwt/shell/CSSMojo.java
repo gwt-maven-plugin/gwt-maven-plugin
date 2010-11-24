@@ -86,7 +86,11 @@ public class CSSMojo
                     {
                         getLog().info( "Generating " + javaOutput + " with typeName " + typeName );
                         ensureTargetPackageExists( getGenerateDirectory(), typeName );
-                        new JavaCommand( "com.google.gwt.resources.css.InterfaceGenerator" )
+
+                        
+                        try
+                        {
+                            new JavaCommand( "com.google.gwt.resources.css.InterfaceGenerator" )
                             .withinScope( Artifact.SCOPE_COMPILE )
                             .arg( "-standalone" )
                             .arg( "-typeName" )
@@ -94,10 +98,7 @@ public class CSSMojo
                             .arg( "-css" )
                             .arg( candidate.getAbsolutePath() )
                             .withinClasspath( getGwtDevJar() , getGwtUserJar() )
-                            .execute();
-                        
-                        try
-                        {
+                            .execute();                            
                             final FileWriter outputWriter = new FileWriter( javaOutput );
                             outputWriter.write( content.toString() );
                             outputWriter.close();

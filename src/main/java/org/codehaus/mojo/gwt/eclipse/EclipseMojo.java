@@ -277,10 +277,11 @@ public class EclipseMojo
         context.put( "additionalArguments", args );
         context.put( "extraJvmArgs", extraJvmArgs );
         context.put( "project", eclipseUtil.getProjectName( getProject() ) );
-        context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath().replace( '\\', '/' ) );
+       
 
         try
         {
+            context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath().replace( '\\', '/' ) );
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             String templateName = useGoogleEclispePlugin ? "google.fm" : "launch.fm";
             Template template = cfg.getTemplate( templateName, "UTF-8" );

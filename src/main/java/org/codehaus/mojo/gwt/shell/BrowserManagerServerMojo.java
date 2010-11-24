@@ -20,6 +20,7 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -50,11 +51,16 @@ public class BrowserManagerServerMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.junit.remote.BrowserManagerServer" )
-            .withinClasspath( getGwtUserJar(), getGwtDevJar() )
-            .arg( server )
-            .arg( browser.getAbsolutePath() );
+        try
+        {
+            JavaCommand cmd = new JavaCommand( "com.google.gwt.junit.remote.BrowserManagerServer" )
+                .withinClasspath( getGwtUserJar(), getGwtDevJar() ).arg( server ).arg( browser.getAbsolutePath() );
 
-        cmd.execute();
+            cmd.execute();
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 }

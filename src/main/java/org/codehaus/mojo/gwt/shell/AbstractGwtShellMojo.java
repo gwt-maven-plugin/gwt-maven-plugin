@@ -152,6 +152,7 @@ public abstract class AbstractGwtShellMojo
      * hook to post-process the dependency-based classpath
      */
     protected void postProcessClassPath( Collection<File> classpath )
+        throws MojoExecutionException
     {
         // Nothing to do in most case
     }

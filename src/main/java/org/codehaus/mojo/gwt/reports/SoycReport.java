@@ -20,6 +20,7 @@ package org.codehaus.mojo.gwt.reports;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -78,19 +79,25 @@ public class SoycReport
 
         for ( String path : scanner.getIncludedFiles() )
         {
-            String module = path.substring( 0, path.indexOf( File.separatorChar ) );
-            JavaCommand cmd =
-                new JavaCommand( "com.google.gwt.soyc.SoycDashboard" )
-                   .withinClasspath( getGwtDevJar() )
-                   //  FIXME
-//                   .withinClasspath( runtime.getSoycJar() )
-//                   .arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
-                   .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
+            try
+            {
+                String module = path.substring( 0, path.indexOf( File.separatorChar ) );
+                JavaCommand cmd = new JavaCommand( "com.google.gwt.soyc.SoycDashboard" )
+                    .withinClasspath( getGwtDevJar() )
+                    //  FIXME
+                    // .withinClasspath( runtime.getSoycJar() )
+                    //  .arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
+                    .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
 
-            cmd.arg( new File( extra, path ).getAbsolutePath() );
-            cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "dependencies" ) );
-            cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
-            cmd.execute();
+                cmd.arg( new File( extra, path ).getAbsolutePath() );
+                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "dependencies" ) );
+                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
+                cmd.execute();
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( e.getMessage(), e );
+            }            
         }
     }
 

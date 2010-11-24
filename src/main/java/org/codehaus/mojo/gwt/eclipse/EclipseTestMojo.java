@@ -121,10 +121,11 @@ public class EclipseTestMojo
         context.put( "out", testOutputDirectory.getAbsolutePath().substring( basedir + 1 ) );
         context.put( "extraJvmArgs", getExtraJvmArgs() );
         context.put( "project", eclipseUtil.getProjectName( getProject() ) );
-        context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath() );
+        
 
         try
         {
+            context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath() );
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             Template template = cfg.getTemplate( "test-launch.fm", "UTF-8" );
             template.process( context, configWriter );

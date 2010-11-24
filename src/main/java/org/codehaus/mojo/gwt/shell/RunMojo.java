@@ -315,68 +315,70 @@ public class RunMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" )
-            .withinScope( Artifact.SCOPE_RUNTIME )
-            .withinClasspath( getGwtUserJar() )
-            .withinClasspath( getGwtDevJar() )
-            .arg( "-war", hostedWebapp.getAbsolutePath() )
-            .arg( "-gen", getGen().getAbsolutePath() )
-            .arg( "-logLevel", getLogLevel() )
-            .arg( "-port", Integer.toString( getPort() ) )
-            .arg( "-startupUrl", getStartupUrl() )
-            .arg( noServer, "-noserver" );
+        try
+        {
+            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" ).withinScope( Artifact.SCOPE_RUNTIME )
+                .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
+                .arg( "-war", hostedWebapp.getAbsolutePath() ).arg( "-gen", getGen().getAbsolutePath() )
+                .arg( "-logLevel", getLogLevel() ).arg( "-port", Integer.toString( getPort() ) )
+                .arg( "-startupUrl", getStartupUrl() ).arg( noServer, "-noserver" );
 
-        if ( server != null )
-        {
-            cmd.arg( "-server", server );
-        }
-
-        if ( whitelist != null && whitelist.length() > 0 )
-        {
-            cmd.arg( "-whitelist", whitelist );
-        }
-        if ( blacklist != null && blacklist.length() > 0 )
-        {
-            cmd.arg( "-blacklist", blacklist );
-        }
-
-        if ( systemProperties != null && !systemProperties.isEmpty() )
-        {
-            for ( String key : systemProperties.keySet() )
+            if ( server != null )
             {
-                String value = systemProperties.get( key );
-                if ( value != null )
+                cmd.arg( "-server", server );
+            }
+
+            if ( whitelist != null && whitelist.length() > 0 )
+            {
+                cmd.arg( "-whitelist", whitelist );
+            }
+            if ( blacklist != null && blacklist.length() > 0 )
+            {
+                cmd.arg( "-blacklist", blacklist );
+            }
+
+            if ( systemProperties != null && !systemProperties.isEmpty() )
+            {
+                for ( String key : systemProperties.keySet() )
                 {
-                    getLog().info( " " + key + "=" + value );
-                    cmd.systemProperty( key, value );
-                }
-                else
-                {
-                    getLog().info( "skip sysProps " + key + " with empty value" );
+                    String value = systemProperties.get( key );
+                    if ( value != null )
+                    {
+                        getLog().info( " " + key + "=" + value );
+                        cmd.systemProperty( key, value );
+                    }
+                    else
+                    {
+                        getLog().info( "skip sysProps " + key + " with empty value" );
+                    }
                 }
             }
-        }
-        
-        if ( bindAddress != null && bindAddress.length() > 0 )
-        {
-            cmd.arg( "-bindAddress" ).arg( bindAddress );
-        }
 
-        if ( !noServer )
-        {
-            setupExplodedWar();
-        }
-        else
-        {
-            getLog().info( "noServer is set! Skipping exploding war file..." );
-        }
+            if ( bindAddress != null && bindAddress.length() > 0 )
+            {
+                cmd.arg( "-bindAddress" ).arg( bindAddress );
+            }
 
-        for ( String module : getModules() )
-        {
-            cmd.arg( module );
-        }
+            if ( !noServer )
+            {
+                setupExplodedWar();
+            }
+            else
+            {
+                getLog().info( "noServer is set! Skipping exploding war file..." );
+            }
 
-        cmd.execute();
+            for ( String module : getModules() )
+            {
+                cmd.arg( module );
+            }
+
+            cmd.execute();
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }        
     }
 
     @Override

@@ -111,7 +111,7 @@
   <properties>
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
-    <!-- set -Dgwt.version=XX to test another GWT release -->
+    <!-- This property is used in a filtered resources to check the version compatibility -->
     <gwt.version>2.1.0</gwt.version>
     <mavenVersion>2.0.9</mavenVersion>
     <mojo.java.target>1.5</mojo.java.target>
