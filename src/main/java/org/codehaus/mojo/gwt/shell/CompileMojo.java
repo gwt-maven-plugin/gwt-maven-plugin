@@ -198,6 +198,17 @@ public class CompileMojo
      * @since 2.1.1
      */    
     private boolean compileReport;
+    
+    /**
+     * add -optimize parameter to the compiler command line the value must be between 0 and 9
+     * by default -1 so no arg to the compiler
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.optimizationLevel=n'.
+     * </p>
+     * @parameter default-value="-1" expression="${gwt.compiler.optimizationLevel}"
+     * @since 2.1.1
+     */    
+    private int optimizationLevel;    
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -239,6 +250,14 @@ public class CompileMojo
             .arg( treeLogger, "-treeLogger" )
             .arg( disableClassMetadata, "-XdisableClassMetadata" )
             .arg( disableCastChecking, "-XdisableCastChecking" );
+        
+        if ( optimizationLevel >= 0 )
+        {
+            cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
+        }
+        
+        //-strict
+        
         
         if ( extraParam || compileReport || soyc )
         {
