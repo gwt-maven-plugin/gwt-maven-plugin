@@ -76,7 +76,7 @@ public class MergeWebXmlMojo
             for ( String module : getModules() )
             {
                 GwtModule gwtModule = readModule( module );
-                Map<String, String> moduleServlets = gwtModule.getServlets();
+                Map<String, String> moduleServlets = isWebXmlServletPathAsIs() ? gwtModule.getServlets( "" ) : gwtModule.getServlets();
                 getLog().debug( "merge " + moduleServlets.size() + " servlets from module " + module );
                 for ( Map.Entry<String, String> servlet : moduleServlets.entrySet() )
                 {

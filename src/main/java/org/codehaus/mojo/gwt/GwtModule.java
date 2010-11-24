@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
@@ -212,7 +213,8 @@ public class GwtModule
         {
             for ( Xpp3Dom node : nodes )
             {
-                servlets.put( path + node.getAttribute( "path" ), node.getAttribute( "class" ) );
+                servlets.put( StringUtils.isBlank( path ) ? node.getAttribute( "path" ) : path + node.getAttribute( "path" ),
+                              node.getAttribute( "class" ) );
             }
         }
         return servlets;

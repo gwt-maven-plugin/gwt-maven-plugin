@@ -40,6 +40,8 @@
       <inplace>true</inplace>
       <logLevel>INFO</logLevel>
       <style>OBF</style>
+      <draftCompile>true</draftCompile>
+      <optimizationLevel>1</optimizationLevel>      
     </configuration>
     <executions>
       <execution>

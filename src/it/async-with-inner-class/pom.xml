@@ -30,6 +30,10 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <version>@pom.version@</version>
+        <configuration>
+          <draftCompile>true</draftCompile>
+          <optimizationLevel>1</optimizationLevel>        
+        </configuration>
         <executions>
           <execution>
             <goals>
