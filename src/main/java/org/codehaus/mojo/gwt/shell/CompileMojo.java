@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -381,7 +382,10 @@ public class CompileMojo
         // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
         if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) )
         {
-            getLog().info( "Build is using IBM JDK, localWorkers set to 1 as workaround to gwt#4031" );
+            StringBuilder sb = new StringBuilder( "Build is using IBM JDK, localWorkers set to 1 as a workaround" );
+            sb.append( SystemUtils.LINE_SEPARATOR );
+            sb.append( "see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031" );
+            getLog().info( sb.toString() );
             return 1;
         }
         return Runtime.getRuntime().availableProcessors();
