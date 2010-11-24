@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  id="WebApp_ID" version="2.5">
+  
+  <servlet>
+    <servlet-name>org.codehaus.mojo.foo.NiceServlet/Name</servlet-name>
+    <servlet-class>org.codehaus.mojo.foo.NiceServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>org.codehaus.mojo.foo.NiceServlet/Name</servlet-name>
+    <url-pattern>/NiceServlet</url-pattern>
+  </servlet-mapping>  
+</web-app>
