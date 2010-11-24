@@ -19,11 +19,7 @@ package org.codehaus.mojo.gwt.webxml;
  * under the License.
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-
 import java.io.File;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,8 +27,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.classworlds.ClassRealm;
-import org.codehaus.classworlds.ClassWorld;
 import org.codehaus.mojo.gwt.GwtModule;
 import org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo;
 
@@ -97,40 +91,4 @@ public class MergeWebXmlMojo
             throw new MojoExecutionException( "Unable to merge web.xml", e );
         }
     }
-
-    /**
-     * Helper hack for classpath problems, used as a fallback.
-     *
-     * @param runtime TODO
-     *
-     * @return
-     */
-    protected ClassLoader fixThreadClasspath()
-    {
-        try
-        {
-            ClassWorld world = new ClassWorld();
-
-            // use the existing ContextClassLoader in a realm of the classloading space
-            ClassRealm root = world.newRealm( "gwt-plugin", Thread.currentThread().getContextClassLoader() );
-            ClassRealm realm = root.createChildRealm( "gwt-project" );
-
-            Collection<File> classpath = getClasspath( SCOPE_COMPILE );
-            for ( Iterator<File> it = classpath.iterator(); it.hasNext(); )
-            {
-                realm.addConstituent( it.next().toURI().toURL() );
-            }
-
-            Thread.currentThread().setContextClassLoader( realm.getClassLoader() );
-            // /System.out.println("AbstractGwtMojo realm classloader = " + realm.getClassLoader().toString());
-
-            return realm.getClassLoader();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            throw new RuntimeException( e );
-        }
-    }
-
 }
