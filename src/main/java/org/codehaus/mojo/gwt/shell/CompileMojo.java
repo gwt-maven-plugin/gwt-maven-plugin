@@ -87,7 +87,9 @@ public class CompileMojo
      * <p>
      * Can be unset from command line using '-Dgwt.compiler.soyc=false'.
      * </p>
+     * 
      * @parameter expression="${gwt.compiler.soyc}" default-value="true"
+     * @deprecated you must use {@link #compileReport} option
      */
     private boolean soyc;
 
@@ -179,6 +181,16 @@ public class CompileMojo
      * @since 2.1.1
      */
     private boolean extraParam;
+    
+    /**
+     * add -compileReport parameter to the compiler command line
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.compileReport=true'.
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.compileReport}"
+     * @since 2.1.1
+     */    
+    private boolean compileReport;
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -221,13 +233,18 @@ public class CompileMojo
             .arg( disableClassMetadata, "-XdisableClassMetadata" )
             .arg( disableCastChecking, "-XdisableCastChecking" );
         
-        if ( extraParam )
+        if ( extraParam || compileReport || soyc )
         {
             if ( !extra.exists() )
             {
                 extra.mkdirs();
             }
             cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
+        }
+        
+        if ( compileReport )
+        {
+            cmd.arg( "-compileReport" );
         }
         
         addCompileSourceArtifacts( cmd );
@@ -312,15 +329,7 @@ public class CompileMojo
         else
         {
             cmd.arg( "-soyc" );
-            // we force -extra param to the cli even if not asked if not soyc will failed 
-            if ( !extraParam )
-            {
-                if ( !extra.exists() )
-                {
-                    extra.mkdirs();
-                }
-                cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
-            }            
+
         }
     }
 
