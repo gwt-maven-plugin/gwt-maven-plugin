@@ -347,7 +347,7 @@ public abstract class AbstractGwtShellMojo
             command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
             if ( systemProperties != null )
             {
-                for ( @SuppressWarnings("rawtypes") Map.Entry entry : systemProperties.entrySet() )
+                for ( Map.Entry entry : systemProperties.entrySet() )
                 {
                     command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
                 }
@@ -369,7 +369,7 @@ public abstract class AbstractGwtShellMojo
                 cmd.addArguments( arguments );
                 if ( env != null )
                 {
-                    for ( @SuppressWarnings("rawtypes") Map.Entry entry : env.entrySet() )
+                    for ( Map.Entry entry : env.entrySet() )
                     {
                         getLog().debug( "add env " + (String) entry.getKey() + " with value " + (String) entry.getValue() );
                         cmd.addEnvironment( (String) entry.getKey(), (String) entry.getValue() );
