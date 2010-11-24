@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
@@ -68,7 +69,8 @@ public class CSSMojo
         {
             for ( String file : cssFiles )
             {
-                final String typeName = file.substring( 0, file.lastIndexOf( '.' ) ).replace( File.separatorChar, '.' );
+                final String typeName = FilenameUtils.separatorsToSystem( file ).
+                    substring( 0, file.lastIndexOf( '.' ) ).replace( File.separatorChar, '.' );
                 final File javaOutput =
                     new File( getGenerateDirectory(), typeName.replace( '.', File.separatorChar ) + ".java" );
                 final StringBuilder content = new StringBuilder();
