@@ -46,7 +46,8 @@
           <draftCompile>true</draftCompile>
           <extraParam>true</extraParam>
           <soyc>false</soyc>
-          <optimizationLevel>5</optimizationLevel>
+          <optimizationLevel>1</optimizationLevel>
+          <strict>true</strict>
         </configuration>
         <executions>
           <execution>

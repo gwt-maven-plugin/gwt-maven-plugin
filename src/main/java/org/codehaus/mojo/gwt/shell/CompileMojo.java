@@ -52,6 +52,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @author cooper
  * @author ccollins
  * @author <a href="mailto:nicolas@apache.org">Nicolas De loof</a>
+ * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
 public class CompileMojo
     extends AbstractGwtShellMojo
@@ -210,6 +211,17 @@ public class CompileMojo
      * @since 2.1.1
      */    
     private int optimizationLevel;    
+    
+    /**
+     * add -strict parameter to the compiler command line
+     * 
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.strict=true'.
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.strict}"
+     * @since 2.1.1
+     */    
+    private boolean strict;     
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -247,14 +259,13 @@ public class CompileMojo
                 .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
                 .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
                 .arg( disableClassMetadata, "-XdisableClassMetadata" )
-                .arg( disableCastChecking, "-XdisableCastChecking" );
+                .arg( disableCastChecking, "-XdisableCastChecking" )
+                .arg( strict, "-strict" );
 
             if ( optimizationLevel >= 0 )
             {
                 cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
             }
-
-            //-strict
 
             if ( extraParam || compileReport || soyc )
             {

@@ -24,5 +24,11 @@ assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.
 assert new File(basedir, 'target/extra').exists();
 assert new File(basedir, 'target/extra/hello/rpcPolicyManifest').exists();
 
+assert new File(basedir, 'build.log').exists();
 
+content = new File(basedir, 'build.log').text;
+assert content.contains( '-draftCompile' );
+assert content.contains( '-strict' );
+assert content.contains( '-optimize 1' );
+  
 return true;
