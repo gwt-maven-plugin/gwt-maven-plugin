@@ -98,6 +98,12 @@ public class CompileReport
      * @since 2.1.1
      */
     protected ClasspathBuilder classpathBuilder;    
+    
+    /**
+     * @parameter default-value="false" expression="${gwt.compilerReport.skip}"
+     * @since 2.1.1
+     */
+    private boolean skip;    
 
     /**
      * {@inheritDoc}
@@ -185,6 +191,13 @@ public class CompileReport
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
+        
+        if ( skip )
+        {
+            getLog().info( "Compiler Report is skipped" );
+            return;
+        }        
+        
         if ( !reportingOutputDirectory.exists() )
         {
             reportingOutputDirectory.mkdirs();

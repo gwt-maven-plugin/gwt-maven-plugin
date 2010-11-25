@@ -108,6 +108,12 @@ public class SoycReport
      * @since 2.1.1
      */
     protected ClasspathBuilder classpathBuilder;    
+    
+    /**
+     * @parameter default-value="false" expression="${gwt.soycReport.skip}"
+     * @since 2.1.1
+     */
+    private boolean skip;
 
     /**
      * {@inheritDoc}
@@ -194,6 +200,11 @@ public class SoycReport
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
+        if ( skip )
+        {
+            getLog().info( "Soyc Report is skipped" );
+            return;
+        }
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir( extra );
         scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
