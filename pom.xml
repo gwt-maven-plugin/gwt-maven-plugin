@@ -118,6 +118,8 @@
     <sitePluginVersion>2.1.1</sitePluginVersion>
     <doxia-sitetoolsVersion>1.1.2</doxia-sitetoolsVersion>
     <doxiaVersion>1.1.2</doxiaVersion>
+    <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
+    <it.localWorkers>-1</it.localWorkers>
   </properties>
 
   <dependencies>
@@ -339,6 +341,9 @@
               </pomIncludes>
               <postBuildHookScript>verify</postBuildHookScript>
               <localRepositoryPath>${project.build.directory}/local repository</localRepositoryPath>
+              <properties>
+                <gwt.compiler.localWorkers>${it.localWorkers}</gwt.compiler.localWorkers>
+              </properties>
               <goals>
                 <goal>clean</goal>
                 <goal>integration-test</goal>

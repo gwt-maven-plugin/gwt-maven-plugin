@@ -50,7 +50,7 @@
           <draftCompile>true</draftCompile>
           <optimizationLevel>1</optimizationLevel>
           <extraParam>false</extraParam>
-          <soyc>true</soyc>
+          <compileReport>true</compileReport>
         </configuration>
         <executions>
           <execution>
@@ -83,7 +83,7 @@
         <reportSets>
           <reportSet>
             <reports>
-              <report>soyc</report>
+              <report>compile-report</report>
             </reports>
           </reportSet>
         </reportSets>

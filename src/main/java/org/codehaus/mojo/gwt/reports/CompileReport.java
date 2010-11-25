@@ -24,38 +24,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
-import org.codehaus.mojo.gwt.AbstractGwtMojo;
 import org.codehaus.mojo.gwt.ClasspathBuilder;
 import org.codehaus.mojo.gwt.GwtModule;
 import org.codehaus.mojo.gwt.GwtModuleReader;
-import org.codehaus.mojo.gwt.shell.JavaCommand;
-import org.codehaus.mojo.gwt.shell.JavaCommandException;
-import org.codehaus.mojo.gwt.shell.JavaCommandRequest;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
-import org.codehaus.mojo.gwt.utils.GwtDevHelper;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
- * @see http://code.google.com/p/google-web-toolkit/wiki/CodeSplitting#The_Story_of_Your_Compile_(SOYC)
- * @goal soyc
+ * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
+ * @goal compile-report
  * @phase site
+ * @since 2.1.1
  */
-public class SoycReport
+public class CompileReport
     extends AbstractMavenReport
 {
 
     /**
-     * The output directory of the jsdoc report.
+     * The output directory of the gwt compiler reports.
      *
-     * @parameter default-value="${project.reporting.outputDirectory}/soyc"
+     * @parameter default-value="${project.reporting.outputDirectory}/gwtCompileReports"
      * @required
      * @readonly
      */
@@ -96,12 +91,7 @@ public class SoycReport
      * @since 2.1.1
      */
     protected MavenProject project;    
-    
-    /**
-     * @parameter default-value="${plugin.artifactMap}"
-     * @since 2.1.1
-     */
-    private Map<String, Artifact> pluginArtifacts;    
+   
     
     /**
      * @component
@@ -137,7 +127,7 @@ public class SoycReport
      */
     public String getDescription( Locale locale )
     {
-        return "GWT Story Of Your Compiler";
+        return "GWT Compiler Report";
     }
 
     /**
@@ -147,7 +137,7 @@ public class SoycReport
      */
     public String getName( Locale locale )
     {
-        return "GWT Story Of Your Compiler";
+        return "GWT Compiler Report";
     }
 
     /**
@@ -157,9 +147,8 @@ public class SoycReport
      */
     public String getOutputName()
     {
-        return "soyc";
+        return "gwt-compiler-reports";
     }
-
 
     /**
      * {@inheritDoc}
@@ -170,7 +159,6 @@ public class SoycReport
     {
         return false;
     }
-
 
     @Override
     protected Renderer getSiteRenderer()
@@ -188,66 +176,57 @@ public class SoycReport
     protected MavenProject getProject()
     {
         return project;
-    }
-
+    }    
+   
+    /**
+     * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
+     */
     @Override
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
+        if ( !reportingOutputDirectory.exists() )
+        {
+            reportingOutputDirectory.mkdirs();
+        }
+        boolean compileReports = true;
+
+        //compile-report
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir( extra );
-        scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
+        scanner.setIncludes( new String[] { "**/soycReport/compile-report/index.html" } );
         
-        boolean soycRawReport = true;
-
-        if ( extra.exists() )
+        if (extra.exists())
         {
             scanner.scan();
-        }
-        else
+        } else
         {
-            soycRawReport = false;
-        }
-
-        if (!soycRawReport || scanner.getIncludedFiles().length == 0 )
-        {
-            getLog().warn( "No SOYC raw report found, did you compile with soyc option set ?" );
-            soycRawReport = false;
+            compileReports = false;
         }
         
-        GwtDevHelper gwtDevHelper = new GwtDevHelper( pluginArtifacts, project, getLog(), AbstractGwtMojo.GWT_GROUP_ID );
-        String[] includeFiles = soycRawReport ? scanner.getIncludedFiles() : new String[0];
-
+        if (!compileReports || scanner.getIncludedFiles().length == 0 )
+        {
+            getLog().warn( "No compile reports found, did you compile with compileReport option set ?" );
+            compileReports = false;
+        }
+        
+        String[] includeFiles = compileReports ? scanner.getIncludedFiles() : new String[0];
+        
         for ( String path : includeFiles )
         {
+            String module = path.substring( 0, path.indexOf( File.separatorChar ) );
+            File dirTarget = new File( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
+            getLog().debug( "file in path " + path + " to target " + dirTarget.getAbsolutePath());
             try
             {
-                //Usage: java com.google.gwt.soyc.SoycDashboard -resources dir -soycDir dir -symbolMaps dir [-out dir]
-                String module = path.substring( 0, path.indexOf( File.separatorChar ) );
-                JavaCommandRequest javaCommandRequest = new JavaCommandRequest()
-                    .setClassName( "com.google.gwt.soyc.SoycDashboard" )
-                    .setLog( getLog() );
-                JavaCommand cmd = new JavaCommand( javaCommandRequest ).withinClasspath( gwtDevHelper.getGwtDevJar() )
-                //  FIXME
-                // .withinClasspath( runtime.getSoycJar() )
-                //.arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
-                    .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
-
-                cmd.arg( new File( extra, path ).getAbsolutePath() );
-                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "dependencies" ) );
-                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
-                cmd.execute();
+                FileUtils.copyDirectoryStructure( new File(extra, path).getParentFile(), dirTarget );
             }
             catch ( IOException e )
             {
                 throw new MavenReportException( e.getMessage(), e );
             }
-            catch ( JavaCommandException e )
-            {
-                throw new MavenReportException( e.getMessage(), e );
-            }
         }
-        // TODO use this in the report generation instead of file scanning
+        
         try
         {
 
@@ -262,14 +241,18 @@ public class SoycReport
             // add link in the page to all module reports
             CompilationReportRenderer compilationReportRenderer = new CompilationReportRenderer( getSink(), gwtModules,
                                                                                                  getLog(),
-                                                                                                 soycRawReport, "soyc",
-                                                                                                 false );
+                                                                                                 compileReports,
+                                                                                                 "gwtCompileReports",
+                                                                                                 true );
             compilationReportRenderer.render();
         }
         catch ( GwtModuleReaderException e )
         {
             throw new MavenReportException( e.getMessage(), e );
         }
+
     }
+
+
 
 }

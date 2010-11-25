@@ -22,6 +22,7 @@ package org.codehaus.mojo.gwt.reports;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.reporting.AbstractMavenReportRenderer;
@@ -40,14 +41,21 @@ public class CompilationReportRenderer
     
     private final Log log;
     
-    private boolean soycRawReport;
+    private boolean reportsAvailable;
     
-    public CompilationReportRenderer( final Sink sink, final List<GwtModule> gwtModules, Log log, boolean soycRawReport)
+    private String compilerReportsPath;
+    
+    private boolean compilerReport;
+    
+    public CompilationReportRenderer( final Sink sink, final List<GwtModule> gwtModules, Log log,
+                                      boolean reportsAvailable, String compilerReportsPath, boolean compilerReport )
     {
         super( sink );
         this.gwtModules = gwtModules;
         this.log = log;
-        this.soycRawReport = soycRawReport;
+        this.reportsAvailable = reportsAvailable;
+        this.compilerReportsPath = compilerReportsPath;
+        this.compilerReport = compilerReport;
     }
 
     /**
@@ -69,11 +77,18 @@ public class CompilationReportRenderer
         // TODO i18n and message for none
         log.debug( "start renderBody" );
         startSection( "GWT Compilation Reports" );
-        if ( !this.soycRawReport )
+        if ( !this.reportsAvailable )
         {
             sink.paragraph();
             sink.bold();
-            sink.text( "No SOYC raw report found, did you compile with soyc option set ?"  );
+            if ( compilerReport )
+            {
+                sink.text( "No compile reports found, did you compile with compileReport option set ?" );
+            }
+            else
+            {
+                sink.text( "No SOYC raw report found, did you compile with soyc option set ?" );
+            }
             sink.bold_();
             sink.paragraph_();
         }
@@ -82,9 +97,15 @@ public class CompilationReportRenderer
             sink.list();
             for ( GwtModule gwtModule : this.gwtModules )
             {
-
                 sink.listItem();
-                sink.link( "./" + gwtModule.getPath() + "/index.html" );
+                if ( StringUtils.isNotBlank( compilerReportsPath ) )
+                {
+                    sink.link( "./" + compilerReportsPath + "/" + gwtModule.getPath() + "/index.html" );
+                }
+                else
+                {
+                    sink.link( "./" + gwtModule.getPath() + "/index.html" );
+                }
                 sink.text( gwtModule.getName() );
                 sink.link_();
                 sink.listItem_();
