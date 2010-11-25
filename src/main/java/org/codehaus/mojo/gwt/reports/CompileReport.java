@@ -40,7 +40,6 @@ import org.codehaus.plexus.util.FileUtils;
 /**
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  * @goal compile-report
- * @phase site
  * @since 2.1.1
  */
 public class CompileReport

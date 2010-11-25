@@ -46,7 +46,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
 /**
  * @see http://code.google.com/p/google-web-toolkit/wiki/CodeSplitting#The_Story_of_Your_Compile_(SOYC)
  * @goal soyc
- * @phase site
+ * @requiresDependencyResolution runtime
  */
 public class SoycReport
     extends AbstractMavenReport
@@ -99,6 +99,8 @@ public class SoycReport
     
     /**
      * @parameter default-value="${plugin.artifactMap}"
+     * @required
+     * @readonly
      * @since 2.1.1
      */
     private Map<String, Artifact> pluginArtifacts;    

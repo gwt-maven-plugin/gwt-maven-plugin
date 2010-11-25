@@ -84,10 +84,12 @@ public class GwtDevHelper
         throws IOException
     {
         String resource = "org/codehaus/mojo/gwt/mojoGwtVersion.properties";
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( resource );
+        InputStream inputStream = getClass().getResourceAsStream( "/" + resource );
+        //Thread.currentThread().getContextClassLoader().getResourceAsStream( resource );
         if ( inputStream == null )
         {
-            throw new IOException( "impossible to load properties file " + resource );
+            log.info( "skip impossible to load properties file " + resource + " gwt version check will be ignored" );
+            return;
         }
         Properties properties = new Properties();
         try
