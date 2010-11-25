@@ -40,11 +40,14 @@ public class CompilationReportRenderer
     
     private final Log log;
     
-    public CompilationReportRenderer( final Sink sink, final List<GwtModule> gwtModules, Log log)
+    private boolean soycRawReport;
+    
+    public CompilationReportRenderer( final Sink sink, final List<GwtModule> gwtModules, Log log, boolean soycRawReport)
     {
         super( sink );
         this.gwtModules = gwtModules;
         this.log = log;
+        this.soycRawReport = soycRawReport;
     }
 
     /**
@@ -64,20 +67,30 @@ public class CompilationReportRenderer
     protected void renderBody()
     {
         // TODO i18n and message for none
-        // TODO if includeFiles is empty display a warning in the report page 
         log.debug( "start renderBody" );
         startSection( "GWT Compilation Reports" );
-        sink.list();
-        for ( GwtModule gwtModule : this.gwtModules )
+        if ( !this.soycRawReport )
         {
-            
-            sink.listItem();
-            sink.link( "./" + gwtModule.getPath() + "/index.html" );
-            sink.text( gwtModule.getName() );
-            sink.link_();
-            sink.listItem_();
+            sink.paragraph();
+            sink.bold();
+            sink.text( "No SOYC raw report found, did you compile with soyc option set ?"  );
+            sink.bold_();
+            sink.paragraph_();
         }
-        sink.list_();
+        else
+        {
+            sink.list();
+            for ( GwtModule gwtModule : this.gwtModules )
+            {
+
+                sink.listItem();
+                sink.link( "./" + gwtModule.getPath() + "/index.html" );
+                sink.text( gwtModule.getName() );
+                sink.link_();
+                sink.listItem_();
+            }
+            sink.list_();
+        }
         endSection();
         log.debug( "end renderBody" );
     }

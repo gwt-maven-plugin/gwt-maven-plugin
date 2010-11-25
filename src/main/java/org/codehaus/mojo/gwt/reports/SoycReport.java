@@ -31,7 +31,6 @@ import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.surefire.booter.shade.org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.mojo.gwt.AbstractGwtMojo;
 import org.codehaus.mojo.gwt.ClasspathBuilder;
 import org.codehaus.mojo.gwt.GwtModule;
@@ -42,6 +41,7 @@ import org.codehaus.mojo.gwt.shell.JavaCommandRequest;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtDevHelper;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
+import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * @see http://code.google.com/p/google-web-toolkit/wiki/CodeSplitting#The_Story_of_Your_Compile_(SOYC)
@@ -215,16 +215,26 @@ public class SoycReport
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir( extra );
         scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
-        scanner.scan();
+        
+        boolean soycRawReport = true;
 
-        if ( scanner.getIncludedFiles().length == 0 )
+        if ( extra.exists() )
+        {
+            scanner.scan();
+        }
+        else
+        {
+            soycRawReport = false;
+        }
+
+        if (!soycRawReport || scanner.getIncludedFiles().length == 0 )
         {
             getLog().warn( "No SOYC raw report found, did you compile with soyc option set ?" );
-            return;
+            soycRawReport = false;
         }
         
         GwtDevHelper gwtDevHelper = new GwtDevHelper( pluginArtifacts, project, getLog(), AbstractGwtMojo.GWT_GROUP_ID );
-        String[] includeFiles = scanner.getIncludedFiles();
+        String[] includeFiles = soycRawReport ? scanner.getIncludedFiles() : new String[0];
 
         for ( String path : includeFiles )
         {
@@ -268,8 +278,9 @@ public class SoycReport
                 gwtModules.add( gwtModuleReader.readModule( name ) );
             }
             // add link in the page to all module reports
-            CompilationReportRenderer compilationReportRenderer = new CompilationReportRenderer( getSink(),
-                                                                                                 gwtModules, getLog() );
+            CompilationReportRenderer compilationReportRenderer = new CompilationReportRenderer( getSink(), gwtModules,
+                                                                                                 getLog(),
+                                                                                                 soycRawReport );
             compilationReportRenderer.render();
         }
         catch ( GwtModuleReaderException e )
