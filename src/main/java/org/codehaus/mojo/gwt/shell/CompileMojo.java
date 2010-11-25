@@ -215,6 +215,17 @@ public class CompileMojo
     private int optimizationLevel;    
     
     /**
+     * add -XsoycDetailed parameter to the compiler command line
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.soycDetailed=true'.
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.soycDetailed}"
+     * @since 2.1.1
+     */    
+    private boolean soycDetailed;    
+    
+    
+    /**
      * add -strict parameter to the compiler command line
      * 
      * <p>
@@ -262,7 +273,9 @@ public class CompileMojo
                 .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
                 .arg( disableClassMetadata, "-XdisableClassMetadata" )
                 .arg( disableCastChecking, "-XdisableCastChecking" )
-                .arg( strict, "-strict" );
+                .arg( strict, "-strict" )
+                .arg( soycDetailed, "-XsoycDetailed" );
+            
 
             if ( optimizationLevel >= 0 )
             {

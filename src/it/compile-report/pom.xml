@@ -51,6 +51,7 @@
           <optimizationLevel>1</optimizationLevel>
           <extraParam>false</extraParam>
           <compileReport>true</compileReport>
+          <soycDetailed>true</soycDetailed>
         </configuration>
         <executions>
           <execution>
