@@ -116,8 +116,7 @@
     <mavenVersion>2.0.9</mavenVersion>
     <mojo.java.target>1.5</mojo.java.target>
     <sitePluginVersion>2.1.1</sitePluginVersion>
-    <doxia-sitetoolsVersion>1.1.2</doxia-sitetoolsVersion>
-    <doxiaVersion>1.1.2</doxiaVersion>
+    <doxia-sitetoolsVersion>1.1.4</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
   </properties>
@@ -154,29 +153,19 @@
       <version>2.1</version>
     </dependency>
     
-    <!-- Doxia -->
     <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-core</artifactId>
-      <version>${doxiaVersion}</version>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-9-stable-1</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-module-xhtml</artifactId>
-      <version>${doxiaVersion}</version>
-    </dependency>
+    
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-sink-api</artifactId>
-      <version>${doxiaVersion}</version>
-    </dependency>    
+      <version>1.0</version>
+    </dependency>
     
     <!-- Doxia-sitetools -->
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-decoration-model</artifactId>
-      <version>${doxia-sitetoolsVersion}</version>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-site-renderer</artifactId>
@@ -262,11 +251,6 @@
       <groupId>org.apache.maven.surefire</groupId>
       <artifactId>surefire-api</artifactId>
       <version>2.4.3</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
