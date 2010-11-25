@@ -38,6 +38,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
+ * see http://code.google.com/webtoolkit/doc/latest/DevGuideCompileReport.html#Usage
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  * @goal compile-report
  * @since 2.1.1

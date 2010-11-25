@@ -96,10 +96,10 @@ public class CompileMojo
     /**
      * Ask GWT to create the Story of Your Compile (SOYC)
      * <p>
-     * Can be unset from command line using '-Dgwt.compiler.soyc=false'.
+     * Can be set from command line using '-Dgwt.compiler.soyc=true'.
      * </p>
      * 
-     * @parameter expression="${gwt.compiler.soyc}" default-value="true"
+     * @parameter expression="${gwt.compiler.soyc}" default-value="false"
      * @deprecated you must use {@link #compileReport} option
      */
     private boolean soyc;
