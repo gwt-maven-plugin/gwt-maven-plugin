@@ -28,4 +28,11 @@ assert new File(basedir, 'target/site/hello/goog.css').exists();
 assert new File(basedir, 'target/site/hello/goog.css').exists();
 assert new File(basedir, 'target/site/soyc.html').exists();
 
+content = new File(basedir, 'target/site/soyc.html').text;
+assert content.contains( 'href="./com.google.gwt.sample.hello.Hello/index.html' );
+assert content.contains( 'com.google.gwt.sample.hello.Hello</a>' );
+
+assert content.contains( 'href="./hello/index.html' );
+assert content.contains( 'org.codehaus.mojo.gwt.test.Hello</a>' );
+
 return true;
