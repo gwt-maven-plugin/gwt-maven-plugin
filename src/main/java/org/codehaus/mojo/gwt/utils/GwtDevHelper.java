@@ -83,8 +83,12 @@ public class GwtDevHelper
     private void checkGwtUserVersion()
         throws IOException
     {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream( "org/codehaus/mojo/gwt/mojoGwtVersion.properties" );
+        String resource = "org/codehaus/mojo/gwt/mojoGwtVersion.properties";
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( resource );
+        if ( inputStream == null )
+        {
+            throw new IOException( "impossible to load properties file " + resource );
+        }
         Properties properties = new Properties();
         try
         {
