@@ -38,6 +38,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.GwtModule;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
@@ -270,11 +271,16 @@ public class CompileMojo
 
             if ( extraParam || compileReport || soyc )
             {
+                getLog().debug( "create extra directory " );
                 if ( !extra.exists() )
                 {
                     extra.mkdirs();
                 }
                 cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
+            }
+            else
+            {
+                getLog().debug( "NOT create extra directory " );
             }
 
             if ( compileReport )
@@ -405,61 +411,68 @@ public class CompileMojo
     private boolean compilationRequired( String module, File output )
         throws MojoExecutionException
     {
-        GwtModule gwtModule = readModule( module );
-        if ( gwtModule.getEntryPoints().size() == 0 )
+        try
         {
-            getLog().debug( gwtModule.getName() + " has no EntryPoint - compilation skipped" );
-            // No entry-point, this is an utility module : compiling this one will fail
-            // with '[ERROR] Module has no entry points defined'
-            return false;
-        }
-
-        if ( force )
-        {
-            return true;
-        }
-
-        String modulePath = gwtModule.getPath();
-        String outputTarget = modulePath + "/" + modulePath + ".nocache.js";
-
-        // Require compilation if no js file present in target.
-        if ( !new File( output, outputTarget ).exists() )
-        {
-            return true;
-        }
-
-        // js file allreay exists, but may not be up-to-date with project source files
-        SingleTargetSourceMapping singleTargetMapping = new SingleTargetSourceMapping( ".java", outputTarget );
-        StaleSourceScanner scanner = new StaleSourceScanner();
-        scanner.addSourceMapping( singleTargetMapping );
-
-        SingleTargetSourceMapping gwtModuleMapping = new SingleTargetSourceMapping( ".gwt.xml", outputTarget );
-        scanner.addSourceMapping( gwtModuleMapping );
-
-        Collection<File> compileSourceRoots = new HashSet<File>();
-        classpathBuilder.addSourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
-        classpathBuilder.addResourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
-        for ( File sourceRoot : compileSourceRoots )
-        {
-            if ( !sourceRoot.isDirectory() )
+            GwtModule gwtModule = readModule( module );
+            if ( gwtModule.getEntryPoints().size() == 0 )
             {
-                continue;
+                getLog().debug( gwtModule.getName() + " has no EntryPoint - compilation skipped" );
+                // No entry-point, this is an utility module : compiling this one will fail
+                // with '[ERROR] Module has no entry points defined'
+                return false;
             }
-            try
+
+            if ( force )
             {
-                if ( !scanner.getIncludedSources( sourceRoot, output ).isEmpty() )
+                return true;
+            }
+
+            String modulePath = gwtModule.getPath();
+            String outputTarget = modulePath + "/" + modulePath + ".nocache.js";
+
+            // Require compilation if no js file present in target.
+            if ( !new File( output, outputTarget ).exists() )
+            {
+                return true;
+            }
+
+            // js file allreay exists, but may not be up-to-date with project source files
+            SingleTargetSourceMapping singleTargetMapping = new SingleTargetSourceMapping( ".java", outputTarget );
+            StaleSourceScanner scanner = new StaleSourceScanner();
+            scanner.addSourceMapping( singleTargetMapping );
+
+            SingleTargetSourceMapping gwtModuleMapping = new SingleTargetSourceMapping( ".gwt.xml", outputTarget );
+            scanner.addSourceMapping( gwtModuleMapping );
+
+            Collection<File> compileSourceRoots = new HashSet<File>();
+            classpathBuilder.addSourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
+            classpathBuilder.addResourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
+            for ( File sourceRoot : compileSourceRoots )
+            {
+                if ( !sourceRoot.isDirectory() )
                 {
-                    getLog().debug( "found stale source in " + sourceRoot + " compared with " + output );
-                    return true;
+                    continue;
+                }
+                try
+                {
+                    if ( !scanner.getIncludedSources( sourceRoot, output ).isEmpty() )
+                    {
+                        getLog().debug( "found stale source in " + sourceRoot + " compared with " + output );
+                        return true;
+                    }
+                }
+                catch ( InclusionScanException e )
+                {
+                    throw new MojoExecutionException( "Error scanning source root: \'" + sourceRoot + "\' "
+                        + "for stale files to recompile.", e );
                 }
             }
-            catch ( InclusionScanException e )
-            {
-                throw new MojoExecutionException( "Error scanning source root: \'" + sourceRoot + "\' "
-                    + "for stale files to recompile.", e );
-            }
+            getLog().info( module + " is up to date. GWT compilation skipped" );
+            return false;
         }
-        getLog().info( module + " is up to date. GWT compilation skipped" );
-        return false;
+        catch ( GwtModuleReaderException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 }

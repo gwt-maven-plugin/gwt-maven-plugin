@@ -36,25 +36,37 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>@sitePluginVersion@</version>
+      </plugin>       
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
-          <inplace>true</inplace>
           <logLevel>INFO</logLevel>
           <style>OBF</style>
-          <draftCompile>true</draftCompile>
-          <optimizationLevel>1</optimizationLevel>
+          <draftCompile>false</draftCompile>
+          <optimizationLevel>9</optimizationLevel>
           <extraParam>false</extraParam>
           <soyc>true</soyc>
         </configuration>
         <executions>
           <execution>
+            <id>generateAsync</id>
+            <phase>generate-sources</phase>
             <goals>
               <goal>generateAsync</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>gwt-compile</id>
+            <phase>compile</phase>
+            <goals>
               <goal>compile</goal>
               <goal>mergewebxml</goal>
-            </goals>
+            </goals>            
           </execution>
         </executions>
       </plugin>
@@ -67,6 +79,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
+        <version>@pom.version@</version>
         <reportSets>
           <reportSet>
             <reports>

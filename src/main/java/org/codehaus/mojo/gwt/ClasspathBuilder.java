@@ -65,7 +65,7 @@ public class ClasspathBuilder
     @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
                                                 Set<Artifact> artifacts )
-        throws MojoExecutionException
+        throws ClasspathBuilderException
     {
         getLogger().debug( "establishing classpath list (scope = " + scope + ")" );
 
@@ -125,7 +125,7 @@ public class ClasspathBuilder
         }
         else
         {
-            throw new MojoExecutionException( "unsupported scope " + scope );
+            throw new ClasspathBuilderException( "unsupported scope " + scope );
         }
         return items;
     }

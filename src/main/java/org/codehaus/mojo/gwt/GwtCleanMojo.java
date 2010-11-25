@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -44,12 +45,19 @@ public class GwtCleanMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        for ( String name : getModules() )
+        try
         {
-            File output = new File( getOutputDirectory(), readModule( name ).getPath() );
-            clean( output );
+            for ( String name : getModules() )
+            {
+                File output = new File( getOutputDirectory(), readModule( name ).getPath() );
+                clean( output );
+            }
+            clean( new File( getOutputDirectory(), ".gwt-tmp" ) );
         }
-        clean( new File( getOutputDirectory(), ".gwt-tmp" ) );
+        catch ( GwtModuleReaderException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
     private void clean( File output )

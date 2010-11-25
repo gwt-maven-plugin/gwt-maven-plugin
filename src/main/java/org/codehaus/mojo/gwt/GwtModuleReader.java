@@ -19,7 +19,9 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
- import org.apache.maven.plugin.MojoExecutionException;
+ import java.util.List;
+
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 
 
 /**
@@ -28,5 +30,7 @@ package org.codehaus.mojo.gwt;
 public interface GwtModuleReader
 {
     GwtModule readModule( String name )
-		throws MojoExecutionException;
+		throws GwtModuleReaderException;
+    
+    List<String> getGwtModules();
 }

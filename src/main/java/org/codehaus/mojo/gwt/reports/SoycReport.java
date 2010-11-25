@@ -21,15 +21,27 @@ package org.codehaus.mojo.gwt.reports;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.reporting.MavenReport;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.doxia.siterenderer.Renderer;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.surefire.booter.shade.org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.doxia.sink.Sink;
-import org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo;
+import org.codehaus.mojo.gwt.AbstractGwtMojo;
+import org.codehaus.mojo.gwt.ClasspathBuilder;
+import org.codehaus.mojo.gwt.GwtModule;
+import org.codehaus.mojo.gwt.GwtModuleReader;
+import org.codehaus.mojo.gwt.shell.JavaCommand;
+import org.codehaus.mojo.gwt.shell.JavaCommandException;
+import org.codehaus.mojo.gwt.shell.JavaCommandRequest;
+import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
+import org.codehaus.mojo.gwt.utils.GwtDevHelper;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 
 /**
  * @see http://code.google.com/p/google-web-toolkit/wiki/CodeSplitting#The_Story_of_Your_Compile_(SOYC)
@@ -37,8 +49,7 @@ import org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo;
  * @phase site
  */
 public class SoycReport
-    extends AbstractGwtShellMojo
-    implements MavenReport
+    extends AbstractMavenReport
 {
 
     /**
@@ -56,50 +67,47 @@ public class SoycReport
      * @parameter default-value="${project.build.directory}/extra"
      */
     private File extra;
-
+    
     /**
-     * {@inheritDoc}
+     * Doxia Site Renderer component.
      *
-     * @see org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo#doExecute()
+     * @component
+     * @since 2.1.1
      */
-    @Override
-    public void doExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( extra );
-        scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
-        scanner.scan();
-
-        if ( scanner.getIncludedFiles().length == 0 )
-        {
-            getLog().warn( "No SOYC raw report found, did you compile with soyc option set ?" );
-            return;
-        }
-
-        for ( String path : scanner.getIncludedFiles() )
-        {
-            try
-            {
-                String module = path.substring( 0, path.indexOf( File.separatorChar ) );
-                JavaCommand cmd = new JavaCommand( "com.google.gwt.soyc.SoycDashboard" )
-                    .withinClasspath( getGwtDevJar() )
-                    //  FIXME
-                    // .withinClasspath( runtime.getSoycJar() )
-                    //  .arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
-                    .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
-
-                cmd.arg( new File( extra, path ).getAbsolutePath() );
-                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "dependencies" ) );
-                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
-                cmd.execute();
-            }
-            catch ( IOException e )
-            {
-                throw new MojoExecutionException( e.getMessage(), e );
-            }            
-        }
-    }
+    protected Renderer siteRenderer;  
+    
+    /**
+     * The output directory for the report. Note that this parameter is only evaluated if the goal is run directly from
+     * the command line. If the goal is run indirectly as part of a site generation, the output directory configured in
+     * the Maven Site Plugin is used instead.
+     *
+     * @parameter expression="${project.reporting.outputDirectory}"
+     * @required
+     * @since 2.1.1
+     */    
+    protected File outputDirectory;
+    
+    /**
+     * The Maven Project.
+     *
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     * @since 2.1.1
+     */
+    protected MavenProject project;    
+    
+    /**
+     * @parameter expression="${plugin.artifactMap}"
+     * @since 2.1.1
+     */
+    private Map<String, Artifact> pluginArtifacts;    
+    
+    /**
+     * @component
+     * @since 2.1.1
+     */
+    protected ClasspathBuilder classpathBuilder;    
 
     /**
      * {@inheritDoc}
@@ -110,28 +118,6 @@ public class SoycReport
     {
         // TODO check the compiler has created the raw xml soyc file
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.apache.maven.reporting.MavenReport#generate(org.codehaus.doxia.sink.Sink, java.util.Locale)
-     */
-    public void generate( Sink sink, Locale locale )
-        throws MavenReportException
-    {
-        try
-        {
-            doExecute( );
-        }
-        catch ( MojoExecutionException e )
-        {
-            throw new MavenReportException( "Failed to execute SoycDashboard", e);
-        }
-        catch ( MojoFailureException e )
-        {
-            throw new MavenReportException( "Failed to execute SoycDashboard", e );
-        }
     }
 
     /**
@@ -202,6 +188,94 @@ public class SoycReport
     public void setReportOutputDirectory( File outputDirectory )
     {
         reportingOutputDirectory = outputDirectory;
+    }
+
+    @Override
+    protected Renderer getSiteRenderer()
+    {
+        return siteRenderer;
+    }
+
+    @Override
+    protected String getOutputDirectory()
+    {
+        return outputDirectory.getAbsolutePath();
+    }
+
+    @Override
+    protected MavenProject getProject()
+    {
+        return project;
+    }
+
+    @Override
+    protected void executeReport( Locale locale )
+        throws MavenReportException
+    {
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setBasedir( extra );
+        scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
+        scanner.scan();
+
+        if ( scanner.getIncludedFiles().length == 0 )
+        {
+            getLog().warn( "No SOYC raw report found, did you compile with soyc option set ?" );
+            return;
+        }
+        
+        GwtDevHelper gwtDevHelper = new GwtDevHelper( pluginArtifacts, project, getLog(), AbstractGwtMojo.GWT_GROUP_ID );
+        String[] includeFiles = scanner.getIncludedFiles();
+
+        for ( String path : includeFiles )
+        {
+            try
+            {
+                //Usage: java com.google.gwt.soyc.SoycDashboard -resources dir -soycDir dir -symbolMaps dir [-out dir]
+                String module = path.substring( 0, path.indexOf( File.separatorChar ) );
+                JavaCommandRequest javaCommandRequest = new JavaCommandRequest()
+                    .setClassName( "com.google.gwt.soyc.SoycDashboard" )
+                    .setLog( getLog() );
+                JavaCommand cmd = new JavaCommand( javaCommandRequest ).withinClasspath( gwtDevHelper.getGwtDevJar() )
+                //  FIXME
+                // .withinClasspath( runtime.getSoycJar() )
+                //.arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
+                    .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
+
+                cmd.arg( new File( extra, path ).getAbsolutePath() );
+                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "dependencies" ) );
+                cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
+                cmd.execute();
+            }
+            catch ( IOException e )
+            {
+                throw new MavenReportException( e.getMessage(), e );
+            }
+            catch ( JavaCommandException e )
+            {
+                throw new MavenReportException( e.getMessage(), e );
+            }
+        }
+        // TODO use this in the report generation instead of file scanning
+        try
+        {
+
+            GwtModuleReader gwtModuleReader = new DefaultGwtModuleReader( this.project, getLog(), classpathBuilder );
+
+            List<GwtModule> gwtModules = new ArrayList<GwtModule>();
+            List<String> moduleNames = gwtModuleReader.getGwtModules();
+            for ( String name : moduleNames )
+            {
+                gwtModules.add( gwtModuleReader.readModule( name ) );
+            }
+            // add link in the page to all module reports
+            CompilationReportRenderer compilationReportRenderer = new CompilationReportRenderer( getSink(),
+                                                                                                 gwtModules, getLog() );
+            compilationReportRenderer.render();
+        }
+        catch ( GwtModuleReaderException e )
+        {
+            throw new MavenReportException( e.getMessage(), e );
+        }
     }
 
 }

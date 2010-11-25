@@ -206,20 +206,28 @@ public abstract class AbstractGwtMojo
     public Collection<File> getClasspath( String scope )
         throws MojoExecutionException
     {
-        Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts() );
-
-        if ( getLog().isDebugEnabled() )
+        try
         {
-            getLog().debug( "GWT SDK execution classpath :" );
-            for ( File f : files )
+            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts() );
+
+            if ( getLog().isDebugEnabled() )
             {
-                getLog().debug( "   " + f.getAbsolutePath() );
+                getLog().debug( "GWT SDK execution classpath :" );
+                for ( File f : files )
+                {
+                    getLog().debug( "   " + f.getAbsolutePath() );
+                }
             }
+            return files;
         }
-        return files;
+        catch ( ClasspathBuilderException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
 
+    // FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
         throws IOException
     {
@@ -236,6 +244,7 @@ public abstract class AbstractGwtMojo
     }
 
     /**
+     * TODO remove !
      * Check that gwt-dev is not define in dependencies : this can produce version conflicts with other dependencies, as
      * gwt-dev is a "uber-jar" with some commons-* and jetty libs inside.
      */

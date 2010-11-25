@@ -26,14 +26,19 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -51,7 +56,10 @@ public abstract class AbstractGwtModuleMojo
     extends AbstractGwtMojo
     implements GwtModuleReader
 {
-    public static final String GWT_MODULE_EXTENSION = ".gwt.xml";
+    /**
+     * @deprecated use {@link DefaultGwtModuleReader#GWT_MODULE_EXTENSION}
+     */
+    public static final String GWT_MODULE_EXTENSION = DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
 
     /**
      * The project GWT modules. If not set, the plugin will scan the project for <code>.gwt.xml</code> files.
@@ -68,12 +76,19 @@ public abstract class AbstractGwtModuleMojo
      */
     private String module;
 
+    public List<String> getGwtModules()
+    {
+        String[] modules = getModules();
+        return ArrayUtils.isEmpty( modules )? new ArrayList<String>(0) : Arrays.asList( modules );
+    }
+    
     /**
      * Return the configured modules or scan the project source/resources folder to find them
      *
      * @return the modules
      */
     @SuppressWarnings( "unchecked" )
+    // FIXME move to DefaultGwtModuleReader !
     public String[] getModules()
     {
         // module has higher priority if set by expression
@@ -138,7 +153,7 @@ public abstract class AbstractGwtModuleMojo
     }
 
     public GwtModule readModule( String name )
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         String modulePath = name.replace( '.', '/' ) + GWT_MODULE_EXTENSION;
         Collection<String> sourceRoots = getProject().getCompileSourceRoots();
@@ -182,13 +197,16 @@ public abstract class AbstractGwtModuleMojo
         catch ( MalformedURLException e )
         {
             // ignored;
+        } catch (MojoExecutionException e)
+        {
+            throw new GwtModuleReaderException(e.getMessage(), e);
         }
 
-        throw new MojoExecutionException( "GWT Module " + name + " not found in project sources or resources." );
+        throw new GwtModuleReaderException( "GWT Module " + name + " not found in project sources or resources." );
     }
 
     private GwtModule readModule( String name, File file )
-        throws MojoExecutionException
+        throws GwtModuleReaderException
 
     {
         try
@@ -197,7 +215,7 @@ public abstract class AbstractGwtModuleMojo
         }
         catch ( FileNotFoundException e )
         {
-            throw new MojoExecutionException( "Failed to read module file " + file );
+            throw new GwtModuleReaderException( "Failed to read module file " + file );
         }
     }
 
@@ -206,7 +224,7 @@ public abstract class AbstractGwtModuleMojo
      * @return
      */
     private GwtModule readModule( String name, InputStream xml )
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         try
         {
@@ -217,7 +235,7 @@ public abstract class AbstractGwtModuleMojo
         {
             String error = "Failed to read module XML file " + xml;
             getLog().error( error );
-            throw new MojoExecutionException( error, e );
+            throw new GwtModuleReaderException( error, e );
         }
     }
 

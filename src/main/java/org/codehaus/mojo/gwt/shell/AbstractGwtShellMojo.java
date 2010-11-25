@@ -196,39 +196,6 @@ public abstract class AbstractGwtShellMojo
         return jvm;
     }
 
-    /**
-     * plexus-util hack to run a command WITHOUT a shell
-     *
-     * @see PLXUTILS-107
-     */
-    private class JavaShell
-        extends Shell
-    {
-        protected List<String> getRawCommandLine( String executable, String[] arguments )
-        {
-            List<String> commandLine = new ArrayList<String>();
-            if ( executable != null )
-            {
-                commandLine.add( executable );
-            }
-            for ( String arg : arguments )
-            {
-                if ( isQuotedArgumentsEnabled() )
-                {
-                    char[] escapeChars = getEscapeChars( isSingleQuotedExecutableEscaped(),
-                                                         isDoubleQuotedExecutableEscaped() );
-
-                    commandLine.add( StringUtils.quoteAndEscape( arg, getArgumentQuoteDelimiter(), escapeChars,
-                                                                 getQuotingTriggerChars(), '\\', false ) );
-                }
-                else
-                {
-                    commandLine.add( arg );
-                }
-            }
-            return commandLine;
-        }
-    }
 
     /**
      * @param timeOut the timeOut to set
@@ -236,7 +203,7 @@ public abstract class AbstractGwtShellMojo
     public void setTimeOut( int timeOut )
     {
         this.timeOut = timeOut;
-    };
+    }
 
     /**
      * A plexus-util StreamConsumer to redirect messages to plugin log
@@ -261,6 +228,7 @@ public abstract class AbstractGwtShellMojo
     };
 
     /**
+     * @deprecated use the new {@link JavaCommand}
      * Create a command to execute using builder pattern
      *
      * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>

@@ -27,6 +27,7 @@ import java.util.Set;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
@@ -63,38 +64,47 @@ abstract class GwtResourcesBaseMojo
     protected Collection<ResourceFile> getAllResourceFiles()
         throws MojoExecutionException, MojoFailureException
     {
-        Set<ResourceFile> sourcesAndResources = new HashSet<ResourceFile>();
-        Set<String> sourcesAndResourcesPath = new HashSet<String>();
-        sourcesAndResourcesPath.addAll( getProject().getCompileSourceRoots() );
-        for ( Resource resource : (Collection<Resource>) getProject().getResources() )
+        try
         {
-            sourcesAndResourcesPath.add( resource.getDirectory() );
-        }
+            Set<ResourceFile> sourcesAndResources = new HashSet<ResourceFile>();
+            Set<String> sourcesAndResourcesPath = new HashSet<String>();
+            sourcesAndResourcesPath.addAll( getProject().getCompileSourceRoots() );
+            for ( Resource resource : (Collection<Resource>) getProject().getResources() )
+            {
+                sourcesAndResourcesPath.add( resource.getDirectory() );
+            }
 
-        for ( String name : getModules() )
+            for ( String name : getModules() )
+            {
+                GwtModule module = readModule( name );
+
+                sourcesAndResources.add( getDescriptor( module, sourcesAndResourcesPath ) );
+                int count = 1;
+
+                for ( String source : module.getSources() )
+                {
+                    getLog().debug( "GWT sources from " + name + '.' + source );
+                    Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
+                                                                     "**/*.java" );
+                    sourcesAndResources.addAll( files );
+                    count += files.size();
+                }
+                for ( String source : module.getSuperSources() )
+                {
+                    getLog().debug( "GWT super-sources from " + name + '.' + source );
+                    Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
+                                                                     "**/*.java" );
+                    sourcesAndResources.addAll( files );
+                    count += files.size();
+                }
+                getLog().info( count + " source files from GWT module " + name );
+            }
+            return sourcesAndResources;
+        }
+        catch ( GwtModuleReaderException e )
         {
-            GwtModule module = readModule( name );
-
-            sourcesAndResources.add( getDescriptor( module, sourcesAndResourcesPath ) );
-            int count = 1;
-
-            for ( String source : module.getSources() )
-            {
-                getLog().debug( "GWT sources from " + name + '.' + source );
-                Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath, "**/*.java" );
-                sourcesAndResources.addAll( files );
-                count += files.size();
-            }
-            for ( String source : module.getSuperSources() )
-            {
-                getLog().debug( "GWT super-sources from " + name + '.' + source );
-                Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath, "**/*.java" );
-                sourcesAndResources.addAll( files );
-                count += files.size();
-            }
-            getLog().info( count + " source files from GWT module " + name );
+            throw new MojoExecutionException( e.getMessage(), e );
         }
-        return sourcesAndResources;
     }
 
     /**

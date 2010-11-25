@@ -32,6 +32,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
@@ -282,7 +283,7 @@ public class RunMojo
      * @return the startup URL to open in hosted browser (gwt 1.6+)
      */
     public String getStartupUrl()
-       throws MojoExecutionException
+        throws MojoExecutionException
     {
         if ( noServer )
         {
@@ -300,7 +301,14 @@ public class RunMojo
             {
                 if ( prefix.equals( module ) )
                 {
-                    return readModule( module ).getPath() + '/' + runTarget.substring( dash + 1 );
+                    try
+                    {
+                        return readModule( module ).getPath() + '/' + runTarget.substring( dash + 1 );
+                    }
+                    catch ( GwtModuleReaderException e )
+                    {
+                        throw new MojoExecutionException( e.getMessage(), e );
+                    }
                 }
             }
         }

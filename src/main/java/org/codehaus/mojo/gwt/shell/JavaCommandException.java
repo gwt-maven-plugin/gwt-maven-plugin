@@ -1,3 +1,5 @@
+package org.codehaus.mojo.gwt.shell;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,16 +18,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes').exists();
-assert new File(basedir, 'target/extra').exists();
-assert new File(basedir, 'target/extra/hello/soycReport').exists();
-assert new File(basedir, 'target/extra/hello/soycReport/compile-report').exists();
-assert new File(basedir, 'target/extra/hello/soycReport/compile-report/index.html').exists();
-assert new File(basedir, 'target/site/hello').exists();
-assert new File(basedir, 'target/site/hello/index.html').exists();
-assert new File(basedir, 'target/site/hello/soyc.css').exists();
-assert new File(basedir, 'target/site/hello/goog.css').exists();
-assert new File(basedir, 'target/site/hello/goog.css').exists();
-assert new File(basedir, 'target/site/soyc.html').exists();
 
-return true;
+/**
+ * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
+ * @since 2.1.1
+ */
+public class JavaCommandException
+    extends Exception
+{
+
+    public JavaCommandException( String message )
+    {
+        super( message );
+    }
+
+    public JavaCommandException( String message, Throwable t )
+    {
+        super( message, t );
+    }
+}

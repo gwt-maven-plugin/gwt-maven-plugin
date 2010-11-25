@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 
@@ -103,7 +104,7 @@ public class GwtModule
     }
 
     public List<String> getEntryPoints()
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         List<String> entryPoints = new ArrayList<String>();
         entryPoints.addAll( getLocalEntryPoints() );
@@ -134,7 +135,7 @@ public class GwtModule
      * graph, so we build a set of inherited modules
      */
     public Set<GwtModule> getInherits()
-		throws MojoExecutionException
+		throws GwtModuleReaderException
     {
         if ( inherits != null )
         {
@@ -154,7 +155,7 @@ public class GwtModule
      * @throws MojoExecutionException
      */
     private void addInheritedModules( Set<GwtModule> set, Set<GwtModule> modules )
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         for ( GwtModule module : modules )
         {
@@ -168,7 +169,7 @@ public class GwtModule
     }
 
     private Set<GwtModule> getLocalInherits()
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         Xpp3Dom nodes[] = xml.getChildren( "inherits" );
         if ( nodes == null )
@@ -189,13 +190,13 @@ public class GwtModule
     }
 
     public Map<String, String> getServlets()
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         return getServlets( getPath() );
     }
 
     public Map<String, String> getServlets( String path )
-        throws MojoExecutionException
+        throws GwtModuleReaderException
     {
         Map<String, String> servlets = getLocalServlets( path );
         for ( GwtModule module : getInherits() )

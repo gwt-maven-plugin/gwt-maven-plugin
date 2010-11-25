@@ -35,6 +35,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 
@@ -228,59 +229,58 @@ public class EclipseMojo
     private void createLaunchConfigurationForHostedModeBrowser( String module )
         throws MojoExecutionException
     {
-        File launchFile = new File( getProject().getBasedir(), readModule( module ).getPath() + ".launch" );
-        if ( launchFile.exists() )
-        {
-            getLog().info( "launch file exists " + launchFile.getName() + " skip generation " );
-            return;
-        }
-
-        Configuration cfg = new Configuration();
-        cfg.setClassForTemplateLoading( EclipseMojo.class, "" );
-
-        Map<String, Object> context = new HashMap<String, Object>();
-        // Read compileSourceRoots from executedProject to retrieve generated source directories
-        Collection<String> sources = new LinkedList<String>( executedProject.getCompileSourceRoots() );
-        List<Resource> resources = executedProject.getResources();
-        for ( Resource resource : resources )
-        {
-            sources.add( resource.getDirectory() );
-        }
-        context.put( "sources", sources );
-        context.put( "module", module );
-        context.put( "localRepository", localRepository.getBasedir() );
-        int idx = module.lastIndexOf( '.' );
-        String page = module.substring( idx + 1 ) + ".html";
-        if ( additionalPageParameters != null )
-        {
-            page += "?" + additionalPageParameters;
-        }
-
-        context.put( "modulePath", readModule( module ).getPath() );
-        context.put( "page", page );
-        int basedir = getProject().getBasedir().getAbsolutePath().length();
-        context.put( "out", getOutputDirectory().getAbsolutePath().substring( basedir + 1 ) );
-        context.put( "war", hostedWebapp.getAbsolutePath().substring( basedir + 1 ) );
-        String args = noserver ? "-noserver -port " + port : "";
-        if ( blacklist != null )
-        {
-            args += " -blacklist " + blacklist;
-        }
-        if ( whitelist != null )
-        {
-            args += " -whitelist " + whitelist;
-        }
-        if ( bindAddress != null )
-        {
-            args += " -bindAddress " + bindAddress;
-        }
-        context.put( "additionalArguments", args );
-        context.put( "extraJvmArgs", extraJvmArgs );
-        context.put( "project", eclipseUtil.getProjectName( getProject() ) );
-       
-
         try
         {
+            File launchFile = new File( getProject().getBasedir(), readModule( module ).getPath() + ".launch" );
+            if ( launchFile.exists() )
+            {
+                getLog().info( "launch file exists " + launchFile.getName() + " skip generation " );
+                return;
+            }
+
+            Configuration cfg = new Configuration();
+            cfg.setClassForTemplateLoading( EclipseMojo.class, "" );
+
+            Map<String, Object> context = new HashMap<String, Object>();
+            // Read compileSourceRoots from executedProject to retrieve generated source directories
+            Collection<String> sources = new LinkedList<String>( executedProject.getCompileSourceRoots() );
+            List<Resource> resources = executedProject.getResources();
+            for ( Resource resource : resources )
+            {
+                sources.add( resource.getDirectory() );
+            }
+            context.put( "sources", sources );
+            context.put( "module", module );
+            context.put( "localRepository", localRepository.getBasedir() );
+            int idx = module.lastIndexOf( '.' );
+            String page = module.substring( idx + 1 ) + ".html";
+            if ( additionalPageParameters != null )
+            {
+                page += "?" + additionalPageParameters;
+            }
+
+            context.put( "modulePath", readModule( module ).getPath() );
+            context.put( "page", page );
+            int basedir = getProject().getBasedir().getAbsolutePath().length();
+            context.put( "out", getOutputDirectory().getAbsolutePath().substring( basedir + 1 ) );
+            context.put( "war", hostedWebapp.getAbsolutePath().substring( basedir + 1 ) );
+            String args = noserver ? "-noserver -port " + port : "";
+            if ( blacklist != null )
+            {
+                args += " -blacklist " + blacklist;
+            }
+            if ( whitelist != null )
+            {
+                args += " -whitelist " + whitelist;
+            }
+            if ( bindAddress != null )
+            {
+                args += " -bindAddress " + bindAddress;
+            }
+            context.put( "additionalArguments", args );
+            context.put( "extraJvmArgs", extraJvmArgs );
+            context.put( "project", eclipseUtil.getProjectName( getProject() ) );
+
             context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath().replace( '\\', '/' ) );
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             String templateName = useGoogleEclispePlugin ? "google.fm" : "launch.fm";
@@ -298,6 +298,11 @@ public class EclipseMojo
         {
             throw new MojoExecutionException( "Unable to merge freemarker template", te );
         }
+        catch ( GwtModuleReaderException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
+        
     }
 
 }
