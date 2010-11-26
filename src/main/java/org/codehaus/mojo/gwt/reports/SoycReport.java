@@ -40,6 +40,7 @@ import org.codehaus.mojo.gwt.shell.JavaCommandRequest;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtDevHelper;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
+import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
@@ -116,6 +117,14 @@ public class SoycReport
      * @since 2.1.1
      */
     private boolean skip;
+    
+    /**
+     * Internationalization component.
+     *
+     * @component
+     * @since 2.1.1
+     */
+    protected I18N i18n;    
 
     /**
      * {@inheritDoc}
@@ -124,7 +133,6 @@ public class SoycReport
      */
     public boolean canGenerateReport()
     {
-        // TODO check the compiler has created the raw xml soyc file
         return true;
     }
 
@@ -145,7 +153,7 @@ public class SoycReport
      */
     public String getDescription( Locale locale )
     {
-        return "GWT Story Of Your Compiler";
+        return getI18nString( locale, "soyc.report.description" );
     }
 
     /**
@@ -155,7 +163,7 @@ public class SoycReport
      */
     public String getName( Locale locale )
     {
-        return "GWT Story Of Your Compiler";
+        return getI18nString( locale, "soyc.report.name" );
     }
 
     /**
@@ -202,11 +210,10 @@ public class SoycReport
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
-        //TODO I18n
         StringBuilder message = new StringBuilder();
         message.append( "--------------------------------------------------------------------------" );
         message.append( SystemUtils.LINE_SEPARATOR );
-        message.append( "You must now use the CompileReport, SoycDashboard is not anymore supported" );
+        message.append( getI18nString( locale, "soyc.report.warning" ) );
         message.append( SystemUtils.LINE_SEPARATOR );
         message.append( "--------------------------------------------------------------------------" );
         getLog().warn( message.toString() );
@@ -250,9 +257,6 @@ public class SoycReport
                     .setClassName( "com.google.gwt.soyc.SoycDashboard" )
                     .setLog( getLog() );
                 JavaCommand cmd = new JavaCommand( javaCommandRequest ).withinClasspath( gwtDevHelper.getGwtDevJar() )
-                //  FIXME
-                // .withinClasspath( runtime.getSoycJar() )
-                //.arg( "-resources" ).arg( runtime.getSoycJar().getAbsolutePath() )
                     .arg( "-out" ).arg( reportingOutputDirectory.getAbsolutePath() + File.separatorChar + module );
 
                 cmd.arg( new File( extra, path ).getAbsolutePath() );
@@ -264,10 +268,10 @@ public class SoycReport
             {
                 getLog().warn( e.getMessage(), e );
                 new CompilationReportRenderer( getSink(), new ArrayList<GwtModule>( 0 ), getLog(), soycRawReport,
-                                               "soyc", false ).render();
+                                               "soyc", false, i18n, locale ).render();
             }
         }
-        // TODO use this in the report generation instead of file scanning
+        
         try
         {
 
@@ -283,7 +287,7 @@ public class SoycReport
             CompilationReportRenderer compilationReportRenderer = new CompilationReportRenderer( getSink(), gwtModules,
                                                                                                  getLog(),
                                                                                                  soycRawReport, "soyc",
-                                                                                                 false );
+                                                                                                 false, i18n, locale );
             compilationReportRenderer.render();
         }
         catch ( GwtModuleReaderException e )
@@ -292,4 +296,9 @@ public class SoycReport
         }
     }
 
+    protected String getI18nString( Locale locale, String key )
+    {
+        return i18n.getString( "compile-report", locale, key );
+    }    
+    
 }

@@ -34,6 +34,7 @@ import org.codehaus.mojo.gwt.GwtModule;
 import org.codehaus.mojo.gwt.GwtModuleReader;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
+import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -104,6 +105,14 @@ public class CompileReport
      * @since 2.1.1
      */
     private boolean skip;    
+    
+    /**
+     * Internationalization component.
+     *
+     * @component
+     * @since 2.1.1
+     */
+    protected I18N i18n;
 
     /**
      * {@inheritDoc}
@@ -256,7 +265,7 @@ public class CompileReport
                                                                                                  getLog(),
                                                                                                  compileReports,
                                                                                                  "gwtCompileReports",
-                                                                                                 true );
+                                                                                                 true, i18n, locale );
             compilationReportRenderer.render();
         }
         catch ( GwtModuleReaderException e )

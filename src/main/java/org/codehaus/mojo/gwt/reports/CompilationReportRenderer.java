@@ -21,12 +21,14 @@ package org.codehaus.mojo.gwt.reports;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.reporting.AbstractMavenReportRenderer;
 import org.codehaus.mojo.gwt.GwtModule;
+import org.codehaus.plexus.i18n.I18N;
 
 /**
  * project compilation report renderer to display links to 
@@ -47,15 +49,23 @@ public class CompilationReportRenderer
     
     private boolean compilerReport;
     
+    private final I18N i18n;
+    
+    private final Locale locale;
+    
     public CompilationReportRenderer( final Sink sink, final List<GwtModule> gwtModules, Log log,
-                                      boolean reportsAvailable, String compilerReportsPath, boolean compilerReport )
+                                      boolean reportsAvailable, String compilerReportsPath, boolean compilerReport,
+                                      I18N i18n, Locale locale )
     {
         super( sink );
+
         this.gwtModules = gwtModules;
         this.log = log;
         this.reportsAvailable = reportsAvailable;
         this.compilerReportsPath = compilerReportsPath;
         this.compilerReport = compilerReport;
+        this.i18n = i18n;
+        this.locale = locale;
     }
 
     /**
@@ -76,13 +86,13 @@ public class CompilationReportRenderer
     {
         // TODO i18n and message for none
         log.debug( "start renderBody" );
-        startSection( "GWT Compilation Reports" );
+        startSection( getI18nString( locale, "compiler.report.section.title" ) );
         // display a specific warning message for SoycDashboard Report
         if ( !compilerReport )
         {
             sink.paragraph();
             sink.bold();
-            sink.text( "You must now use the CompileReport, SoycDashboard is not anymore supported" );
+            sink.text( getI18nString( locale, "soyc.report.warning" ) );
             sink.bold_();
             sink.paragraph_();
 
@@ -93,11 +103,11 @@ public class CompilationReportRenderer
             sink.bold();
             if ( compilerReport )
             {
-                sink.text( "No compile reports found, did you compile with compileReport option set ?" );
+                sink.text( getI18nString( locale, "compiler.report.none.warning" ) );
             }
             else
             {
-                sink.text( "No SOYC raw report found, did you compile with soyc option set ?" );
+                sink.text( getI18nString( locale, "compiler.report.soyc.warning" ) );
             }
             sink.bold_();
             sink.paragraph_();
@@ -125,5 +135,9 @@ public class CompilationReportRenderer
         endSection();
         log.debug( "end renderBody" );
     }
-
+    
+    protected String getI18nString( Locale locale, String key )
+    {
+        return i18n.getString( "compile-report", locale, key );
+    }
 }
