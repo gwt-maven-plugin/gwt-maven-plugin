@@ -53,6 +53,8 @@ under the License.
       <item name="Using app Engine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
       <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
       <item name="Eclipse Google Plugin" href="eclipse/google_plugin.html" />
+      <item name="Writing Library" href="user-guide/library.html" />
+      <item name="Productivity" href="user-guide/productivity.html" />
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>

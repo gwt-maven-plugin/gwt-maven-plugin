@@ -35,12 +35,12 @@ Setup Maven for GWT development
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${project.version}</version>
         <executions>
-            <execution>
-                <goals>
-                    <goal>compile</goal>
-                    <goal>generateAsync</goal>
-                </goals>
-            </execution>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>generateAsync</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>
