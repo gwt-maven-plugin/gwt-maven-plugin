@@ -29,7 +29,7 @@ Lauch your application in dev mode with AppEngine launcher
 
   With version 2.1.1, you can now start debug mode with AppEngineLauncher.
   Simple and default configuration. This one will download and extract appengine sdk.
-  The appengine-sdk version used is defined with a mojo property {{{./run-mojo.html#appEngineVersion}appEngineVersion}}.
+  The appengine-sdk version used is defined with a mojo property {{{../run-mojo.html#appEngineVersion}appEngineVersion}}.
   You can change in the cli with -Dgwt.appEngineVersion= 
    :
   
