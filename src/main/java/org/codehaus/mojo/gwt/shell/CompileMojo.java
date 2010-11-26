@@ -380,14 +380,14 @@ public class CompileMojo
 
     private void addSOYC( JavaCommand cmd )
     {
-        if ( !soyc )
+        if ( soyc )
         {
-            getLog().debug( "SOYC has been disabled by user" );
+            getLog().debug( "SOYC has been enabled by user, SOYC is deprecated : you must now use compileReport" );
+            cmd.arg( "-soyc" );
         }
         else
         {
-            cmd.arg( "-soyc" );
-
+            getLog().debug( "SOYC disabled" );
         }
     }
 
