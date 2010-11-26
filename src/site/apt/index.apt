@@ -40,15 +40,9 @@ GWT Maven Plugin
  or by reading the online
  {{{http://www.sonatype.com/books/mvnref-book/reference/public-book.html}reference book}}.
  
-  * {{{./whats_new.html}What's new in 2.1.1 ?}}
+ << {{{./whats_new.html}What's new in 2.1.1 ?}} >>
   
-  * {{{./user-guide/archetype.html}Using the archetype}}
  
-  * {{{./user-guide/project.html}Organize project}}
-  
-  * {{{./plugin-info.html}Goals and Parameters Reference}}
-
-  * {{{./faq.html}Frequently Asked Questions}}  
   
   
 GWT Maven Plugin supports :
@@ -65,4 +59,13 @@ GWT Maven Plugin supports :
   
   * integrate nicelly into Eclipse, thanks to M2Eclipse and Google Eclipse plugins.  
 
+TIPS
+
+  * {{{./user-guide/archetype.html}Using the archetype}}
+ 
+  * {{{./user-guide/project.html}Organize project}}
+  
+  * {{{./plugin-info.html}Goals and Parameters Reference}}
+
+  * {{{./faq.html}Frequently Asked Questions}} 
 

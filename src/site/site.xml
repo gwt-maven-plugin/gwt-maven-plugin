@@ -41,6 +41,7 @@ under the License.
     </links>
     <menu name="User Guide">
       <item name="Introduction" href="index.html"/>
+      <item name="What new in ${project.version}" href="whats_new.html"/>
       <item name="Using the archetype" href="user-guide/archetype.html"/>
       <item name="Project organization" href="user-guide/project.html"/>
       <item name="Compile and Debug" href="user-guide/compile.html"/>
@@ -55,6 +56,7 @@ under the License.
       <item name="Eclipse Google Plugin" href="eclipse/google_plugin.html" />
       <item name="Writing Library" href="user-guide/library.html" />
       <item name="Productivity" href="user-guide/productivity.html" />
+      <item name="Compiler Report" href="user-guide/compiler-report.html"/>
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>

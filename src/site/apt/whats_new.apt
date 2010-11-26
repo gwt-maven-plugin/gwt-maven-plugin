@@ -28,10 +28,10 @@
 
 What's new in gwt-maven-plugin 2.1.1
 
- * AppEngine Launch
+ * {{{./user-guide/appengine-launcher.html}AppEngine Launch}}
  
- * css generator
+ * {{{./user-guide/css-interface-generator.html}Css Interface Generator}}
  
- * more gwt compiler options
+ * More Gwt compiler options : -compileReport, -optimize, -XsoycDetailed, -strict (see the mojo {{{./compile-mojo.html}Compile Mojo}} )  
  
- * compiler report 
+ * {{{./user-guide/compiler-report.html} Compiler Report}} 

@@ -119,6 +119,8 @@
     <doxia-sitetoolsVersion>1.1.4</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
+    <stagingSiteRepositoryId>codehaus</stagingSiteRepositoryId>
+    <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>    
   </properties>
 
   <dependencies>
@@ -474,8 +476,8 @@
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
-          <stagingRepositoryId>codehaus</stagingRepositoryId>
-          <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>
+          <stagingRepositoryId>${stagingSiteRepositoryId}</stagingRepositoryId>
+          <stagingSiteURL>${stagingSiteURL}</stagingSiteURL>
         </configuration>
       </plugin>
       <plugin>
