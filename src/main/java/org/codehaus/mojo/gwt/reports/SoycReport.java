@@ -20,12 +20,12 @@ package org.codehaus.mojo.gwt.reports;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.project.MavenProject;
@@ -36,7 +36,6 @@ import org.codehaus.mojo.gwt.ClasspathBuilder;
 import org.codehaus.mojo.gwt.GwtModule;
 import org.codehaus.mojo.gwt.GwtModuleReader;
 import org.codehaus.mojo.gwt.shell.JavaCommand;
-import org.codehaus.mojo.gwt.shell.JavaCommandException;
 import org.codehaus.mojo.gwt.shell.JavaCommandRequest;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtDevHelper;
@@ -47,6 +46,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * @see http://code.google.com/p/google-web-toolkit/wiki/CodeSplitting#The_Story_of_Your_Compile_(SOYC)
  * @goal soyc
  * @requiresDependencyResolution runtime
+ * @deprecated You must now use the CompileReport, SoycDashboard is not anymore supported will be removed in 2.1.2
  */
 public class SoycReport
     extends AbstractMavenReport
@@ -202,11 +202,20 @@ public class SoycReport
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
+        //TODO I18n
+        StringBuilder message = new StringBuilder();
+        message.append( "--------------------------------------------------------------------------" );
+        message.append( SystemUtils.LINE_SEPARATOR );
+        message.append( "You must now use the CompileReport, SoycDashboard is not anymore supported" );
+        message.append( SystemUtils.LINE_SEPARATOR );
+        message.append( "--------------------------------------------------------------------------" );
+        getLog().warn( message.toString() );
         if ( skip )
         {
             getLog().info( "Soyc Report is skipped" );
             return;
         }
+        
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir( extra );
         scanner.setIncludes( new String[] { "**/soycReport/stories0.xml.gz" } );
@@ -251,13 +260,11 @@ public class SoycReport
                 cmd.arg( new File( extra, path ).getAbsolutePath().replace( "stories", "splitPoints" ) );
                 cmd.execute();
             }
-            catch ( IOException e )
+            catch ( Exception e )
             {
-                throw new MavenReportException( e.getMessage(), e );
-            }
-            catch ( JavaCommandException e )
-            {
-                throw new MavenReportException( e.getMessage(), e );
+                getLog().warn( e.getMessage(), e );
+                new CompilationReportRenderer( getSink(), new ArrayList<GwtModule>( 0 ), getLog(), soycRawReport,
+                                               "soyc", false ).render();
             }
         }
         // TODO use this in the report generation instead of file scanning

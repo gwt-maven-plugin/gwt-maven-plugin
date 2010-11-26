@@ -77,6 +77,16 @@ public class CompilationReportRenderer
         // TODO i18n and message for none
         log.debug( "start renderBody" );
         startSection( "GWT Compilation Reports" );
+        // display a specific warning message for SoycDashboard Report
+        if ( !compilerReport )
+        {
+            sink.paragraph();
+            sink.bold();
+            sink.text( "You must now use the CompileReport, SoycDashboard is not anymore supported" );
+            sink.bold_();
+            sink.paragraph_();
+
+        }
         if ( !this.reportsAvailable )
         {
             sink.paragraph();

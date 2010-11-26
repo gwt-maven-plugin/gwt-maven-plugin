@@ -16,23 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+// so as it's no supported anymore we just check the page is here
+// and the build doesn't fail 
 assert new File(basedir, 'target/classes').exists();
 assert new File(basedir, 'target/extra').exists();
-assert new File(basedir, 'target/extra/hello/soycReport').exists();
-assert new File(basedir, 'target/extra/hello/soycReport/compile-report').exists();
-assert new File(basedir, 'target/extra/hello/soycReport/compile-report/index.html').exists();
-assert new File(basedir, 'target/site/soyc/hello').exists();
-assert new File(basedir, 'target/site/soyc/hello/index.html').exists();
-assert new File(basedir, 'target/site/soyc/hello/soyc.css').exists();
-assert new File(basedir, 'target/site/soyc/hello/goog.css').exists();
-assert new File(basedir, 'target/site/soyc/hello/goog.css').exists();
 assert new File(basedir, 'target/site/soyc.html').exists();
-
-content = new File(basedir, 'target/site/soyc.html').text;
-assert content.contains( 'href="./soyc/com.google.gwt.sample.hello.Hello/index.html' );
-assert content.contains( 'com.google.gwt.sample.hello.Hello</a>' );
-
-assert content.contains( 'href="./soyc/hello/index.html' );
-assert content.contains( 'org.codehaus.mojo.gwt.test.Hello</a>' );
 
 return true;
