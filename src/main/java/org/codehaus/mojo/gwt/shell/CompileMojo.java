@@ -46,6 +46,8 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Invokes the GWTCompiler for the project source.
+ * See compiler options :
+ * http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
  *
  * @phase prepare-package
  * @goal compile
