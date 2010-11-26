@@ -1,14 +1,37 @@
  ------
- What's new
+ Introduction
  ------
+ Nicolas de Loof
+ Olivier Lamy
  ------
-
-What's new in gwt-maven-plugin 2.1
-
- 1.x releases of gwt-maven-plugin where not tied to a GWT SDK release. This had the benefict that we didn't 
- have to release the plugin for each minor GWT SDK release, but from GWT 1.4 to GWT 2.0 many options have
- changed in the SDK and the plugin was more and more complex.
+ 2010-11-26 
  
- Starting with 2.1.x releases, the gwt-maven-plugin is tied to a GWT release. Google Web Toolkit Team is 
- activelly collaborating to make GWT and Maven work better together, so it will be easier for us to integrate
- ehnacements and new features in the plugin and release the plugin few days after a new SDK is out.
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html 
+
+What's new in gwt-maven-plugin 2.1.1
+
+ * AppEngine Launch
+ 
+ * css generator
+ 
+ * more gwt compiler options
+ 
+ * compiler report 

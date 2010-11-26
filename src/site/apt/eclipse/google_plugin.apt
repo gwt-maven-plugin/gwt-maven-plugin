@@ -175,7 +175,7 @@ Using the Google Eclipse Plugin
   configured(*) as a GWT module project, changes to java sources will be available in the hosted browser with a simple
   refresh with no requirement to repackage the modules.
 
-  [images/gwt-maven-logo.png] m2eclipse detecting the gwt module as project reference
+  [../images/gwt-maven-logo.png] m2eclipse detecting the gwt module as project reference
 
   (*) A "<well configured GWT module project>" is expected to have Java sources copied as resources in the project
   build outputDirectory (using gwt:resource goal) and a dedicated gwt.xml module file to define the required

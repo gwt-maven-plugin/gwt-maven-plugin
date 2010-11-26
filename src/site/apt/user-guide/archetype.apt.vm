@@ -33,7 +33,7 @@ Using the Archetype
 
   <<<>>>
 
-[images/projectLayout.png]
+[../images/user-guide/projectLayout.png]
 
   It uses M2Eclipse for classpath management and Google Eclipse Plugin for nice GWT
   support inside Eclipse.

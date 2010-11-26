@@ -27,23 +27,24 @@ Testing GWT code with Maven
   If you really want to do so, here is a sample configuration :
 
 +---
-   <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <additionalClasspathElements>
-            <additionalClasspathElement>${project.build.sourceDirectory}</additionalClasspathElement>
-            <additionalClasspathElement>${project.build.testSourceDirectory}</additionalClasspathElement>
-          </additionalClasspathElements>
-          <useManifestOnlyJar>false</useManifestOnlyJar>
-          <forkMode>always</forkMode>
-          <systemProperties>
-            <property>
-              <name>gwt.args</name>
-              <value>-out ${webAppDirectory}</value>
-            </property>
-          </systemProperties>
-        </configuration>
-   </plugin>
+  <plugin>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.6</version>
+    <configuration>
+      <additionalClasspathElements>
+        <additionalClasspathElement>\${project.build.sourceDirectory}</additionalClasspathElement>
+        <additionalClasspathElement>\${project.build.testSourceDirectory}</additionalClasspathElement>
+      </additionalClasspathElements>
+      <useManifestOnlyJar>false</useManifestOnlyJar>
+      <forkMode>always</forkMode>
+      <systemProperties>
+        <property>
+          <name>gwt.args</name>
+          <value>-out \${webAppDirectory}</value>
+        </property>
+      </systemProperties>
+    </configuration>
+  </plugin>
 +---
 
 * Using gwt-maven-plugin <<<test>>> goal
@@ -63,10 +64,10 @@ Testing GWT code with Maven
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${project.version}</version>
         <executions>
-	      <execution>
-    	    <goals>
-       		  <goal>test</goal>
-       	 	</goals>
+          <execution>
+            <goals>
+              <goal>test</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -87,15 +88,15 @@ Testing GWT code with Maven
   tests during maven build) to skip the GwtTests using some naming patterns :
 
 +--
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.3</version>
-        <configuration>
-          <excludes>
-            <exclude>**/*GwtTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
+  <plugin>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.6</version>
+    <configuration>
+      <excludes>
+        <exclude>**/*GwtTest.java</exclude>
+      </excludes>
+    </configuration>
+  </plugin>
 +--
 
   A simplier way to separate classic and GWT tests is to name latests <<<GwtTest"Something.java>>>.
@@ -108,21 +109,21 @@ Testing GWT code with Maven
   To configure the plugin to use another naming convention, set the <<<includes>>> plugin parameter.
 
 +--
-        <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                  <includes>**/CustomPattern*.java</includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-        </plugin>
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>gwt-maven-plugin</artifactId>
+    <version>${project.version}</version>
+    <configuration>
+      <includes>**/CustomPattern*.java</includes>
+    </configuration>
+    <executions>
+      <execution>
+        <goals>
+          <goal>test</goal>
+        </goals>
+      </execution>
+    </executions>
+  </plugin>
 +--
 
 * Test results output
@@ -176,14 +177,14 @@ Testing GWT code with Maven
   the <<<htmlunit>>> with a list of emulated browsers - please not this is only emulation, always validate test results with a real browser.
 
 +---
-        <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                  <htmlunit>IE6,IE7,IE8</htmlunit>
-                </configuration>
-        </plugin>
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>gwt-maven-plugin</artifactId>
+    <version>${project.version}</version>
+    <configuration>
+      <htmlunit>IE6,IE7,IE8</htmlunit>
+    </configuration>
+  </plugin>
 +---
 
 * testing with "real" browsers
@@ -200,14 +201,14 @@ Testing GWT code with Maven
   browser :
 
 +---
-        <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                  <selenium>myhost:4444/*firefox"</selenium>
-                </configuration>
-        </plugin>
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>gwt-maven-plugin</artifactId>
+    <version>${project.version}</version>
+    <configuration>
+      <selenium>myhost:4444/*firefox"</selenium>
+    </configuration>
+  </plugin>
 +---
 
   Selenium may not fit your needs, then GWT comes with a custom RemoteBrowserServer. You can lauch such a server using <<<gwt:browser>>> goal,
@@ -216,14 +217,14 @@ Testing GWT code with Maven
   parameter to declare your remoteBrowserServer :
 
 +---
-        <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                  <remoteweb>rmi://myhost/ie</remoteweb>
-                </configuration>
-        </plugin>
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>gwt-maven-plugin</artifactId>
+    <version>${project.version}</version>
+    <configuration>
+      <remoteweb>rmi://myhost/ie</remoteweb>
+    </configuration>
+  </plugin>
 +---
 
 

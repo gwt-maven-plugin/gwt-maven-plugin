@@ -28,7 +28,7 @@
 Compile GWT application
 
   You can use the following configuration in your pom.xml to run the GWT compiler
-  when the project is built. By default, the {{{compile-mojo.html}compile}} goal is configured
+  when the project is built. By default, the {{{../compile-mojo.html}compile}} goal is configured
   to be executed during the ''prepare-package'' phase to run as late as possible.
 
 +--

@@ -41,17 +41,17 @@ under the License.
     </links>
     <menu name="User Guide">
       <item name="Introduction" href="index.html"/>
-      <item name="Using the archetype" href="archetype.html"/>
-      <item name="Project organization" href="project.html"/>
-      <item name="Compile and Debug" href="compile.html"/>
-      <item name="Internationalization" href="i18n.html"/>
-      <item name="Testing" href="testing.html"/>
-      <item name="Run Hosted Mode" href="hosted.html"/>
+      <item name="Using the archetype" href="user-guide/archetype.html"/>
+      <item name="Project organization" href="user-guide/project.html"/>
+      <item name="Compile and Debug" href="user-guide/compile.html"/>
+      <item name="Internationalization" href="user-guide/i18n.html"/>
+      <item name="Testing" href="user-guide/testing.html"/>
+      <item name="Run Hosted Mode" href="user-guide/hosted.html"/>
       <item name="Async interfaces" href="user-guide/async.html"/>
       <item name="Comfortable debugging" href="user-guide/comfortable_debugging.html"/>
 	  <item name="Productivity Tips" href="user-guide/productivity.html"/>
-      <item name="Using app Engine launcher in dev mode" href="appengine-launcher.html"/>
-      <item name="Using the CSS Interface Generator" href="css-interface-generator.html"/>
+      <item name="Using app Engine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
+      <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>

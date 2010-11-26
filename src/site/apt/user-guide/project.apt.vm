@@ -12,7 +12,7 @@ Project organization
 
   <<<>>>
 
-[images/projectLayout.png]
+[../images/user-guide/projectLayout.png]
 
  Compared to the directory layout used by GWT, notice that the <<</war>>> folder is replaced by the
  <<<src/main/webapp>>> folder, following {{{http://maven.apache.org/plugins/maven-war-plugin/}maven-war-plugin}}
@@ -22,7 +22,7 @@ Project organization
 
  <<<>>>
 
-[images/GEP-war.png]
+[../images/user-guide/GEP-war.png]
 
 * POM configuration
 
@@ -136,7 +136,7 @@ parent/                                     (aggregating parent project)
 
   The domain project it not yet a valid GWT module : GWT compiler requires Java source files.
 
-  First option is to use the {{{resources-mojo.html}gwt:resources}} or {{{source-jar-mojo.html}gwt:source-jar}} goals to attach java sources and resources
+  First option is to use the {{{../resources-mojo.html}gwt:resources}} or {{{../source-jar-mojo.html}gwt:source-jar}} goals to attach java sources and resources
   in the generated jar. The side effect is that this jar will include java sources, that may not be what you
   want to do if you use it elsewhere, typically in the webapp servlets.
 
