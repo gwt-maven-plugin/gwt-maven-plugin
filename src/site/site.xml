@@ -49,9 +49,10 @@ under the License.
       <item name="Run Hosted Mode" href="user-guide/hosted.html"/>
       <item name="Async interfaces" href="user-guide/async.html"/>
       <item name="Comfortable debugging" href="user-guide/comfortable_debugging.html"/>
-	  <item name="Productivity Tips" href="user-guide/productivity.html"/>
+      <item name="Productivity Tips" href="user-guide/productivity.html"/>
       <item name="Using app Engine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
       <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
+      <item name="Eclipse Google Plugin" href="eclipse/google_plugin.html" />
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>

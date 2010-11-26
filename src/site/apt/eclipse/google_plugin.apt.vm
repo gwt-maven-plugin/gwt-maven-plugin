@@ -1,7 +1,29 @@
  -----
  Using the Google Eclipse Plugin
  -----
- -----
+ Nicolas de Loof
+ ------
+ 2010-11-26 
+ 
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html 
 
 Using the Google Eclipse Plugin
 
@@ -85,7 +107,7 @@ Using the Google Eclipse Plugin
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>1.1</version>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <goals>
@@ -100,7 +122,7 @@ Using the Google Eclipse Plugin
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>2.1.1</version>
         <configuration>
           <warSourceDirectory>war</warSourceDirectory>
           <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
@@ -172,11 +194,11 @@ Using the Google Eclipse Plugin
 
   When using Eclipse-Maven integration like the m2eclipse plugin, other maven projects open in the
   workspace will be automagically resolved as projects (instead of JARs). When the referenced project is well
-  configured(*) as a GWT module project, changes to java sources will be available in the hosted browser with a simple
-  refresh with no requirement to repackage the modules.
-
-  [../images/gwt-maven-logo.png] m2eclipse detecting the gwt module as project reference
-
+  configured (*) as a GWT module project, changes to java sources will be available in the hosted browser with a simple
+  refresh with no requirement to repackage the modules. 
+  
+[../images/eclipse/gwt-maven-logo.png] m2eclipse detecting the gwt module as project reference.
+    
   (*) A "<well configured GWT module project>" is expected to have Java sources copied as resources in the project
   build outputDirectory (using gwt:resource goal) and a dedicated gwt.xml module file to define the required
   inherits.
