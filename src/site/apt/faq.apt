@@ -2,6 +2,7 @@
  Maven 2 GWT Plugin F.A.Q.
  ---
  Nicolas de Loof
+ Olivier Lamy
  ---
  2010-11-26 
  
@@ -52,3 +53,11 @@ Frequently Asked Questions
   Some user report same errors as <<<gwt-dev>>> also include and Eclipse JDT compiler. A way to detect this issue is to
   run mvn dependency:tree and look for any org.eclipse.jdt artifacts listed (GWT's is in the gwt-dev jar added by the
   <<<gwt:compile>>> task itself) - then exclude it from whichever artifact is bringing it in.
+  
+* Versioning scheme
+
+  Since 2.1.0 version, the versioning scheme follow the gwt sdk version number plus the plugin version : \<gwt-sdk>-\<plugin-release-number>.\
+  Note this has been decided by the plugins maintainers after the first 2.1.0 release. So the first release for gwt sdk is 2.1.0 
+  (and the second one 2.1.0-1).
+   
+    
