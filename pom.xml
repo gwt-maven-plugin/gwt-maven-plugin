@@ -120,7 +120,8 @@
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
     <stagingSiteRepositoryId>codehaus</stagingSiteRepositoryId>
-    <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>    
+    <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>
+    <invokerPluginVersion>1.5</invokerPluginVersion>    
   </properties>
 
   <dependencies>
@@ -319,6 +320,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
+            <version>${invokerPluginVersion}</version>
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
@@ -349,6 +351,26 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    
+    <profile>
+      <id>grid</id>
+      <properties>
+        <invokerPluginVersion>1.6-SNAPSHOT</invokerPluginVersion>
+        <itParrallelThreads>3</itParrallelThreads>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <version>${invokerPluginVersion}</version>
+            <configuration>
+              <parrallelThreads>${itParrallelThreads}</parrallelThreads>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>      
     </profile>
     
     <profile>
