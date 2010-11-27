@@ -21,40 +21,24 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${gwtVersion}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${gwtVersion}</version>
+      <scope>provided</scope>
+    </dependency>  
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.7</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <profiles>
-    <profile>
-      <!-- Activate only when within eclipse -->
-      <id>m2eclipse</id>
-      <activation>
-        <property>
-          <name>!m2e.version</name>
-        </property>
-      </activation>
-
-      <!-- GWT SDK is provided by GWT SDK Classpath Container -->
-      <dependencies>
-        <dependency>
-          <groupId>com.google.gwt</groupId>
-          <artifactId>gwt-servlet</artifactId>
-          <version>${gwtVersion}</version>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.google.gwt</groupId>
-          <artifactId>gwt-user</artifactId>
-          <version>${gwtVersion}</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 
   <build>
     <!-- Generate compiled stuff in the folder used for developing mode -->
