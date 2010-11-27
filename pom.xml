@@ -320,7 +320,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>${invokerPluginVersion}</version>
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
@@ -364,25 +363,40 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>${invokerPluginVersion}</version>
             <configuration>
               <parrallelThreads>${itParrallelThreads}</parrallelThreads>
             </configuration>
           </plugin>
+          <plugin>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+              <execution>
+                <id>mojo-enforcer-rules</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requirePluginVersions>
+                       <banSnapshots>false</banSnapshots>
+                       <!--
+                       oups documentation sucks !!
+                       http://maven.apache.org/enforcer/enforcer-rules/requirePluginVersions.html
+                       log says 
+                       Cause: Cannot find setter nor field in org.apache.maven.plugins.enforcer.RequirePluginVersions for 'unCheckedPluginsList'
+
+                       <unCheckedPluginsList>org.apache.maven.plugins:maven-invoker-plugin</unCheckedPluginsList>
+                        -->
+                    </requirePluginVersions>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>          
         </plugins>
       </build>  
-      <pluginRepositories>
-        <pluginRepository>
-          <id>apache.snapshots</id>
-          <url>https://repository.apache.org/content/groups/snapshots-group/</url>
-          <releases>
-            <enabled>false</enabled>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </pluginRepository>
-      </pluginRepositories>    
     </profile>
     
     <profile>
@@ -543,10 +557,32 @@
       </plugin>      
       -->
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-invoker-plugin</artifactId>
+          <version>${invokerPluginVersion}</version>
+        </plugin>      
+      </plugins>
+    </pluginManagement>
   </build>
 
   <reporting>
     <excludeDefaults>false</excludeDefaults>
   </reporting>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>  
 
 </project>
