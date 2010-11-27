@@ -370,7 +370,19 @@
             </configuration>
           </plugin>
         </plugins>
-      </build>      
+      </build>  
+      <pluginRepositories>
+        <pluginRepository>
+          <id>apache.snapshots</id>
+          <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>    
     </profile>
     
     <profile>
