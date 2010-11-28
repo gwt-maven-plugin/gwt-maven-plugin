@@ -73,7 +73,7 @@ public class SoycReport
      * Doxia Site Renderer component.
      *
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected Renderer siteRenderer;  
     
@@ -84,7 +84,7 @@ public class SoycReport
      *
      * @parameter default-value="${project.reporting.outputDirectory}"
      * @required
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     protected File outputDirectory;
     
@@ -94,7 +94,7 @@ public class SoycReport
      * @parameter default-value="${project}"
      * @required
      * @readonly
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected MavenProject project;    
     
@@ -102,19 +102,19 @@ public class SoycReport
      * @parameter default-value="${plugin.artifactMap}"
      * @required
      * @readonly
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private Map<String, Artifact> pluginArtifacts;    
     
     /**
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected ClasspathBuilder classpathBuilder;    
     
     /**
      * @parameter default-value="false" expression="${gwt.soycReport.skip}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private boolean skip;
     
@@ -122,7 +122,7 @@ public class SoycReport
      * Internationalization component.
      *
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected I18N i18n;    
 

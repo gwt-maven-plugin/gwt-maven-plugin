@@ -191,7 +191,7 @@ public class CompileMojo
      * Can be set from command line using '-Dgwt.extraParam=true'.
      * </p>
      * @parameter default-value="false" expression="${gwt.extraParam}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private boolean extraParam;
     
@@ -201,7 +201,7 @@ public class CompileMojo
      * Can be set from command line using '-Dgwt.compiler.compileReport=true'.
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.compileReport}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private boolean compileReport;
     
@@ -212,7 +212,7 @@ public class CompileMojo
      * Can be set from command line using '-Dgwt.compiler.optimizationLevel=n'.
      * </p>
      * @parameter default-value="-1" expression="${gwt.compiler.optimizationLevel}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private int optimizationLevel;    
     
@@ -222,7 +222,7 @@ public class CompileMojo
      * Can be set from command line using '-Dgwt.compiler.soycDetailed=true'.
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.soycDetailed}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private boolean soycDetailed;    
     
@@ -234,7 +234,7 @@ public class CompileMojo
      * Can be set from command line using '-Dgwt.compiler.strict=true'.
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.strict}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private boolean strict;     
 

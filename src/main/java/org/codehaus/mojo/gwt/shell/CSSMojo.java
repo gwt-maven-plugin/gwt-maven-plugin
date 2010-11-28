@@ -37,7 +37,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * @description Creates CSS interfaces for css files
  * @author Stale Undheim <undheim@corporater.com>
  * @author olamy
- * @since 2.1.1
+ * @since 2.1.0-1
  */
 public class CSSMojo
     extends AbstractGwtShellMojo

@@ -42,7 +42,7 @@ import org.codehaus.plexus.util.FileUtils;
  * see http://code.google.com/webtoolkit/doc/latest/DevGuideCompileReport.html#Usage
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  * @goal compile-report
- * @since 2.1.1
+ * @since 2.1.0-1
  */
 public class CompileReport
     extends AbstractMavenReport
@@ -68,7 +68,7 @@ public class CompileReport
      * Doxia Site Renderer component.
      *
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected Renderer siteRenderer;  
     
@@ -79,7 +79,7 @@ public class CompileReport
      *
      * @parameter default-value="${project.reporting.outputDirectory}"
      * @required
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     protected File outputDirectory;
     
@@ -89,20 +89,20 @@ public class CompileReport
      * @parameter default-value="${project}"
      * @required
      * @readonly
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected MavenProject project;    
    
     
     /**
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected ClasspathBuilder classpathBuilder;    
     
     /**
      * @parameter default-value="false" expression="${gwt.compilerReport.skip}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private boolean skip;    
     
@@ -110,7 +110,7 @@ public class CompileReport
      * Internationalization component.
      *
      * @component
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     protected I18N i18n;
 

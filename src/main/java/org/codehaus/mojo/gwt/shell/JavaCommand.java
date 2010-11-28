@@ -39,7 +39,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
- * @since 2.1.1
+ * @since 2.1.0-1
  */
 public class JavaCommand
 {

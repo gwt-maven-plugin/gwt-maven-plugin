@@ -171,7 +171,7 @@ public class RunMojo
      * Can be set from command line using '-Dgwt.copyWebapp=...'
      * </p>
      * @parameter default-value="false" expression="${gwt.copyWebapp}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private boolean copyWebapp;    
 
@@ -182,7 +182,7 @@ public class RunMojo
      * and artifactId {@link #appEngineArtifactId}
      * <p>
      * @parameter default-value="1.3.8" expression="${gwt.appEngineVersion}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private String appEngineVersion;
     
@@ -192,7 +192,7 @@ public class RunMojo
      * dev mode
      * </p>
      * @parameter 
-     * @since 2.1.1
+     * @since 2.1.0-1
      */
     private List<String> runClasspathExcludes;
     
@@ -201,7 +201,7 @@ public class RunMojo
      * Location to find appengine sdk or to unzip downloaded one see {@link #appEngineVersion}
      * </p>
      * @parameter default-value="${project.build.directory}/appengine-sdk/" expression="${gwt.appEngineHome}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private File appEngineHome;
     
@@ -210,7 +210,7 @@ public class RunMojo
      * groupId to download appengine sdk from maven repo
      * </p>
      * @parameter default-value="com.google.appengine" expression="${gwt.appEngineGroupId}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private String appEngineGroupId;
     
@@ -219,14 +219,14 @@ public class RunMojo
      * groupId to download appengine sdk from maven repo
      * </p>
      * @parameter default-value="appengine-java-sdk" expression="${gwt.appEngineArtifactId}"
-     * @since 2.1.1
+     * @since 2.1.0-1
      */    
     private String appEngineArtifactId;    
     
     
     /**
      * To look up Archiver/UnArchiver implementations
-     * @since 2.1.1
+     * @since 2.1.0-1
      * @component
      */
     protected ArchiverManager archiverManager;
@@ -237,7 +237,7 @@ public class RunMojo
      * Set GWT shell bindAddress.
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
-     * @since 2.1.1
+     * @since 2.1.0-1
      * @parameter expression="${gwt.bindAddress}"
      */
     private String bindAddress;    

@@ -39,7 +39,7 @@ import org.apache.maven.project.MavenProject;
 /**
  * Helper class to resolve gwt-dev jar artifact 
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
- * @since 2.1.1
+ * @since 2.1.0-1
  */
 public class GwtDevHelper
 {
