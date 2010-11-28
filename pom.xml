@@ -356,7 +356,7 @@
       <id>grid</id>
       <properties>
         <invokerPluginVersion>1.6-SNAPSHOT</invokerPluginVersion>
-        <itParrallelThreads>3</itParrallelThreads>
+        <itParrallelThreads>1</itParrallelThreads>
       </properties>
       <build>
         <plugins>
