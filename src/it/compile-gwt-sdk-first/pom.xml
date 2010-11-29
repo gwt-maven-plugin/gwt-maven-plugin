@@ -20,28 +20,45 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.mojo.gwt.it</groupId>
-  <artifactId>async-with-inner-class</artifactId>
+  <artifactId>gwt-compile</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
+
   <build>
-  	<finalName>hello</finalName>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
+          <inplace>true</inplace>
+          <logLevel>INFO</logLevel>
+          <style>OBF</style>
           <draftCompile>true</draftCompile>
-          <optimizationLevel>1</optimizationLevel>        
+          <optimizationLevel>1</optimizationLevel>
+          <extraParam>true</extraParam>
+          <soyc>false</soyc>
+          <strict>true</strict>
+          <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
         </configuration>
         <executions>
           <execution>
             <id>generateAsync</id>
             <goals>
               <goal>generateAsync</goal>
-            </goals>            
-          </execution>
+            </goals>
+          </execution>        
           <execution>
+            <phase>compile</phase>
             <id>compile</id>
             <goals>
               <goal>compile</goal>
@@ -49,23 +66,37 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
+
+  <reporting>
+    <excludeDefaults>true</excludeDefaults>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>soyc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <dependencies>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
       <version>@gwt.version@</version>
-      <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt.core.compiler</groupId>
+      <artifactId>ecj</artifactId>
+      <!-- Not the same version as used by gwt-dev -->
+      <version>3.5.1</version>
+    </dependency>    
   </dependencies>
 </project>

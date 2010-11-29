@@ -262,10 +262,19 @@ public class CompileMojo
 
         try
         {
+            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
+            if ( gwtSdkFirstInClasspath )
+            {
+                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            }
+            cmd.withinScope( Artifact.SCOPE_COMPILE );
 
-            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" ).withinScope( Artifact.SCOPE_COMPILE )
-                .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                .arg( "-gen", getGen().getAbsolutePath() )
+            if ( !gwtSdkFirstInClasspath )
+            {
+                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            }
+
+            cmd.arg( "-gen", getGen().getAbsolutePath() )
                 .arg( "-logLevel", getLogLevel() )
                 .arg( "-style", getStyle() )
                 .arg( "-war", getOutputDirectory().getAbsolutePath() )
@@ -274,8 +283,7 @@ public class CompileMojo
                 .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
                 .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
                 .arg( disableClassMetadata, "-XdisableClassMetadata" )
-                .arg( disableCastChecking, "-XdisableCastChecking" )
-                .arg( strict, "-strict" )
+                .arg( disableCastChecking, "-XdisableCastChecking" ).arg( strict, "-strict" )
                 .arg( soycDetailed, "-XsoycDetailed" );
             
 

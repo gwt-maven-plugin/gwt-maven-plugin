@@ -325,9 +325,21 @@ public class RunMojo
     {
         try
         {
-            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" ).withinScope( Artifact.SCOPE_RUNTIME )
-                .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                .arg( "-war", hostedWebapp.getAbsolutePath() ).arg( "-gen", getGen().getAbsolutePath() )
+            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+
+            if ( gwtSdkFirstInClasspath )
+            {
+                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            }
+
+            cmd.withinScope( Artifact.SCOPE_RUNTIME );
+
+            if ( !gwtSdkFirstInClasspath )
+            {
+                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            }
+
+            cmd.arg( "-war", hostedWebapp.getAbsolutePath() ).arg( "-gen", getGen().getAbsolutePath() )
                 .arg( "-logLevel", getLogLevel() ).arg( "-port", Integer.toString( getPort() ) )
                 .arg( "-startupUrl", getStartupUrl() ).arg( noServer, "-noserver" );
 
