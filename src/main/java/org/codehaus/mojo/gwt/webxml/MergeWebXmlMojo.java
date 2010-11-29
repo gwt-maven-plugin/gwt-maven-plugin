@@ -69,6 +69,7 @@ public class MergeWebXmlMojo
     /**
      * 
      * @parameter default-value="false"
+     * @since 2.1.0-1
      */    
     private boolean scanRemoteServiceRelativePathAnnotation;
     
