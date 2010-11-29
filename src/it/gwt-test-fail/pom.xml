@@ -40,6 +40,7 @@
           <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
           <draftCompile>true</draftCompile>
           <optimizationLevel>1</optimizationLevel>          
+          <mode>htmlunit</mode>
         </configuration>
         <executions>
           <execution>
