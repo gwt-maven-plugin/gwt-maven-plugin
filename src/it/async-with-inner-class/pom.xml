@@ -32,17 +32,20 @@
         <version>@pom.version@</version>
         <configuration>
           <draftCompile>true</draftCompile>
-          <optimizationLevel>1</optimizationLevel>        
+          <optimizationLevel>0</optimizationLevel>     
+          <soyc>false</soyc>   
         </configuration>
         <executions>
           <execution>
             <id>generateAsync</id>
+            <phase>generate-sources</phase>
             <goals>
               <goal>generateAsync</goal>
             </goals>            
           </execution>
           <execution>
             <id>compile</id>
+            <phase>compile</phase>
             <goals>
               <goal>compile</goal>
             </goals>
