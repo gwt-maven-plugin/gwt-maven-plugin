@@ -50,7 +50,7 @@ public abstract class AbstractGwtMojoTestCase
 
         MavenProject project = new MavenProjectStub();
         //addCompileSourceRoot will generate singletonList if null, which doesn't support a second add.
-        setVariableValueToObject( project, "compileSourceRoots", new ArrayList() );
+        setVariableValueToObject( project, "compileSourceRoots", new ArrayList<String>() );
         project.addCompileSourceRoot( new File( testRoot, "src/main/java" ).getAbsolutePath() );
 
         //required field of mojo

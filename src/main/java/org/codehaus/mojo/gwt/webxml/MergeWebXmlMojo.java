@@ -20,19 +20,33 @@ package org.codehaus.mojo.gwt.webxml;
  */
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.mojo.gwt.ClasspathBuilder;
+import org.codehaus.mojo.gwt.ClasspathBuilderException;
 import org.codehaus.mojo.gwt.GwtModule;
 import org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo;
 
 /**
  * Merges GWT servlet elements into deployment descriptor (and non GWT servlets into shell).
- *
+ * <p>
+ * <b>If you use {@link #scanRemoteServiceRelativePathAnnotation} you must bind this mojo to at least compile phase</b>
+ * Because the classpath scanner need to see compile classes
+ * </p>
  * @goal mergewebxml
  * @phase process-resources
  * @requiresDependencyResolution compile
@@ -51,6 +65,35 @@ public class MergeWebXmlMojo
      * @parameter default-value="${project.build.directory}/web.xml"
      */
     private File mergedWebXml;
+    
+    /**
+     * 
+     * @parameter default-value="false"
+     */    
+    private boolean scanRemoteServiceRelativePathAnnotation;
+    
+    /**
+     * @parameter
+     * @since 2.1.0-1
+     */
+    private Map<String,String> packageNamePerModule;
+    
+    /**
+     * @component
+     * @required
+     * @readonly
+     * @since 2.1.0-1
+     */
+    private ServletAnnotationFinder servletAnnotationFinder;
+ 
+    
+    /**
+     * @component
+     * @required
+     * @readonly
+     * @since 2.1.0-1
+     */
+    private ClasspathBuilder classpathBuilder;
 
     /** Creates a new instance of MergeWebXmlMojo */
     public MergeWebXmlMojo()
@@ -58,7 +101,7 @@ public class MergeWebXmlMojo
         super();
     }
 
-    public void doExecute( )
+    public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
 
@@ -73,16 +116,44 @@ public class MergeWebXmlMojo
             FileUtils.copyFile( getWebXml(), mergedWebXml );
 
             Set<ServletDescriptor> servlets = new LinkedHashSet<ServletDescriptor>();
+            
+
             for ( String module : getModules() )
             {
                 GwtModule gwtModule = readModule( module );
-                Map<String, String> moduleServlets = isWebXmlServletPathAsIs() ? gwtModule.getServlets( "" ) : gwtModule.getServlets();
+
+                Map<String, String> moduleServlets = isWebXmlServletPathAsIs() ? gwtModule.getServlets( "" )
+                                                                              : gwtModule.getServlets();
                 getLog().debug( "merge " + moduleServlets.size() + " servlets from module " + module );
                 for ( Map.Entry<String, String> servlet : moduleServlets.entrySet() )
                 {
                     servlets.add( new ServletDescriptor( servlet.getKey(), servlet.getValue() ) );
                 }
+
+                if ( scanRemoteServiceRelativePathAnnotation && packageNamePerModule != null )
+                {
+                    String packageName = packageNamePerModule.get( gwtModule.getName() );
+                    if ( StringUtils.isBlank( packageName ) )
+                    {
+                        // here with try with the rename-to value
+                        packageName = packageNamePerModule.get( gwtModule.getPath() );
+                    }
+                    if ( StringUtils.isNotBlank( packageName ) )
+                    {
+                        getLog().debug( "search annotated servlet with package name " + packageName + " in module "
+                                            + gwtModule.getName() );
+                        Set<ServletDescriptor> annotatedServlets = servletAnnotationFinder
+                            .findServlets( packageName, isWebXmlServletPathAsIs() ? null : gwtModule.getPath(), getAnnotationSearchClassLoader() );
+                        servlets.addAll( annotatedServlets );
+                    } else
+                    {
+                        getLog().debug( "cannot find package name for module " + gwtModule.getName() + " or path "
+                                            + gwtModule.getPath() );
+                    }
+                }
+
             }
+
             new GwtWebInfProcessor().process( mergedWebXml, mergedWebXml, servlets );
             getLog().info( servlets.size() + " servlet(s) merged into " + mergedWebXml );
         }
@@ -90,5 +161,22 @@ public class MergeWebXmlMojo
         {
             throw new MojoExecutionException( "Unable to merge web.xml", e );
         }
+    }
+    
+    private ClassLoader getAnnotationSearchClassLoader()
+        throws ClasspathBuilderException, MalformedURLException
+    {
+        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet() );
+
+        List<URL> urls = new ArrayList<URL>( classPathFiles.size() );
+
+        for ( File file : classPathFiles )
+        {
+            urls.add( file.toURL() );
+        }
+
+        URLClassLoader url = new URLClassLoader( urls.toArray( new URL[urls.size()] ) );
+        return url;
+
     }
 }
