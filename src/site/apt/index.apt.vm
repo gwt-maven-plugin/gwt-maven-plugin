@@ -40,7 +40,7 @@ GWT Maven Plugin
  or by reading the online
  {{{http://www.sonatype.com/books/mvnref-book/reference/public-book.html}reference book}}.
  
- << {{{./whats_new.html}What's new in 2.1.1 ?}} >>
+ << {{{./whats_new.html}What's new in ${project.version} ?}} >>
   
  
   

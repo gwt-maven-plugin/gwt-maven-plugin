@@ -1,0 +1,77 @@
+ ------
+ Processing Annotation @RemoteServiceRelativePath
+ ------
+ Olivier Lamy
+ ------
+ 2010-11-29
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+Processing Annotation @RemoteServiceRelativePath to generate web.xml content
+
+  Because life is too short to manually write xml content for servlets in web.xml files (and not 
+  everybody uses servlet 3.0), you can now automatically merge your web.xml with generated servlet lines
+  for classes annotated with @RemoteServiceRelativePath.
+  This feature has been added in {{{../mergewebxml-mojo.html}mergewebxml mojo}}
+  
++--
+<project>
+  [...]
+  <build>
+    <plugins>
+      [...]
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${pom.version}</version>
+        <configuration>
+          <packageNamePerModule>
+            <hello>org.codehaus.mojo.gwt.test.server</hello>
+          </packageNamePerModule>
+          <scanRemoteServiceRelativePathAnnotation>true</scanRemoteServiceRelativePathAnnotation>
+        </configuration>
+        <executions>
+          <execution>
+            <id>mergewebxml</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>mergewebxml</goal>
+            </goals>
+          </execution>          
+        </executions>
+      </plugin>
+      [...]
+    </plugins>
+  </build>
+  [...]
+</project>
++--   
+
+  As the the annotation processing need the compiled classes you need to bind the mojo to at least compile phase.
+  The other mojo parameters are : 
+  
+  * {{{../mergewebxml-mojo.html#scanRemoteServiceRelativePathAnnotation}scanRemoteServiceRelativePathAnnotation}} : to activate this feature
+  
+  * {{{../mergewebxml-mojo.html#packageNamePerModule}packageNamePerModule}} : to configure per module the root package to scan.
+  Here you can use the "module name" ( org/codehaus/mojo/gwt/test/Hello.gwt.xml -> org.codehaus.mojo.gwt.test.Hello) or the rename-to value
+  coming from your module name.
+  
+  

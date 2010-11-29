@@ -57,6 +57,7 @@ under the License.
       <item name="Writing Library" href="user-guide/library.html" />
       <item name="Productivity" href="user-guide/productivity.html" />
       <item name="Compiler Report" href="user-guide/compiler-report.html"/>
+      <item name="Processing Annotation @RemoteServiceRelativePath" href="user-guide/remoteservicerelativepath-annotation.html"/>
     </menu>
     <menu name="Reference">
       <item name="Goals" href="plugin-info.html"/>
