@@ -43,7 +43,7 @@ import org.codehaus.plexus.util.FileUtils;
  * Goal which run a GWT module in the GWT Hosted mode.
  *
  * @goal run
- * @execute phase=compile goal:war:exploded
+ * @execute phase=process-classes goal:war:exploded
  * @requiresDirectInvocation
  * @requiresDependencyResolution test
  * @description Runs the the project in the GWT Hosted mode for development.
