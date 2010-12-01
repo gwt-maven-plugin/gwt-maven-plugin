@@ -70,3 +70,8 @@ Using the Archetype
 
   It uses M2Eclipse for classpath management and Google Eclipse Plugin for nice GWT
   support inside Eclipse.
+  
+  Note before importing your project you must configure M2eclipse as it.
+  See box : Goals to run on project import.
+  
+[../images/user-guide/eclipse-m2-conf.jpg]  
