@@ -33,8 +33,10 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
+ * Creates CSS interfaces for css files.
+ * Will use the utility tool provided in gwt sdk which create a corresponding Java interface for accessing 
+ * the classnames used in the file.
  * @goal css
- * @description Creates CSS interfaces for css files
  * @author Stale Undheim <undheim@corporater.com>
  * @author olamy
  * @since 2.1.0-1
