@@ -33,18 +33,18 @@ Project organization
 
 +--
   <dependencies>
-	  <dependency>
-	    <groupId>com.google.gwt</groupId>
-	    <artifactId>gwt-servlet</artifactId>
-	    <version>${project.version}</version>
-	    <scope>compile</scope>
-	  </dependency>
-	  <dependency>
-	    <groupId>com.google.gwt</groupId>
-	    <artifactId>gwt-user</artifactId>
-	    <version>${project.version}</version>
-	    <scope>provided</scope>
-	  </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
   <dependencies>
 
   <build>
@@ -54,13 +54,13 @@ Project organization
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${project.version}</version>
         <executions>
-            <execution>
-                <goals>
-                    <goal>compile</goal>
-                    <goal>generateAsync</goal>
-                    <goal>test</goal>
-                </goals>
-            </execution>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>generateAsync</goal>
+              <goal>test</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>
@@ -145,18 +145,18 @@ parent/                                     (aggregating parent project)
   for the domain dependency :
 
 +---+
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <executions>
-            ...
-        </executions>
-		<configuration>
-		  <compileSourcesArtifacts>
-		    <artifact>org.codehaus.mojo:domain</artifact>
-		  </compileSourcesArtifacts>
-		</configuration>
-      </plugin>
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>gwt-maven-plugin</artifactId>
+    <version>${project.version}</version>
+    <executions>
+        ...
+    </executions>
+      <configuration>
+        <compileSourcesArtifacts>
+          <artifact>org.codehaus.mojo:domain</artifact>
+        </compileSourcesArtifacts>
+      </configuration>
+  </plugin>
 
 +---+
