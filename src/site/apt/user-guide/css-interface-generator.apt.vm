@@ -33,11 +33,11 @@ Generate Java Interface using the CSS Interface Generator from GWT
   
 +--
 
-src 
-   main 
-       resources 
-                bar/MyCss.css 
-                foo/MySite.css 
+|_src 
+| |_main 
+|   |_resources 
+      |_bar/MyCss.css 
+      |_foo/MySite.css 
 
 +--  
   
