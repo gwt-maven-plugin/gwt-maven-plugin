@@ -4,7 +4,7 @@
  Nicolas de Loof
  Olivier Lamy
  ------
- 2010-11-26 
+ 2010-12-02 
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -39,6 +39,8 @@ GWT Maven Plugin
  {{{http://maven.apache.org/guides/getting-started/index.html}getting started guide}}
  or by reading the online
  {{{http://www.sonatype.com/books/mvnref-book/reference/public-book.html}reference book}}.
+ 
+ << This mojo has been developped and tested with the gwt version ${gwtVersion} >>
  
  << {{{./whats_new.html}What's new in ${project.version} ?}} >>
   

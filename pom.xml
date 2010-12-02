@@ -113,6 +113,8 @@
     <maven.compiler.target>1.5</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
     <gwt.version>2.1.0</gwt.version>
+    <!--  apt filterting doesn't support dot -->
+    <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>2.0.9</mavenVersion>
     <mojo.java.target>1.5</mojo.java.target>
     <sitePluginVersion>2.1.1</sitePluginVersion>
