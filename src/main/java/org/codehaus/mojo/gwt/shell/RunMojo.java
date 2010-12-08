@@ -364,12 +364,12 @@ public class RunMojo
                     String value = systemProperties.get( key );
                     if ( value != null )
                     {
-                        getLog().info( " " + key + "=" + value );
+                        getLog().debug( " " + key + "=" + value );
                         cmd.systemProperty( key, value );
                     }
                     else
                     {
-                        getLog().info( "skip sysProps " + key + " with empty value" );
+                        getLog().debug( "skip sysProps " + key + " with empty value" );
                     }
                 }
             }
