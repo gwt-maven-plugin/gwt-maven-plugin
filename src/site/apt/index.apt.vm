@@ -33,7 +33,7 @@ GWT Maven Plugin
  using Maven as build tool. This guide covers project organisation and setup, integration with
  development environment, and running GWT SDK tools from maven command line.
 
- If you're new to GWT or Maven, you miught want to first read the
+ If you're new to GWT or Maven, you might want to first read the
  {{{http://code.google.com/intl/fr/webtoolkit/overview.html}GWT documentation}} and get more
  familiar with Maven by reading at least its
  {{{http://maven.apache.org/guides/getting-started/index.html}getting started guide}}
