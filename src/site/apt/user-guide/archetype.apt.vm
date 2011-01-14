@@ -4,7 +4,7 @@
  Nicolas de Loof
  Olivier Lamy
  ------
- 2010-11-26 
+ 2011-01-14 
  
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -48,7 +48,7 @@ Using the Archetype
   
 +--
  mvn archetype:generate \
-   -DarchetypeRepository=repo1.maven.org
+   -DarchetypeRepository=repo1.maven.org \
    -DarchetypeGroupId=org.codehaus.mojo \
    -DarchetypeArtifactId=gwt-maven-plugin \
    -DarchetypeVersion=${project.version}
