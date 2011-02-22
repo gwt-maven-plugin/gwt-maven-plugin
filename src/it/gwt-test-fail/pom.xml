@@ -7,10 +7,6 @@
   <packaging>jar</packaging>
   <name>GwtTestSuite fail example</name>
 
-  <properties>
-    <gwt.version>2.1.0</gwt.version>
-  </properties>
-
   <build>
     <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
     <resources>
@@ -66,23 +62,15 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
-      <version>${gwt.version}</version>
+      <version>@gwt.version@</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
-      <version>${gwt.version}</version>
+      <version>@gwt.version@</version>
       <scope>compile</scope>
     </dependency>
-    <!-- 
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-dev</artifactId>
-      <version>${gwt.version}</version>
-      <scope>test</scope>
-    </dependency>
-     -->     
     <!-- tests -->
     <dependency>
       <groupId>junit</groupId>
