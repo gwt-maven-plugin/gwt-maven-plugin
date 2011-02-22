@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>27</version>
+    <version>28</version>
   </parent>
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.2.1-SNAPSHOT</version>
