@@ -441,6 +441,9 @@ public class CompileMojo
             SingleTargetSourceMapping gwtModuleMapping = new SingleTargetSourceMapping( ".gwt.xml", outputTarget );
             scanner.addSourceMapping( gwtModuleMapping );
 
+            SingleTargetSourceMapping uiBinderMapping = new SingleTargetSourceMapping( ".ui.xml", outputTarget );
+            scanner.addSourceMapping( uiBinderMapping );
+
             Collection<File> compileSourceRoots = new HashSet<File>();
             classpathBuilder.addSourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
             classpathBuilder.addResourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
