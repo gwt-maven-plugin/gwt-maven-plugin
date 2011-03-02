@@ -96,17 +96,6 @@ public class CompileMojo
     private boolean enableAssertions;
 
     /**
-     * Ask GWT to create the Story of Your Compile (SOYC)
-     * <p>
-     * Can be set from command line using '-Dgwt.compiler.soyc=true'.
-     * </p>
-     * 
-     * @parameter expression="${gwt.compiler.soyc}" default-value="false"
-     * @deprecated you must use {@link #compileReport} option
-     */
-    private boolean soyc;
-
-    /**
      * 
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
      * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
@@ -292,7 +281,7 @@ public class CompileMojo
                 cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
             }
 
-            if ( extraParam || compileReport || soyc )
+            if ( extraParam || compileReport )
             {
                 getLog().debug( "create extra directory " );
                 if ( !extra.exists() )
@@ -317,8 +306,6 @@ public class CompileMojo
             {
                 cmd.arg( "-workDir" ).arg( String.valueOf( workDir ) );
             }
-
-            addSOYC( cmd );
 
             for ( String target : modules )
             {
@@ -385,19 +372,6 @@ public class CompileMojo
             if ( !found )
                 getLog().warn(
                     "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
-        }
-    }
-
-    private void addSOYC( JavaCommand cmd )
-    {
-        if ( soyc )
-        {
-            getLog().debug( "SOYC has been enabled by user, SOYC is deprecated : you must now use compileReport" );
-            cmd.arg( "-soyc" );
-        }
-        else
-        {
-            getLog().debug( "SOYC disabled" );
         }
     }
 
