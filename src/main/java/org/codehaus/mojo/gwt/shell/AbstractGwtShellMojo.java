@@ -21,12 +21,14 @@ package org.codehaus.mojo.gwt.shell;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
@@ -37,7 +39,6 @@ import org.codehaus.plexus.util.cli.CommandLineTimeOutException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.StreamConsumer;
-import org.codehaus.plexus.util.cli.shell.Shell;
 
 /**
  * Support running GWT SDK Tools as forked JVM with classpath set according to project source/resource directories and
@@ -105,6 +106,20 @@ public abstract class AbstractGwtShellMojo
      * @parameter
      */
     private int timeOut;
+    /**
+     *
+     * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
+     * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
+     * GWT. The plugin will download the source.jar if necessary.
+     *
+     * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
+     * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
+     * desirable).
+     *
+     *
+     * @parameter
+     */
+    private String[] compileSourcesArtifacts;
 
     // methods
 
@@ -203,6 +218,54 @@ public abstract class AbstractGwtShellMojo
     public void setTimeOut( int timeOut )
     {
         this.timeOut = timeOut;
+    }
+
+    /**
+     * Add sources.jar artifacts for project dependencies listed as compileSourcesArtifacts. This is a GWT hack to avoid
+     * packaging java source files into JAR when sharing code between server and client. Typically, some domain model
+     * classes or business rules may be packaged as a separate Maven module. With GWT packaging this requires to
+     * distribute such classes with code, that may not be desirable.
+     * <p>
+     * The hack can also be used to include utility code from external librariries that may not have been designed for
+     * GWT.
+     */
+    protected void addCompileSourceArtifacts(JavaCommand cmd)
+            throws MojoExecutionException
+    {
+        if ( compileSourcesArtifacts == null )
+        {
+            return;
+        }
+        for ( String include : compileSourcesArtifacts )
+        {
+            List<String> parts = new ArrayList<String>();
+            parts.addAll( Arrays.asList(include.split(":")) );
+            if ( parts.size() == 2 )
+            {
+                // type is optional as it will mostly be "jar"
+                parts.add( "jar" );
+            }
+            String dependencyId = StringUtils.join( parts.iterator(), ":" );
+            boolean found = false;
+
+            for ( Artifact artifact : getProjectArtifacts() )
+            {
+                getLog().debug( "compare " + dependencyId + " with " + artifact.getDependencyConflictId() );
+                if ( artifact.getDependencyConflictId().equals( dependencyId ) )
+                {
+                    getLog().debug( "Add " + dependencyId + " sources.jar artifact to compile classpath" );
+                    Artifact sources =
+                            resolve( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                                    "jar", "sources" );
+                    cmd.withinClasspath( sources.getFile() );
+                    found = true;
+                    break;
+                }
+            }
+            if ( !found )
+                getLog().warn(
+                        "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
+        }
     }
 
     /**

@@ -333,15 +333,19 @@ public class RunMojo
             }
 
             cmd.withinScope( Artifact.SCOPE_RUNTIME );
+            addCompileSourceArtifacts( cmd );
 
             if ( !gwtSdkFirstInClasspath )
             {
                 cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
             }
 
-            cmd.arg( "-war", hostedWebapp.getAbsolutePath() ).arg( "-gen", getGen().getAbsolutePath() )
-                .arg( "-logLevel", getLogLevel() ).arg( "-port", Integer.toString( getPort() ) )
-                .arg( "-startupUrl", getStartupUrl() ).arg( noServer, "-noserver" );
+            cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
+                .arg( "-gen", getGen().getAbsolutePath() )
+                .arg( "-logLevel", getLogLevel() )
+                .arg( "-port", Integer.toString( getPort() ) )
+                .arg( "-startupUrl", getStartupUrl() )
+                .arg( noServer, "-noserver" );
 
             if ( server != null )
             {
