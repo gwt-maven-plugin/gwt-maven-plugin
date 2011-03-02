@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
   <!-- Inherit our applications main module.                      -->
-  <inherits name='${package}.\${artifactId}'/>
+  <inherits name='${package}.\${module}'/>
 
   <!-- Specify the path to any remote services.                   -->
   <servlet path="/${module}/greet" class="${package}.server.GreetingServiceImpl" />
