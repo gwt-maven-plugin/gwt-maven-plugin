@@ -19,6 +19,8 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
+import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Goal which run a GWT module in the GWT Hosted mode.
@@ -527,7 +530,8 @@ public class RunMojo
         {
             try
             {
-                FileUtils.copyDirectoryStructure( warSourceDirectory, hostedWebapp );
+                String excludes = StringUtils.join( DEFAULTEXCLUDES, "," );
+                FileUtils.copyDirectory( warSourceDirectory, hostedWebapp, "**", excludes );
             }
             catch ( IOException e )
             {
