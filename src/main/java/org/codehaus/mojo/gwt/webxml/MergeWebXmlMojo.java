@@ -86,15 +86,7 @@ public class MergeWebXmlMojo
      * @since 2.1.0-1
      */
     private ServletAnnotationFinder servletAnnotationFinder;
- 
-    
-    /**
-     * @component
-     * @required
-     * @readonly
-     * @since 2.1.0-1
-     */
-    private ClasspathBuilder classpathBuilder;
+
 
     /** Creates a new instance of MergeWebXmlMojo */
     public MergeWebXmlMojo()

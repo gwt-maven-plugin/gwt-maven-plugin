@@ -29,7 +29,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.1</version>
+        <version>2.3.2</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
@@ -79,5 +79,10 @@
       <artifactId>gwt-user</artifactId>
       <version>@gwt.version@</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gwt-dnd</groupId> 
+      <artifactId>gwt-dnd</artifactId> 
+      <version>3.0.1</version>    
+    </dependency>    
   </dependencies>
 </project>

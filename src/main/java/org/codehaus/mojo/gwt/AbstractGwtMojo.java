@@ -87,6 +87,8 @@ public abstract class AbstractGwtMojo
 
 
     /**
+     * @required
+     * @readonly
      * @component
      */
     protected ClasspathBuilder classpathBuilder;
