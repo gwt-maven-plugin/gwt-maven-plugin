@@ -559,7 +559,7 @@ public class RunMojo
         File lib = new File( hostedWebapp, "WEB-INF/lib" );
         lib.mkdirs();
 
-        Collection<Artifact> artifacts = getProjectArtifacts();
+        Collection<Artifact> artifacts = getProjectRuntimeArtifacts();
         for ( Artifact artifact : artifacts )
         {
             try

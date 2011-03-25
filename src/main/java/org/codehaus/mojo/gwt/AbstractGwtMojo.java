@@ -20,6 +20,8 @@ package org.codehaus.mojo.gwt;
  */
 
 import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
+import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -373,4 +376,23 @@ public abstract class AbstractGwtMojo
     {
         return project.getArtifacts();
     }
+
+    @SuppressWarnings( "unchecked" )
+    public Set<Artifact> getProjectRuntimeArtifacts()
+    {
+        Set<Artifact> artifacts = new HashSet<Artifact>();
+        for (Artifact projectArtifact : (Collection<Artifact>) project.getArtifacts() )
+        {
+            String scope = projectArtifact.getScope();
+            if ( SCOPE_RUNTIME.equals( scope )
+              || SCOPE_COMPILE.equals( scope ) )
+            {
+                artifacts.add( projectArtifact );
+            }
+
+        }
+        return artifacts;
+    }
+
+
 }
