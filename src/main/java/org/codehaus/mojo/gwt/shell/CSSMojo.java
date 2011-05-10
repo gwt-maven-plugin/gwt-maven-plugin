@@ -101,7 +101,8 @@ public class CSSMojo
                             .arg( typeName )
                             .arg( "-css" )
                             .arg( candidate.getAbsolutePath() )
-                            .withinClasspath( getGwtDevJar() , getGwtUserJar() )
+                            .withinClasspath( getGwtDevJar() )
+                            .withinClasspath( getGwtUserJar() )
                             .execute();                            
                             final FileWriter outputWriter = new FileWriter( javaOutput );
                             outputWriter.write( content.toString() );

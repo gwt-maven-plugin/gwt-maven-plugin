@@ -74,9 +74,11 @@ public abstract class AbstractGwtMojo
     private String version;
 
     /**
-     * @parameter expression="${plugin.artifactMap}"
+     * @parameter expression="${plugin.artifacts}"
+     * @required
+     * @readonly
      */
-    private Map<String, Artifact> pluginArtifacts;
+    private Collection<Artifact> pluginArtifacts;
 
     /**
      * @component
@@ -247,14 +249,45 @@ public abstract class AbstractGwtMojo
     {
         checkGwtDevAsDependency();
         checkGwtUserVersion();
-        return pluginArtifacts.get( "com.google.gwt:gwt-dev" ).getFile();
+        return getArtifact( "com.google.gwt", "gwt-dev" );
     }
 
-    protected File getGwtUserJar()
+
+    protected File getArtifact( String groupId, String artifactId )
+    {
+        return getArtifact( groupId, artifactId, null );
+    }
+ 
+    protected File getArtifact( String groupId, String artifactId, String classifier ) 
+    {
+        for ( Artifact artifact : pluginArtifacts )
+        {
+            if ( groupId.equals( artifact.getGroupId() ) && artifactId.equals( artifact.getArtifactId() ) )
+            {
+                if ( classifier != null && classifier.equals( artifact.getClassifier() ) )
+                {
+                    return artifact.getFile();
+                }
+                if ( classifier == null && artifact.getClassifier() == null )
+                {
+                    return artifact.getFile();
+                }
+            }
+        }
+        getLog().error( "Failed to retrieve " + groupId + ":" + artifactId + ":" + classifier );
+        return null;
+    }
+
+    protected File[] getGwtUserJar()
         throws IOException
     {
         checkGwtUserVersion();
-        return pluginArtifacts.get( "com.google.gwt:gwt-user" ).getFile();
+        // TODO starting with GWT 2.3.0, gwt-user comes with dependencies. We should use maven metadata to return gwt-user jar file with it's declared dependencies
+        return new File[] {
+            getArtifact( "com.google.gwt", "gwt-user" ),
+            getArtifact( "javax.validation", "validation-api" ),
+            getArtifact( "javax.validation", "validation-api", "sources" )
+        };
     }
 
     /**

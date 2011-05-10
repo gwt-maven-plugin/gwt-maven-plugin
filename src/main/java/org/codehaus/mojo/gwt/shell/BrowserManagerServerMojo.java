@@ -54,7 +54,10 @@ public class BrowserManagerServerMojo
         try
         {
             JavaCommand cmd = new JavaCommand( "com.google.gwt.junit.remote.BrowserManagerServer" )
-                .withinClasspath( getGwtUserJar(), getGwtDevJar() ).arg( server ).arg( browser.getAbsolutePath() );
+                .withinClasspath( getGwtUserJar() )
+                .withinClasspath( getGwtDevJar() )
+                .arg( server )
+                .arg( browser.getAbsolutePath() );
 
             cmd.execute();
         }
