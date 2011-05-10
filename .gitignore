@@ -2,3 +2,5 @@ target/
 *.iml
 *.ipr
 *.iws
+*.swp
+*.swo
