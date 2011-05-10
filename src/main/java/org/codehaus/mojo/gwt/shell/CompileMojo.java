@@ -239,13 +239,15 @@ public class CompileMojo
             JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
             if ( gwtSdkFirstInClasspath )
             {
-                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+                cmd.withinClasspath( getGwtUserJar() )
+                   .withinClasspath( getGwtDevJar() );
             }
             cmd.withinScope( Artifact.SCOPE_COMPILE );
 
             if ( !gwtSdkFirstInClasspath )
             {
-                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+                cmd.withinClasspath( getGwtUserJar() )
+                   .withinClasspath( getGwtDevJar() );
             }
 
             cmd.arg( "-gen", getGen().getAbsolutePath() )
