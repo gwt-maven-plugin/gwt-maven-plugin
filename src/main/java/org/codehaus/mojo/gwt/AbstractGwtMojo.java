@@ -19,9 +19,9 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
+import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,16 +32,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -113,6 +114,11 @@ public abstract class AbstractGwtMojo
      * @readonly
      */
     protected List<ArtifactRepository> remoteRepositories;
+
+    /**
+     * @component
+     */
+    protected ArtifactMetadataSource artifactMetadataSource;
 
     /**
      * The maven project descriptor
@@ -245,20 +251,57 @@ public abstract class AbstractGwtMojo
 
     // FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
-        throws IOException
+        throws MojoExecutionException
     {
         checkGwtDevAsDependency();
         checkGwtUserVersion();
-        return getArtifact( "com.google.gwt", "gwt-dev" );
+        return getArtifact( "com.google.gwt", "gwt-dev" ).getFile();
     }
 
 
-    protected File getArtifact( String groupId, String artifactId )
+    protected Artifact getArtifact( String groupId, String artifactId )
     {
         return getArtifact( groupId, artifactId, null );
     }
- 
-    protected File getArtifact( String groupId, String artifactId, String classifier ) 
+
+    protected File[] getGwtUserJar()
+            throws MojoExecutionException
+    {
+        checkGwtUserVersion();
+        Artifact gwtUserArtifact = getArtifact( "com.google.gwt", "gwt-user" );
+
+        Set<Artifact> artifacts = new HashSet<Artifact>();
+        ArtifactResolutionResult result = null;
+        try
+        {
+            result = resolver.resolveTransitively( artifacts, gwtUserArtifact,
+                    remoteRepositories, localRepository, artifactMetadataSource );
+        }
+        catch (ArtifactResolutionException e)
+        {
+            throw new MojoExecutionException( "Failed to resolve artifact", e);
+        }
+        catch (ArtifactNotFoundException e)
+        {
+            throw new MojoExecutionException( "Failed to resolve artifact", e);
+        }
+
+        Collection<Artifact> resolved = result.getArtifacts();
+        int i = 0;
+        // FIXME gwt 2.3.0 don't declare dependency on javax.validation, should be fix in next release
+        File[] files = new File[ resolved.size() + 1 + 2 ];
+        files[i++] = gwtUserArtifact.getFile();
+        for ( Artifact artifact : resolved )
+        {
+            files[i++] = artifact.getFile();
+        }
+
+        files[i++] = getArtifact( "javax.validation", "validation-api" ).getFile();
+        files[i++] = getArtifact( "javax.validation", "validation-api", "sources" ).getFile();
+        return files;
+    }
+
+    protected Artifact getArtifact( String groupId, String artifactId, String classifier )
     {
         for ( Artifact artifact : pluginArtifacts )
         {
@@ -266,28 +309,16 @@ public abstract class AbstractGwtMojo
             {
                 if ( classifier != null && classifier.equals( artifact.getClassifier() ) )
                 {
-                    return artifact.getFile();
+                    return artifact;
                 }
                 if ( classifier == null && artifact.getClassifier() == null )
                 {
-                    return artifact.getFile();
+                    return artifact;
                 }
             }
         }
         getLog().error( "Failed to retrieve " + groupId + ":" + artifactId + ":" + classifier );
         return null;
-    }
-
-    protected File[] getGwtUserJar()
-        throws IOException
-    {
-        checkGwtUserVersion();
-        // TODO starting with GWT 2.3.0, gwt-user comes with dependencies. We should use maven metadata to return gwt-user jar file with it's declared dependencies
-        return new File[] {
-            getArtifact( "com.google.gwt", "gwt-user" ),
-            getArtifact( "javax.validation", "validation-api" ),
-            getArtifact( "javax.validation", "validation-api", "sources" )
-        };
     }
 
     /**
@@ -312,7 +343,7 @@ public abstract class AbstractGwtMojo
     /**
      * Check gwt-user dependency matches plugin version
      */
-    private void checkGwtUserVersion() throws IOException
+    private void checkGwtUserVersion() throws MojoExecutionException
     {
         InputStream inputStream = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream( "org/codehaus/mojo/gwt/mojoGwtVersion.properties" );
@@ -321,6 +352,10 @@ public abstract class AbstractGwtMojo
         {
             properties.load( inputStream );
 
+        }
+        catch (IOException e)
+        {
+            throw new MojoExecutionException( "Failed to load plugin properties", e );
         }
         finally
         {
@@ -354,7 +389,7 @@ public abstract class AbstractGwtMojo
         Artifact artifact = artifactFactory.createArtifactWithClassifier( groupId, artifactId, version, type, classifier );
         try
         {
-            resolver.resolve( artifact, remoteRepositories, localRepository );
+            resolver.resolve(artifact, remoteRepositories, localRepository);
         }
         catch ( ArtifactNotFoundException e )
         {

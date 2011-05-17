@@ -20,7 +20,6 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -280,15 +279,7 @@ public class TestMojo
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );
         classpath.add( getClassPathElementFor( ReporterManager.class ) );
-        try
-        {
-            // MGWT-232 olamy : add automatically gwt-dev jar in the classpath
-            classpath.add( getGwtDevJar() );
-        }
-        catch ( IOException ioe )
-        {
-            throw new MojoExecutionException( "Unable to write launch configuration", ioe );
-        }
+        classpath.add( getGwtDevJar() );
     }
 
     /**

@@ -326,86 +326,79 @@ public class RunMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        try
+        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+
+        if ( gwtSdkFirstInClasspath )
         {
-            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+        }
 
-            if ( gwtSdkFirstInClasspath )
+        cmd.withinScope( Artifact.SCOPE_RUNTIME );
+        addCompileSourceArtifacts( cmd );
+
+        if ( !gwtSdkFirstInClasspath )
+        {
+            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+        }
+
+        cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
+            .arg( "-gen", getGen().getAbsolutePath() )
+            .arg( "-logLevel", getLogLevel() )
+            .arg( "-port", Integer.toString( getPort() ) )
+            .arg( "-startupUrl", getStartupUrl() )
+            .arg( noServer, "-noserver" );
+
+        if ( server != null )
+        {
+            cmd.arg( "-server", server );
+        }
+
+        if ( whitelist != null && whitelist.length() > 0 )
+        {
+            cmd.arg( "-whitelist", whitelist );
+        }
+        if ( blacklist != null && blacklist.length() > 0 )
+        {
+            cmd.arg( "-blacklist", blacklist );
+        }
+
+        if ( systemProperties != null && !systemProperties.isEmpty() )
+        {
+            for ( String key : systemProperties.keySet() )
             {
-                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
-            }
-
-            cmd.withinScope( Artifact.SCOPE_RUNTIME );
-            addCompileSourceArtifacts( cmd );
-
-            if ( !gwtSdkFirstInClasspath )
-            {
-                cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
-            }
-
-            cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
-                .arg( "-gen", getGen().getAbsolutePath() )
-                .arg( "-logLevel", getLogLevel() )
-                .arg( "-port", Integer.toString( getPort() ) )
-                .arg( "-startupUrl", getStartupUrl() )
-                .arg( noServer, "-noserver" );
-
-            if ( server != null )
-            {
-                cmd.arg( "-server", server );
-            }
-
-            if ( whitelist != null && whitelist.length() > 0 )
-            {
-                cmd.arg( "-whitelist", whitelist );
-            }
-            if ( blacklist != null && blacklist.length() > 0 )
-            {
-                cmd.arg( "-blacklist", blacklist );
-            }
-
-            if ( systemProperties != null && !systemProperties.isEmpty() )
-            {
-                for ( String key : systemProperties.keySet() )
+                String value = systemProperties.get( key );
+                if ( value != null )
                 {
-                    String value = systemProperties.get( key );
-                    if ( value != null )
-                    {
-                        getLog().debug( " " + key + "=" + value );
-                        cmd.systemProperty( key, value );
-                    }
-                    else
-                    {
-                        getLog().debug( "skip sysProps " + key + " with empty value" );
-                    }
+                    getLog().debug( " " + key + "=" + value );
+                    cmd.systemProperty( key, value );
+                }
+                else
+                {
+                    getLog().debug( "skip sysProps " + key + " with empty value" );
                 }
             }
-
-            if ( bindAddress != null && bindAddress.length() > 0 )
-            {
-                cmd.arg( "-bindAddress" ).arg( bindAddress );
-            }
-
-            if ( !noServer )
-            {
-                setupExplodedWar();
-            }
-            else
-            {
-                getLog().info( "noServer is set! Skipping exploding war file..." );
-            }
-
-            for ( String module : getModules() )
-            {
-                cmd.arg( module );
-            }
-
-            cmd.execute();
         }
-        catch ( IOException e )
+
+        if ( bindAddress != null && bindAddress.length() > 0 )
         {
-            throw new MojoExecutionException( e.getMessage(), e );
-        }        
+            cmd.arg( "-bindAddress" ).arg( bindAddress );
+        }
+
+        if ( !noServer )
+        {
+            setupExplodedWar();
+        }
+        else
+        {
+            getLog().info( "noServer is set! Skipping exploding war file..." );
+        }
+
+        for ( String module : getModules() )
+        {
+            cmd.arg( module );
+        }
+
+        cmd.execute();
     }
 
     @Override

@@ -26,12 +26,8 @@ package org.codehaus.mojo.gwt.shell;
 import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
@@ -42,7 +38,6 @@ import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Invokes the GWTCompiler for the project source.
@@ -234,84 +229,77 @@ public class CompileMojo
     {
         boolean upToDate = true;
 
-        try
+        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
+        if ( gwtSdkFirstInClasspath )
         {
-            JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
-            if ( gwtSdkFirstInClasspath )
-            {
-                cmd.withinClasspath( getGwtUserJar() )
-                   .withinClasspath( getGwtDevJar() );
-            }
-            cmd.withinScope( Artifact.SCOPE_COMPILE );
-
-            if ( !gwtSdkFirstInClasspath )
-            {
-                cmd.withinClasspath( getGwtUserJar() )
-                   .withinClasspath( getGwtDevJar() );
-            }
-
-            cmd.arg( "-gen", getGen().getAbsolutePath() )
-                .arg( "-logLevel", getLogLevel() )
-                .arg( "-style", getStyle() )
-                .arg( "-war", getOutputDirectory().getAbsolutePath() )
-                .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
-                // optional advanced arguments
-                .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
-                .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
-                .arg( disableClassMetadata, "-XdisableClassMetadata" )
-                .arg( disableCastChecking, "-XdisableCastChecking" ).arg( strict, "-strict" )
-                .arg( soycDetailed, "-XsoycDetailed" );
-            
-
-            if ( optimizationLevel >= 0 )
-            {
-                cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
-            }
-
-            if ( extraParam || compileReport )
-            {
-                getLog().debug( "create extra directory " );
-                if ( !extra.exists() )
-                {
-                    extra.mkdirs();
-                }
-                cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
-            }
-            else
-            {
-                getLog().debug( "NOT create extra directory " );
-            }
-
-            if ( compileReport )
-            {
-                cmd.arg( "-compileReport" );
-            }
-
-            addCompileSourceArtifacts( cmd );
-
-            if ( workDir != null )
-            {
-                cmd.arg( "-workDir" ).arg( String.valueOf( workDir ) );
-            }
-
-            for ( String target : modules )
-            {
-                if ( !compilationRequired( target, getOutputDirectory() ) )
-                {
-                    continue;
-                }
-                cmd.arg( target );
-                upToDate = false;
-            }
-            if ( !upToDate )
-            {
-                cmd.execute();
-            }
+            cmd.withinClasspath( getGwtUserJar() )
+               .withinClasspath( getGwtDevJar() );
         }
-        catch ( IOException e )
+        cmd.withinScope( Artifact.SCOPE_COMPILE );
+
+        if ( !gwtSdkFirstInClasspath )
         {
-            throw new MojoExecutionException( e.getMessage(), e );
-        }        
+            cmd.withinClasspath( getGwtUserJar() )
+               .withinClasspath( getGwtDevJar() );
+        }
+
+        cmd.arg( "-gen", getGen().getAbsolutePath() )
+            .arg( "-logLevel", getLogLevel() )
+            .arg( "-style", getStyle() )
+            .arg( "-war", getOutputDirectory().getAbsolutePath() )
+            .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
+            // optional advanced arguments
+            .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
+            .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
+            .arg( disableClassMetadata, "-XdisableClassMetadata" )
+            .arg( disableCastChecking, "-XdisableCastChecking" ).arg( strict, "-strict" )
+            .arg( soycDetailed, "-XsoycDetailed" );
+
+
+        if ( optimizationLevel >= 0 )
+        {
+            cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
+        }
+
+        if ( extraParam || compileReport )
+        {
+            getLog().debug( "create extra directory " );
+            if ( !extra.exists() )
+            {
+                extra.mkdirs();
+            }
+            cmd.arg( "-extra" ).arg( extra.getAbsolutePath() );
+        }
+        else
+        {
+            getLog().debug( "NOT create extra directory " );
+        }
+
+        if ( compileReport )
+        {
+            cmd.arg( "-compileReport" );
+        }
+
+        addCompileSourceArtifacts( cmd );
+
+        if ( workDir != null )
+        {
+            cmd.arg( "-workDir" ).arg( String.valueOf( workDir ) );
+        }
+
+        for ( String target : modules )
+        {
+            if ( !compilationRequired( target, getOutputDirectory() ) )
+            {
+                continue;
+            }
+            cmd.arg( target );
+            upToDate = false;
+        }
+        if ( !upToDate )
+        {
+            cmd.execute();
+        }
     }
 
     private int getLocalWorkers()
