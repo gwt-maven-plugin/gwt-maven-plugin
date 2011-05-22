@@ -74,4 +74,7 @@ TIPS
 
   <<<>>>
 
+  Development builds are tested on next GWT SDK milestones on 
+  {{{https://gwt-maven-plugin.ci.cloudbees.com/}CloudBees infrastructure}} 
+
 [http://static-www.cloudbees.com/images/badges/BuiltOnDEV.png]
