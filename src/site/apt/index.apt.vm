@@ -72,6 +72,14 @@ TIPS
   * {{{./faq.html}Frequently Asked Questions}} 
 
 
+WANT TO CONTRIBUTE ?
+
+  We are big fans of {{{http://jenkins-ci.org/}Jenkins}} community model, and want to apply it to lower the contribution barrier.
+  Code is hosted on {{{https://github.com/gwt-maven-plugin/gwt-maven-plugin}GitHub}}, fork it, improve it, and send pull requests.
+  Just please log what's you're working for in {{{http://jira.codehaus.org/browse/MGWT}Jira}} and use the Jira ID as a profix for 
+  you commits. If you feel confortable with the code, just ask for commit permission to apply changes by yourself.
+
+
   <<<>>>
 
   Development builds are tested on next GWT SDK milestones on 
