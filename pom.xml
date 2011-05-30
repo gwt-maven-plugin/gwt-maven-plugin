@@ -100,9 +100,9 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/gwt-maven-plugin</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/gwt-maven-plugin</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/gwt-maven-plugin</url>
+    <connection>scm:git:git@github.com:gwt-maven-plugin/gwt-maven-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:gwt-maven-plugin/gwt-maven-plugin.git</developerConnection>
+    <url>https://github.com/gwt-maven-plugin/gwt-maven-plugin</url>
   </scm>
   <issueManagement>
     <system>jira</system>
