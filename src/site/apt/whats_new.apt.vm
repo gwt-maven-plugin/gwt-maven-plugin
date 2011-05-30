@@ -27,6 +27,9 @@
 ~~ http://maven.apache.org/doxia/references/apt-format.html 
 
 What's new in gwt-maven-plugin ${project.version}
+ 
+ * code has moved to {{{https://github.com/gwt-maven-plugin/gwt-maven-plugin}GitHub}}, contributors are welcome to fork, send pull request
+   or request for commit if you feel confident with the code.
 
  * {{{./user-guide/appengine-launcher.html}AppEngine Launch}}
  
@@ -37,3 +40,4 @@ What's new in gwt-maven-plugin ${project.version}
  * {{{./user-guide/compiler-report.html} Compiler Report}} 
  
  * {{{./user-guide/remoteservicerelativepath-annotation.html} @RemoteServiceRelativePath annotation processing}} 
+
