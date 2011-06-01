@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.google.gdt.eclipse.suite.webapp">
-  <stringAttribute key="com.google.gwt.eclipse.core.URL" value="${modulePath}/${page}"/>
+  <stringAttribute key="com.google.gwt.eclipse.core.URL" value="${page}"/>
   <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
     <listEntry value="/${project}"/>
   </listAttribute>
