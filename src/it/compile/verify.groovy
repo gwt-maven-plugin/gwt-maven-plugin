@@ -23,6 +23,11 @@ assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello').ex
 assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.google.gwt.sample.hello.Hello.nocache.js').exists();
 assert new File(basedir, 'target/extra').exists();
 assert new File(basedir, 'target/extra/hello/rpcPolicyManifest').exists();
+assert new File(basedir, 'target/workDir').exists();
+assert new File(basedir, 'target/workDir/com.google.gwt.sample.hello.Hello').exists();
+assert new File(basedir, 'target/workDir/org.codehaus.mojo.gwt.test.Hello').exists();
+assert new File(basedir, 'target/deploy').exists();
+assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 
 assert new File(basedir, 'build.log').exists();
 
