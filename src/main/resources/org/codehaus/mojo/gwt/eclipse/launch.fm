@@ -13,7 +13,7 @@
         <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry id=&quot;org.eclipse.jdt.launching.classpathentry.defaultClasspath&quot;&gt;&#13;&#10;&lt;memento project=&quot;${project}&quot;/&gt;&#13;&#10;&lt;/runtimeClasspathEntry&gt;&#13;&#10;"/>
     </listAttribute>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="${extraJvmArgs} -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-war ${war} ${additionalArguments} -startupUrl ${modulePath}/${page} ${module}"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-war ${war} ${additionalArguments} -startupUrl ${page} ${module}"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="${project}"/>
     <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 </launchConfiguration>
