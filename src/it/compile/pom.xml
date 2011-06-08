@@ -48,6 +48,8 @@
           <extraParam>true</extraParam>
           <soyc>false</soyc>
           <strict>true</strict>
+          <workDir>${project.build.directory}/workDir</workDir>
+          <deploy>${project.build.directory}/deploy</deploy>
         </configuration>
         <executions>
           <execution>
