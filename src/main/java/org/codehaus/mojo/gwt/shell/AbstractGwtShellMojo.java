@@ -80,6 +80,14 @@ public abstract class AbstractGwtShellMojo
     private String style;
 
     /**
+     * The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the webappDirectory directory/jar, and may be the same as the extra directory/jar)
+     *
+     * @parameter
+     * @since 2.3.0-1
+     */
+    private File deploy;
+
+    /**
      * Extra JVM arguments that are passed to the GWT-Maven generated scripts (for compiler, shell, etc - typically use
      * -Xmx512m here, or -XstartOnFirstThread, etc).
      * <p>
@@ -265,6 +273,13 @@ public abstract class AbstractGwtShellMojo
             if ( !found )
                 getLog().warn(
                         "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
+        }
+    }
+
+    protected void addArgumentDeploy(JavaCommand cmd) {
+        if ( deploy != null )
+        {
+            cmd.arg( "-deploy" ).arg( String.valueOf( deploy ) );
         }
     }
 
