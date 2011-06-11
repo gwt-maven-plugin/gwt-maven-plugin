@@ -228,7 +228,8 @@ public class GwtModule
 
     public String getPackage()
     {
-        return name.substring( 0, name.lastIndexOf( '.' ) );
+        int index = name.lastIndexOf( '.' );
+        return ( index < 0 ) ? "" : name.substring( 0, index );
     }
 
     public String getPath()
