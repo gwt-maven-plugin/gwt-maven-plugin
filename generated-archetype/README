@@ -1,0 +1,19 @@
+This generated artifact is used to develop the GWT Maven plugin archetype. Having source control on the generated artifact allows to check that changes on the archetype produce the expected changes on the generated artifact, and to easily track those changes.
+
+When trying to implement a change on the archetype, the process should be the following :
+
+1) Work on the generated artifact so that it matches what you want.
+2) Commit those changes
+3) Implement those changes in the archetype
+4) Regenerate the artifact, and check that there's no diff. If there's a diff, then obviously something's wrong in the archetype.
+
+Use the following command to generate the artifact :
+
+ mvn archetype:generate \
+   -DarchetypeGroupId=org.codehaus.mojo \
+   -DarchetypeArtifactId=gwt-maven-plugin \
+   -DarchetypeVersion=2.3.0 \
+   -DgroupId=com.company \
+   -DartifactId=some-artifact \
+   -Dversion=1.0-SNAPSHOT \
+   -Dmodule=SomeModule
