@@ -5,3 +5,6 @@ target/
 *.iws
 *.swp
 *.swo
+/.classpath
+/.project
+/.settings
