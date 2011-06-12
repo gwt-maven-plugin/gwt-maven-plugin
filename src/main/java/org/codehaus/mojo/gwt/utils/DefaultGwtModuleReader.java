@@ -79,7 +79,7 @@ public class DefaultGwtModuleReader
             {
                 DirectoryScanner scanner = new DirectoryScanner();
                 scanner.setBasedir( sourceDirectory.getAbsolutePath() );
-                scanner.setIncludes( new String[] { "**/*" + AbstractGwtModuleMojo.GWT_MODULE_EXTENSION } );
+                scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
                 scanner.scan();
 
                 mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
@@ -96,7 +96,7 @@ public class DefaultGwtModuleReader
             }
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( resource.getDirectory() );
-            scanner.setIncludes( new String[] { "**/*" + AbstractGwtModuleMojo.GWT_MODULE_EXTENSION } );
+            scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
             scanner.scan();
             mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
         }
@@ -109,8 +109,7 @@ public class DefaultGwtModuleReader
         List<String> modules = new ArrayList<String>( mods.size() );
         for ( String fileName : mods )
         {
-            String path = fileName.substring( 0,
-                                              fileName.length() - AbstractGwtModuleMojo.GWT_MODULE_EXTENSION.length() );
+            String path = fileName.substring( 0, fileName.length() - GWT_MODULE_EXTENSION.length() );
             modules.add( path.replace( File.separatorChar, '.' ) );
         }
         if ( modules.size() > 0 )
