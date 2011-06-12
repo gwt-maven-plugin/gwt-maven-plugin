@@ -57,11 +57,6 @@ public abstract class AbstractGwtModuleMojo
     implements GwtModuleReader
 {
     /**
-     * @deprecated use {@link DefaultGwtModuleReader#GWT_MODULE_EXTENSION}
-     */
-    public static final String GWT_MODULE_EXTENSION = DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
-
-    /**
      * The project GWT modules. If not set, the plugin will scan the project for <code>.gwt.xml</code> files.
      *
      * @parameter
@@ -109,7 +104,7 @@ public abstract class AbstractGwtModuleMojo
                 {
                     DirectoryScanner scanner = new DirectoryScanner();
                     scanner.setBasedir( sourceDirectory.getAbsolutePath() );
-                    scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
+                    scanner.setIncludes( new String[] { "**/*" + DefaultGwtModuleReader.GWT_MODULE_EXTENSION } );
                     scanner.scan();
 
                     mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
@@ -126,7 +121,7 @@ public abstract class AbstractGwtModuleMojo
                 }
                 DirectoryScanner scanner = new DirectoryScanner();
                 scanner.setBasedir( resource.getDirectory() );
-                scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
+                scanner.setIncludes( new String[] { "**/*" + DefaultGwtModuleReader.GWT_MODULE_EXTENSION } );
                 scanner.scan();
                 mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
             }
@@ -140,7 +135,8 @@ public abstract class AbstractGwtModuleMojo
             int i = 0;
             for ( String fileName : mods )
             {
-                String path = fileName.substring( 0, fileName.length() - GWT_MODULE_EXTENSION.length() );
+                String path =
+                    fileName.substring( 0, fileName.length() - DefaultGwtModuleReader.GWT_MODULE_EXTENSION.length() );
                 modules[i++] = path.replace( File.separatorChar, '.' );
             }
             if ( modules.length > 0 )
@@ -155,7 +151,7 @@ public abstract class AbstractGwtModuleMojo
     public GwtModule readModule( String name )
         throws GwtModuleReaderException
     {
-        String modulePath = name.replace( '.', '/' ) + GWT_MODULE_EXTENSION;
+        String modulePath = name.replace( '.', '/' ) + DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
         Collection<String> sourceRoots = getProject().getCompileSourceRoots();
         for ( String sourceRoot : sourceRoots )
         {
