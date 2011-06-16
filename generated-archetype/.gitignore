@@ -3,3 +3,5 @@ some-artifact/src/main/webapp/WEB-INF/classes/
 some-artifact/src/main/webapp/WEB-INF/deploy/
 some-artifact/src/main/webapp/WEB-INF/lib/
 some-artifact/src/main/webapp/com.company.SomeModuleJUnit/
+some-artifact/.gwt
+some-artifact/war
