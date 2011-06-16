@@ -2,6 +2,9 @@
 <module rename-to='SomeModule'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  
+  <!-- We need the JUnit module in the main module, otherwise eclipse complains (Google plugin bug?) -->
+  <inherits name='com.google.gwt.junit.JUnit'/>
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
@@ -9,7 +12,7 @@
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
-
+  
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->

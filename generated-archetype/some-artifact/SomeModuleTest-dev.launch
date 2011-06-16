@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/some-artifact/src/test/java/com/company/test/GwtTestSomeModule.java"/>
+<listEntry value="/some-artifact/src/test/java/com/company/client/GwtTestSomeModule.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -20,7 +20,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.classpathProvider"/>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.company.test.GwtTestSomeModule"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.company.client.GwtTestSomeModule"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="some-artifact"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.sourcepathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dgwt.args=&quot;-standardsMode -logLevel WARN&quot; -Xmx256M"/>

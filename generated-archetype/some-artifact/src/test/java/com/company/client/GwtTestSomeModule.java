@@ -1,7 +1,5 @@
-package com.company.test;
+package com.company.client;
 
-import com.company.client.GreetingService;
-import com.company.client.GreetingServiceAsync;
 import com.company.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
