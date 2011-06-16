@@ -9,10 +9,11 @@ When trying to implement a change on the archetype, the process should be the fo
 
 Use the following command to generate the artifact :
 
- mvn archetype:generate \
+mvn archetype:generate \
    -DarchetypeGroupId=org.codehaus.mojo \
    -DarchetypeArtifactId=gwt-maven-plugin \
-   -DarchetypeVersion=2.3.0 \
+   -DarchetypeVersion=2.3.0-1-SNAPSHOT \
+   -DarchetypeCatalog=local \
    -DgroupId=com.company \
    -DartifactId=some-artifact \
    -Dversion=1.0-SNAPSHOT \
