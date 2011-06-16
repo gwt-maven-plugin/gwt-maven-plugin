@@ -17,6 +17,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    
   </properties>
 
   <dependencies>
@@ -38,6 +39,19 @@
       <version>4.7</version>
       <scope>test</scope>
     </dependency>
+<dependency>
+<groupId>javax.validation</groupId>
+<artifactId>validation-api</artifactId>
+<version>1.0.0.GA</version>
+<scope>test</scope>
+</dependency>
+<dependency>
+<groupId>javax.validation</groupId>
+<artifactId>validation-api</artifactId>
+<version>1.0.0.GA</version>
+<classifier>sources</classifier>
+<scope>test</scope>
+</dependency>    
   </dependencies>
 
   <build>
