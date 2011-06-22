@@ -194,7 +194,7 @@ public abstract class AbstractGwtShellMojo
         return extra;
     }
 
-    private String getJavaCommand()
+    protected String getJavaCommand()
         throws MojoExecutionException
     {
         if ( StringUtils.isEmpty( jvm ) )

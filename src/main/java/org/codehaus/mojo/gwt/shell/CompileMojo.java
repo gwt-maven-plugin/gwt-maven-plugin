@@ -38,6 +38,11 @@ import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
+import org.codehaus.plexus.util.Os;
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.Commandline;
+import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * Invokes the GWTCompiler for the project source.
@@ -303,7 +308,7 @@ public class CompileMojo
         }
     }
 
-    private int getLocalWorkers()
+    private int getLocalWorkers() throws MojoExecutionException
     {
         if ( localWorkers > 0 )
         {
@@ -311,7 +316,7 @@ public class CompileMojo
         }
         // workaround to GWT issue 4031 whith IBM JDK
         // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
-        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) )
+        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" )  && isIBMjvm() )
         {
             StringBuilder sb = new StringBuilder( "Build is using IBM JDK, localWorkers set to 1 as a workaround" );
             sb.append( SystemUtils.LINE_SEPARATOR );
@@ -319,8 +324,48 @@ public class CompileMojo
             getLog().info( sb.toString() );
             return 1;
         }
+        
         return Runtime.getRuntime().availableProcessors();
     }
+    
+    
+    /**
+     * Executes a -version against the specified jvm to confirm whether the jvm parameter is pointing at an IBM jvm.
+     * 
+     * @return
+     * @throws MojoExecutionException
+     */
+    private boolean isIBMjvm() throws MojoExecutionException {
+    	Commandline cmd = Os.isFamily( Os.FAMILY_WINDOWS ) ? new Commandline( new JavaShell() ) : new Commandline();
+    	cmd.setExecutable(getJavaCommand());
+    	String[] args = new String[1];
+    	args[0] = "-showversion";
+    	cmd.addArguments(args);
+    	
+    	final StringBuilder sb = new StringBuilder();  //we'll check this to see if it contains the string "IBM"  
+    	
+    	StreamConsumer outputConsumer = new StreamConsumer() {
+    		
+			public void consumeLine(String line) {
+				sb.append(line);					
+			}
+		};
+		
+    	try {
+			CommandLineUtils.executeCommandLine(cmd, outputConsumer, outputConsumer, 3);
+		} catch (CommandLineException e) {
+			e.printStackTrace(); //don't care about an exception - assume not ibm or other error.				
+		} 
+		
+		
+		if (sb.toString().contains("IBM")) {
+			return true;
+		}
+		
+		return false;
+    }
+    
+    
 
     /**
      * Try to find out, if there are stale sources. If aren't some, we don't have to compile... ...this heuristic
