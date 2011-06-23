@@ -19,6 +19,7 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class GwtModule
     private Set<GwtModule> inherits;
 
     private GwtModuleReader reader;
+    
+    private File sourceFile;
 
     public GwtModule( String name, Xpp3Dom xml, GwtModuleReader reader )
     {
@@ -90,7 +93,7 @@ public class GwtModule
     public String[] getSources()
     {
         Xpp3Dom nodes[] = xml.getChildren( "source" );
-        if ( nodes == null )
+        if ( nodes == null || nodes.length == 0 )
         {
             return new String[] { "client" };
         }
@@ -241,6 +244,14 @@ public class GwtModule
         return name;
     }
 
+    public File getSourceFile() {
+    	return sourceFile;
+    }
+    
+    public void setSourceFile(File file) {
+		this.sourceFile = file;
+	}
+	
     @Override
     public boolean equals( Object obj )
     {
@@ -252,4 +263,5 @@ public class GwtModule
     {
         return name.hashCode();
     }
+
 }

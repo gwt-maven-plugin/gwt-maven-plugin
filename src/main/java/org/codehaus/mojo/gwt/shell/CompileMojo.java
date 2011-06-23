@@ -28,12 +28,14 @@ import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.GwtModule;
+import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
@@ -339,45 +341,72 @@ public class CompileMojo
     private boolean compilationRequired( String module, File output )
         throws MojoExecutionException
     {
+        getLog().debug( "**Checking if compilation is required for " + module );
         try
         {
-            GwtModule gwtModule = readModule( module );
+
+        	GwtModule gwtModule = readModule( module );
             if ( gwtModule.getEntryPoints().size() == 0 )
             {
-                getLog().debug( gwtModule.getName() + " has no EntryPoint - compilation skipped" );
+                getLog().info( gwtModule.getName() + " has no EntryPoint - compilation skipped" );
                 // No entry-point, this is an utility module : compiling this one will fail
                 // with '[ERROR] Module has no entry points defined'
                 return false;
             }
+            getLog().debug( "Module has an entrypoint" );
 
             if ( force )
             {
                 return true;
             }
-
+            getLog().debug( "Compilation not forced");
+            
             String modulePath = gwtModule.getPath();
-            String outputTarget = modulePath + "/" + modulePath + ".nocache.js";
 
+            String outputTarget = modulePath + "/" + modulePath + ".nocache.js";
+            File outputTargetFile = new File( output, outputTarget );
             // Require compilation if no js file present in target.
-            if ( !new File( output, outputTarget ).exists() )
+            if ( !outputTargetFile.exists() )
             {
                 return true;
             }
+            getLog().debug( "Output file exists");
+            
+            File moduleFile = gwtModule.getSourceFile();
+            if(moduleFile == null) {
+            	return true; //the module was read from something like an InputStream; always recompile this because we can't make any other choice
+            }
+            getLog().debug( "There is a module source file (not an input stream");
+            
+            //If input is newer than target, recompile
+            if(moduleFile.lastModified() > outputTargetFile.lastModified()) 
+            {
+                getLog().debug( "Module file has been modified since the output file was created; recompiling" );
+            	return true;
+            }
+            getLog().debug( "The module XML hasn't been updated");
 
-            // js file allreay exists, but may not be up-to-date with project source files
+            // js file already exists, but may not be up-to-date with project source files
             SingleTargetSourceMapping singleTargetMapping = new SingleTargetSourceMapping( ".java", outputTarget );
             StaleSourceScanner scanner = new StaleSourceScanner();
             scanner.addSourceMapping( singleTargetMapping );
-
-            SingleTargetSourceMapping gwtModuleMapping = new SingleTargetSourceMapping( ".gwt.xml", outputTarget );
-            scanner.addSourceMapping( gwtModuleMapping );
 
             SingleTargetSourceMapping uiBinderMapping = new SingleTargetSourceMapping( ".ui.xml", outputTarget );
             scanner.addSourceMapping( uiBinderMapping );
 
             Collection<File> compileSourceRoots = new HashSet<File>();
-            classpathBuilder.addSourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
-            classpathBuilder.addResourcesWithActiveProjects( getProject(), compileSourceRoots, SCOPE_COMPILE );
+           	for (Iterator iterator = getProject().getCompileSourceRoots().iterator(); iterator.hasNext();) {	
+				String sourceRoot = (String) iterator.next();
+           		for (String sourcePackage : gwtModule.getSources()) {
+			        String packagePath = gwtModule.getPackage().replace( '.', File.separatorChar );
+		            File sourceDirectory = new File (sourceRoot + File.separatorChar + packagePath + File.separator + sourcePackage);
+		            if(sourceDirectory.exists()) {
+		            	getLog().debug(" Looking in a source directory "+sourceDirectory.getAbsolutePath() + " for possible changes");
+			            compileSourceRoots.add(sourceDirectory);					
+		            }
+				}
+			}
+
             for ( File sourceRoot : compileSourceRoots )
             {
                 if ( !sourceRoot.isDirectory() )
