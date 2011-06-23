@@ -38,6 +38,7 @@ import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Invokes the GWTCompiler for the project source.
@@ -311,9 +312,11 @@ public class CompileMojo
         }
         // workaround to GWT issue 4031 whith IBM JDK
         // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
-        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) )
+        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()))
         {
-            StringBuilder sb = new StringBuilder( "Build is using IBM JDK, localWorkers set to 1 as a workaround" );
+            StringBuilder sb = new StringBuilder( "Build is using IBM JDK, and no explicit JVM property has been set." );
+            sb.append( SystemUtils.LINE_SEPARATOR );
+            sb.append("localWorkers set to 1 as a workaround");
             sb.append( SystemUtils.LINE_SEPARATOR );
             sb.append( "see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031" );
             getLog().info( sb.toString() );
