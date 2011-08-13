@@ -81,7 +81,7 @@
       <subscribe>user-subscribe@mojo.codehaus.org</subscribe>
       <unsubscribe>user-unsubscribe@mojo.codehaus.org</unsubscribe>
       <post>user@mojo.codehaus.org</post>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.mojo.user</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.mojo.user</archive>
       <otherArchives>
         <otherArchive>http://old.nabble.com/mojo---dev-f11981.html</otherArchive>
         <otherArchive>http://markmail.org/list/org.codehaus.mojo.user</otherArchive>
@@ -92,7 +92,7 @@
       <subscribe>dev-subscribe@mojo.codehaus.org</subscribe>
       <unsubscribe>dev-unsubscribe@mojo.codehaus.org</unsubscribe>
       <post>dev@mojo.codehaus.org</post>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.mojo.dev</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.mojo.dev</archive>
       <otherArchives>
         <otherArchive>http://www.nabble.com/mojo---dev-f11981.html</otherArchive>
         <otherArchive>http://markmail.org/list/org.codehaus.mojo.dev</otherArchive>
