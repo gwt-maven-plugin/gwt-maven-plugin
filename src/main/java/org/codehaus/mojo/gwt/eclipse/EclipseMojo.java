@@ -150,7 +150,7 @@ public class EclipseMojo
      * 
      * @parameter default-value="true" expression="${use.google.eclipse.plugin}"
      */
-    private boolean useGoogleEclispePlugin;
+    private boolean useGoogleEclipsePlugin;
 
     /**
      * @param parameters additional parameter for module URL
@@ -283,7 +283,7 @@ public class EclipseMojo
 
             context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath().replace( '\\', '/' ) );
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
-            String templateName = useGoogleEclispePlugin ? "google.fm" : "launch.fm";
+            String templateName = useGoogleEclipsePlugin ? "google.fm" : "launch.fm";
             Template template = cfg.getTemplate( templateName, "UTF-8" );
             template.process( context, configWriter );
             configWriter.flush();
