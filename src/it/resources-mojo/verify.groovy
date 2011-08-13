@@ -19,23 +19,5 @@
 assert new File(basedir, 'target/classes').exists();
 assert new File(basedir, 'target/classes/org/codehaus/mojo/gwt/test/client/HelloWorld.ui.xml').exists();
 assert new File(basedir, 'target/classes/org/codehaus/mojo/gwt/test/client/HelloWorld2.ui.xml').exists();
-assert new File(basedir, 'src/main/webapp/hello').exists();
-assert new File(basedir, 'src/main/webapp/hello/hello.nocache.js').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.google.gwt.sample.hello.Hello.nocache.js').exists();
-assert new File(basedir, 'target/extra').exists();
-assert new File(basedir, 'target/extra/hello/rpcPolicyManifest').exists();
-assert new File(basedir, 'target/workDir').exists();
-assert new File(basedir, 'target/workDir/com.google.gwt.sample.hello.Hello').exists();
-assert new File(basedir, 'target/workDir/org.codehaus.mojo.gwt.test.Hello').exists();
-assert new File(basedir, 'target/deploy').exists();
-assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 
-assert new File(basedir, 'build.log').exists();
-
-content = new File(basedir, 'build.log').text;
-assert content.contains( '-draftCompile' );
-assert content.contains( '-strict' );
-assert content.contains( '-optimize 1' );
-  
 return true;
