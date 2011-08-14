@@ -88,6 +88,11 @@ abstract class GwtResourcesBaseMojo
                                                                      "**/*.java" );
                     sourcesAndResources.addAll( files );
                     count += files.size();
+
+                    Collection<ResourceFile> uifiles = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.ui.xml" );
+                    sourcesAndResources.addAll( uifiles );
+                    count += uifiles.size();
                 }
                 for ( String source : module.getSuperSources() )
                 {
@@ -96,6 +101,11 @@ abstract class GwtResourcesBaseMojo
                                                                      "**/*.java" );
                     sourcesAndResources.addAll( files );
                     count += files.size();
+
+                    Collection<ResourceFile> uifiles = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.ui.xml" );
+                    sourcesAndResources.addAll( uifiles );
+                    count += uifiles.size();
                 }
                 getLog().info( count + " source files from GWT module " + name );
             }
