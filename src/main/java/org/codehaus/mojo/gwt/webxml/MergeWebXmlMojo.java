@@ -98,6 +98,12 @@ public class MergeWebXmlMojo
         throws MojoExecutionException, MojoFailureException
     {
 
+    	if ( "pom".equals( getProject().getPackaging() ) )
+        {
+    		getLog().info( "GWT mergewebxml is skipped" );
+    		return;
+    	}
+
         try
         {
             if ( !mergedWebXml.exists() )
