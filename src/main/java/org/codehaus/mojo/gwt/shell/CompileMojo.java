@@ -124,6 +124,16 @@ public class CompileMojo
     private boolean disableCastChecking;
 
     /**
+     * EXPERIMENTAL: Disables code-splitting.
+     * <p>
+     * Can be set from command line using '-Dgwt.disableRunAsync=true'.
+     * </p>
+     *
+     * @parameter default-value="false" expression="${gwt.disableRunAsync}"
+     */
+    private boolean disableRunAsync;
+
+    /**
      * Validate all source code, but do not compile.
      * <p>
      * Can be set from command line using '-Dgwt.validateOnly=true'.
@@ -255,7 +265,9 @@ public class CompileMojo
             .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
             .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
             .arg( disableClassMetadata, "-XdisableClassMetadata" )
-            .arg( disableCastChecking, "-XdisableCastChecking" ).arg( strict, "-strict" )
+            .arg( disableCastChecking, "-XdisableCastChecking" )
+            .arg( disableRunAsync, "-XdisableRunAsync" )
+            .arg( strict, "-strict" )
             .arg( soycDetailed, "-XsoycDetailed" );
 
 
