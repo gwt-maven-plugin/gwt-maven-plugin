@@ -121,6 +121,12 @@ public class GenerateAsyncMojo
     {
         getLog().debug( "GenerateAsyncMojo#execute()" );
 
+        if ( "pom".equals( getProject().getPackaging() ) )
+        {
+    		getLog().info( "GWT generateAsync is skipped" );
+    		return;
+    	}
+
         if ( encoding == null )
         {
             getLog().warn( "Encoding is not set, your build will be platform dependent" );
