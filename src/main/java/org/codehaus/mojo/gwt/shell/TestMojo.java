@@ -223,7 +223,14 @@ public class TestMojo
         test = StringUtils.replace( test, File.separator, "." );
         try
         {
-            new File( getProject().getBasedir(), out ).mkdirs();
+            File outFile = new File(out);
+            if (outFile.isAbsolute())
+            {
+  		outFile.mkdirs();
+            }
+	    else{
+        	new File( getProject().getBasedir(), out ).mkdirs();
+            }
             try
             {
                 new JavaCommand( MavenTestRunner.class.getName() ).withinScope( Artifact.SCOPE_TEST ).arg( test )
