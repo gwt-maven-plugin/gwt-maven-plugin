@@ -45,11 +45,6 @@
   </licenses>
   <developers>
     <developer>
-      <id>ndeloof</id>
-      <name>Nicolas De Loof</name>
-      <email>nicolas@apache.org</email>
-    </developer>
-    <developer>
       <id>charlie.collins</id>
       <name>Charlie Collins</name>
       <email>charlie.collins@gmail.com</email>
