@@ -37,6 +37,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * Will use the utility tool provided in gwt sdk which create a corresponding Java interface for accessing 
  * the classnames used in the file.
  * @goal css
+ * @phase generate-sources
  * @author Stale Undheim <undheim@corporater.com>
  * @author olamy
  * @since 2.1.0-1
