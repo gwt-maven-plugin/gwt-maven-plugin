@@ -163,13 +163,6 @@ public class I18NMojo
         {
             i18nMessagesBundles = new String[] { i18nMessagesBundle };
         }
-
-        if ( i18nMessagesBundles == null && i18nConstantsBundles == null && i18nConstantsWithLookupBundles == null )
-        {
-            throw new MojoExecutionException(
-                "neither i18nConstantsBundles, i18nMessagesBundles nor i18nConstantsWithLookupBundles present. \n"
-                + "Cannot execute i18n goal" );
-        }
     }
 
 
