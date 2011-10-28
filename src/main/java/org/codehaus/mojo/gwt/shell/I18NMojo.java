@@ -96,7 +96,9 @@ public class I18NMojo
         {
             for ( String target : i18nConstantsWithLookupBundles )
             {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
+                File targetFile = buildTargetFile( getGenerateDirectory(), target );
+                getLog().info( "Generating " + targetFile.toString() + ".java" );
+                ensureTargetPackageExists( targetFile );
                 new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
@@ -110,7 +112,9 @@ public class I18NMojo
         {
             for ( String target : i18nConstantsBundles )
             {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
+                File targetFile = buildTargetFile( getGenerateDirectory(), target );
+                getLog().info( "Generating " + targetFile.toString() + ".java" );
+                ensureTargetPackageExists( targetFile );
                 new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
@@ -123,7 +127,9 @@ public class I18NMojo
         {
             for ( String target : i18nMessagesBundles )
             {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
+                File targetFile = buildTargetFile( getGenerateDirectory(), target );
+                getLog().info( "Generating " + targetFile.toString() + ".java" );
+                ensureTargetPackageExists( targetFile );
                 new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
@@ -167,15 +173,17 @@ public class I18NMojo
     }
 
 
-    private void ensureTargetPackageExists( File generateDirectory, String targetName )
+    private File buildTargetFile( File generateDirectory, String targetName )
     {
-        targetName = targetName.substring( 0, targetName.lastIndexOf( '.' ) );
-        String targetPackage = targetName.replace( '.', File.separatorChar );
-        getLog().debug( "ensureTargetPackageExists, targetName : " + targetName + ", targetPackage : " + targetPackage );
-        File targetPackageDirectory = new File( generateDirectory, targetPackage );
-        if ( !targetPackageDirectory.exists() )
+        return new File( generateDirectory, targetName.replace( '.', File.separatorChar ) );
+    }
+
+    private void ensureTargetPackageExists( File targetFile )
+    {
+        getLog().debug( "ensureTargetPackageExists, targetFile : " + targetFile );
+        if ( !targetFile.getParentFile().exists() )
         {
-            targetPackageDirectory.mkdirs();
+            targetFile.getParentFile().mkdirs();
         }
     }
 

@@ -221,6 +221,7 @@ public class GenerateAsyncMojo
     private void generateAsync( JavaClass clazz, File targetFile )
         throws IOException
     {
+        getLog().info( "Generating " + targetFile );
         PrintWriter writer = new PrintWriter( targetFile, encoding );
 
         String className = clazz.getName();
