@@ -24,12 +24,10 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-@RemoteServiceRelativePath(value="/HelloService")
 public class HelloRemoteServlet
-    extends RemoteServiceServlet
+    extends RemoteServiceServlet implements HelloRemoteService
 {
     public void init()
         throws ServletException
@@ -47,16 +45,19 @@ public class HelloRemoteServlet
         return null;
     }
 
+	@Override
     public int returnsPrimitive( String[] values )
     {
         return 0;
     }
 
+	@Override
     public void returnsVoid( String value )
     {
 
     }
 
+	@Override
     public String[] returnsArray( String[] values )
     {
         return new String[0];

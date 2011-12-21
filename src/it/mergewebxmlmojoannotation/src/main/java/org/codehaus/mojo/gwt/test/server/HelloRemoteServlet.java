@@ -26,10 +26,8 @@ import javax.servlet.ServletException;
 
 import org.codehaus.mojo.gwt.test.client.HelloService;
 
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-@RemoteServiceRelativePath(value="/HelloService")
 public class HelloRemoteServlet
     extends RemoteServiceServlet
     implements HelloService
