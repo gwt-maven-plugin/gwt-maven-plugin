@@ -77,9 +77,9 @@ public class ClasspathBuilder
         // addSourceWithActiveProject would make some java sources available to GWT compiler that should not be accessible in
         // a non-reactor build, making the build less deterministic and encouraging bad design.
 
+        items.add( new File( project.getBuild().getOutputDirectory() ) );
         addSources( items, project.getCompileSourceRoots() );
         addResources( items, project.getResources() );
-        items.add( new File( project.getBuild().getOutputDirectory() ) );
 
         // Use our own ClasspathElements fitering, as for RUNTIME we need to include PROVIDED artifacts,
         // that is not the default Maven policy, as RUNTIME is used here to build the GWTShell execution classpath
