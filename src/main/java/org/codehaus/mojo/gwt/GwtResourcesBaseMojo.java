@@ -97,15 +97,14 @@ abstract class GwtResourcesBaseMojo
                     sourcesAndResources.addAll( files );
                     count += files.size();
                 }
+                String source = module.getPublic();
+                getLog().debug( "GWT public files from " + name + '.' + source );
+                Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
+                                                                 "**/*" );
+                sourcesAndResources.addAll( files );
+                count += files.size();
                 getLog().info( count + " source files from GWT module " + name );
             }
-            String source = module.getPublic();
-            getLog().debug( "GWT public files from " + name + '.' + source );
-            Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
-                                                             "**/*" );
-            sourcesAndResources.addAll( files );
-            count += files.size();
-            getLog().info( count + " source files from GWT module " + name );
             return sourcesAndResources;
         }
         catch ( GwtModuleReaderException e )
