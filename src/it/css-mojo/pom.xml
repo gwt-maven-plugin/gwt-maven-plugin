@@ -46,7 +46,6 @@
         <executions>
           <execution>
             <id>css-generation</id>
-            <phase>generate-sources</phase>
             <goals>
               <goal>css</goal>
             </goals>
