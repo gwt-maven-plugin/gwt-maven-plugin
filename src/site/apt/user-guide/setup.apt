@@ -1,0 +1,54 @@
+ ------
+ Setup
+ ------
+ ------
+
+Setup Maven for GWT development
+
+ In order to use gwt-maven-plugin, you will need to configure it using the plugin configuration in your POM.
+
+  You need to include the GWT dependencies in your POM, and use the adequate gwt-maven-plugin version.
+  The plugin will check this version and warn if you try to use inconsistent releases.
+
+  For example:
+
++--
+  <dependencies>
+	  <dependency>
+	    <groupId>com.google.gwt</groupId>
+	    <artifactId>gwt-servlet</artifactId>
+	    <version>${project.version}</version>
+	    <scope>compile</scope>
+	  </dependency>
+	  <dependency>
+	    <groupId>com.google.gwt</groupId>
+	    <artifactId>gwt-user</artifactId>
+	    <version>${project.version}</version>
+	    <scope>provided</scope>
+	  </dependency>
+  <dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>generateAsync</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
++--
+
+  Note : Don't define <<<gwt-dev>>> as project dependency : this JAR has many common libraries packaged that may conflict with
+  the ones defined for your project, resulting in uncomprehensible <<<NoSuchMethodError>>>s. The gwt-maven-plugin will
+  automagically resolve the required dependency based on your declared <<<gwt-user>>> dependency.
+
++--

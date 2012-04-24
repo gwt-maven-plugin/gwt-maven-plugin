@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd"
+    name="Maven GWT Plugin">
+  <bannerLeft>
+    <name>Mojo</name>
+    <src>http://mojo.codehaus.org/images/mojo_logo.png</src>
+    <href>http://mojo.codehaus.org</href>
+  </bannerLeft>
+  <bannerRight>
+    <name>Codehaus</name>
+    <src>http://mojo.codehaus.org/gwt-maven-plugin/images/gwt-maven-logo.png</src>
+    <href>http://www.codehaus.org</href>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="Maven" href="http://maven.apache.org/"/>
+      <item name="Google Web Toolkit" href="http://code.google.com/webtoolkit/"/>
+      <item name="Google Eclipse Plugin" href="http://code.google.com/intl/en/eclipse"/>
+    </links>
+    <menu name="User Guide">
+      <item name="Introduction" href="index.html"/>
+      <item name="What new in ${project.version}" href="whats_new.html"/>
+      <item name="Using the archetype" href="user-guide/archetype.html"/>
+      <item name="Project organization" href="user-guide/project.html"/>
+      <item name="Compile and Debug" href="user-guide/compile.html"/>
+      <item name="Internationalization" href="user-guide/i18n.html"/>
+      <item name="Testing" href="user-guide/testing.html"/>
+      <item name="Run Hosted Mode" href="user-guide/hosted.html"/>
+      <item name="Async interfaces" href="user-guide/async.html"/>
+      <item name="Comfortable debugging" href="user-guide/comfortable_debugging.html"/>
+      <item name="Productivity Tips" href="user-guide/productivity.html"/>
+      <item name="Using app Engine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
+      <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
+      <item name="Eclipse Google Plugin" href="eclipse/google_plugin.html" />
+      <item name="Writing Library" href="user-guide/library.html" />
+      <item name="Productivity" href="user-guide/productivity.html" />
+      <item name="Compiler Report" href="user-guide/compiler-report.html"/>
+      <item name="Processing Annotation @RemoteServiceRelativePath" href="user-guide/remoteservicerelativepath-annotation.html"/>
+      <item name="Using different GWT SDK Version" href="user-guide/using-different-gwt-sdk-version.html"/>
+      
+    </menu>
+    <menu name="Reference">
+      <item name="Goals" href="plugin-info.html"/>
+      <item name="FAQ" href="faq.html"/>
+    </menu>
+    <menu ref="reports"/>
+  </body>
+</project>

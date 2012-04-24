@@ -1,0 +1,77 @@
+ -----
+ GWT Archetype
+ -----
+ Nicolas de Loof
+ Olivier Lamy
+ ------
+ 2011-01-14 
+ 
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+Using the Archetype
+
+ Using the archetype is the simpliest way to get a clean, ready for development
+ GWT application. It is comparable to the application created wy SDK webAppCreator
+ with the ''-maven'' option, with some tweaks to nicelly integrate with Google
+ Eclipse and M2Eclipse plugins.
+
+* Using the Archetype
+
+ Use it as you would any other Maven archetype to create a template/stub project.
+ 
+ Due to an archetype maven project issue {{{http://jira.codehaus.org/browse/ARCHETYPE-351}ARCHETYPE-351}}
+ you must add the archetype repository used via the following parameter
+ 
++--
+ -DarchetypeRepository=repo1.maven.org
++-- 
+
+ The full command line until fix of archetype issue is :
+  
++--
+ mvn archetype:generate \
+   -DarchetypeRepository=repo1.maven.org \
+   -DarchetypeGroupId=org.codehaus.mojo \
+   -DarchetypeArtifactId=gwt-maven-plugin \
+   -DarchetypeVersion=${project.version}
++--
+
+  The generated project can then be imported as "existing project" into Eclipse,
+  or if you don't like Eclipse you can use another IDE and run command-line maven
+  to launch GWT hoste mode with ''mvn gwt:run''.
+
+  Note: don't run mvn <<<archetype:create>>> as the plugin uses archetype 2.0 descriptor.
+
+* Layout
+
+  The generated project layout looks like following figure :
+
+  <<<>>>
+
+[../images/user-guide/projectLayout.png]
+
+  It uses M2Eclipse for classpath management and Google Eclipse Plugin for nice GWT
+  support inside Eclipse.
+  
+  Note before importing your project you must configure M2eclipse as it.
+  See box : Goals to run on project import.
+  
+[../images/user-guide/eclipse-m2-conf.jpg]  

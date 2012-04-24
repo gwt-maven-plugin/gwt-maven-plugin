@@ -1,0 +1,22 @@
+ -------
+ Configuring the Hosted mode server
+ -------
+ -------
+
+Configuring the Hosted mode server
+
+  Another aspect of gwt-maven-plugin to be familiar with it can help you configure the
+  embedded Servlet container GWT uses in the Hosted Mode shell. The standard
+  <<src/main/webapp>> webapp folder is used by gwt-maven-plugin to run the hosted mode
+  server (Jetty).
+
+* Using Eclipse
+
+  Google Eclipse plugin automatically handle launching the Hosted mode browser with a
+  simple right click on your module <<gwt.xml>> file "run as > web application".
+
+* Using command line
+
+  You can use <<<mvn gwt:run>>> to launch the hosted mode from command line. In such case,
+  the plugin will compile your classes and prepare the exploded webapp structure. The hosted
+  mode is then launched on your webapp.

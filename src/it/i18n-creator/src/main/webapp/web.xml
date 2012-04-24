@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  
+  <context-param>
+    <param-name>contextClass</param-name>
+    <param-value>org.codehaus.plexus.spring.PlexusWebApplicationContext</param-value>
+  </context-param>  
+  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+        classpath*:/META-INF/spring-context.xml,
+        classpath*:/META-INF/plexus/components.xml
+    </param-value>
+  </context-param>    
+  
+  <!-- 
+    
+,
+        /WEB-INF/applicationContext.xml,
+        /WEB-INF/plexus.xml    
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+    
+</web-app>

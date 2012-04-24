@@ -1,0 +1,206 @@
+ -----
+ Using the Google Eclipse Plugin
+ -----
+ Nicolas de Loof
+ ------
+ 2010-11-26 
+ 
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html 
+
+Using the Google Eclipse Plugin
+
+
+  The {{{http://code.google.com/intl/en/eclipse/}Google Eclipse Plugin}} is a nice integration of GWT inside
+  eclipse to make development easier. It can be used to launch the hosted browser with a simple right click
+  and to manage the GWT sdk used inside Eclipse.
+
+* Limitations
+
+  A restriction of this plugin is that it will search for gwt modules and host pages only in the first
+  classpath source folder. Using a Maven / Eclipse integration like m2eclipse, this one will be your sourceDirectory
+  (<<<src/main/java>>>). You'll have to move your gwt.xml files in this folder, instead of the standard Maven
+  resource directory.
+  See Google Eclipse Plugin {{{http://code.google.com/p/googleappengine/issues/detail?id=1597}issue #1597}}
+
+  Prior to 2.0.3 release, another bigger restriction of this plugin, is that it <<requires>> the hosted mode
+  webapp to use <<</war>>>
+  directory as web application root. We will have to change the maven-war-plugin setup to use this folder and
+  not the default <<<src/main/webapp>>> path, but will keep the latest to host the <<<web.xml>>> deployment
+  descriptor. We can then have a dedicated hosted mode one where we register stub RPC-servlets for testing
+  purpose. The 'real' web application may be long to start and require more complex resources, like a JDBC
+  DataSource, and we can still run functionnal tests on it using the <<<noserver>>> option.
+  See Google Eclipse Plugin {{{http://code.google.com/p/googleappengine/issues/detail?id=1515}issue #1515}}
+
+  If you are using GWT 2.0.3+ and the associated Google Eclipse plugin, you can configure it to use
+  <<<src/main/webapp>>> as webapp folder.
+
+* Project layout
+
+  Your maven project will end something like this. Please note the <<<Module.gwt.xml>>> module descriptor
+  located in <<<src/main/java>>> directory :
+
++---
+  pom.xml
+  |_src
+  |  |_main
+  |     |_java
+  |     |  |_ com/mycompany/gwt/Module.gwt.xml
+  |     |  |_ com/mycompany/gwt/client
+  |     |  |  |_ ModuleEntryPoint.java
+  |     |_resources
+  |     |_webapp
+  |       |_WEB-INF
+  |         |_web.wml
+  |_war
+    |_Module.html
+    |_WEB-INF
+       |_web.wml
++---
+
+  The <<<war>>> folder will be used to host your test web application (used in hosted mode) where you'll
+  put stub RPC servlets. Your <real> web application can be used for more advanced integration testing with
+  the <<<noserver>>> option.
+
+* Maven configuration
+
+  Your Maven configuration will be something like this :
+
++---
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		                     http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mycompany</groupId>
+  <artifactId>webapp</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <runTarget>com.mycompany.gwt.Module/Module.html</runTarget>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <warSourceDirectory>war</warSourceDirectory>
+          <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
++---
+
+  With this setup, you can start your GWT module with a single right-clik in your Eclispe IDE with
+  <Run as : Web application>.
+
+  You can the edit your java code and just hit refresh to see changes applied in the hosted browser.
+
+* Eclipse configuration
+
+  Import your maven project into eclipse using m2eclipse import wizard (or your prefered tooling). Manually
+  enable GWT on the project from project preference by setting the <<<Use Google Web Toolkit>>> checkbox.
+  Eclipse will add a new ClassPath container for GWT. Please check you use the same version of GWT in your
+  maven configuration and in eclipse preferences.
+
+  Run the <<<gwt:eclipse>>> goal (using m2eclipse <<<Maven2 > build...>>>) to setup your environment and create
+  the launch configuration for your GWT modules. The plugin expect the HTML host page to be named as the module
+  and put in the module <<<public>>> subdirectory. If you don't use this convention yopu will have to edit manually
+  the launch configuration.
+
+* Server side components and RPC
+
+  We use the <<</war>>> folder to host our hosted-mode web application. It's <<<web.xml>>> deployment descriptor
+  is dedicated to hosted mode and will be replaced by the <<<src/main/webapp/WEB-INF>>> one when building the WAR.
+  This is a simple way to setup custom RPC servlets for testing and not require a complex setup (DataSource, Security,
+  Dependency Injection... ) for quick hosted mode testing.
+
+  The <<<gwt:eclipse>>> goal will setup the /war folder as an exploded webapp, ready for lauching GWT hosted server.
+  Please note the Google Eclipse Plugin 1.0.1 still uses the deprecated GWTShell and does not support servlets defined
+  in the <<</war/WEB-INF/web.xml>>>, so you <<must>> declare your (test) servlets in the module descriptor using a <<<servlet>>> element :
+
++---
+  <servlet class="org.codehaus.mojo.gwt.test.server.HelloRemoteServlet" path="/org.codehaus.mojo.gwt.test.Hello/Hello"/>
++---
+
+  This one will be ignored after your GWT module has been compiled into JavaScript.
+
+* Multiproject setup
+
+  Big projects may want to split the client-side application in modules, typically using Maven support for
+  multiprojects. The project layout will the become something like this (maybe with some more classes) :
+
++---
+  pom.xml // reactor project
+  |_domain // shared with other (GWT or Java) projects
+  |  |_src
+  |    |_main
+  |      |_java
+  |      |  |_ com/mycompany/domain
+  |      |  |  |_ User.java
+  |      |_resources
+  |      |  |_ com/mycompany/Domain.gwt.xml
+  |_webapp
+     |_src
+     |  |_main
+     |    |_java
+     |    |  |_ com/mycompany/gwt/Module.gwt.xml // inherits Domain.gwt.xml
+     |    |  |_ com/mycompany/gwt/client
+     |    |  |  |_ ModuleEntryPoint.java
+...
++---
+
+  When using Eclipse-Maven integration like the m2eclipse plugin, other maven projects open in the
+  workspace will be automagically resolved as projects (instead of JARs). When the referenced project is well
+  configured (*) as a GWT module project, changes to java sources will be available in the hosted browser with a simple
+  refresh with no requirement to repackage the modules. 
+  
+[../images/eclipse/gwt-maven-logo.png] m2eclipse detecting the gwt module as project reference.
+    
+  (*) A "<well configured GWT module project>" is expected to have Java sources copied as resources in the project
+  build outputDirectory (using gwt:resource goal) and a dedicated gwt.xml module file to define the required
+  inherits.
+
+  The gwt-maven-plugin <<<src/it/reactor>>> project can be reviewed as a demonstrating sample of this setup.

@@ -1,0 +1,79 @@
+/* Some style tweaks to mimic Google code look&feel */
+
+body  {
+color:#000000;
+font-family:Helvetica,Arial,sans-serif;
+font-size:small;
+}
+
+a, a:link {
+color:#0000CC;
+text-decoration: underline;
+}
+
+h2 {
+background:none repeat scroll 0 0 transparent;
+border:medium none;
+font-size:170%;
+line-height:130%;
+margin:0 0 0 -10px;
+padding:0.8em 0 0;
+color: #000;
+}
+
+h3 {
+background-color:#E5ECF9;
+border: none;
+color: #000;
+border-top:1px solid #3366CC;
+font-weight:bold;
+margin:3px 0 0 1px;
+padding:2px 3px;
+}
+
+#navcolumn h5 {
+border:none;
+font-weight:bold;
+font-size:1em;
+margin: 2px 0;
+}
+
+#navcolumn ul li {
+font-size:1em;
+margin: 3px 0;
+}
+
+#breadcrumbs {
+background-color:#E5ECF9;
+border: none;
+border-top:1px solid #3366CC;
+font-size:1em;
+margin:0;
+padding:0.47em 0;
+white-space:nowrap;
+width:100%;
+word-wrap:normal;
+}
+
+#bodyColumn {
+margin-left:250px;
+}
+
+#leftColumn{
+background-color:#fff;
+border:none;
+border-right:4px solid #E5ECF9;
+margin:0px 0 0 5px;
+width: 230px;
+}
+
+.xleft {
+position:absolute;
+top:0;
+right:0;
+}
+
+#banner{
+  margin-top: 20px;
+  border-top: solid 1px #E5ECF9;
+}

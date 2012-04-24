@@ -1,0 +1,134 @@
+ ------
+ Comfortable debugging
+ ------
+ Nicolas de Loof
+ ------
+ 2010-11-26 
+ 
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html 
+
+Comfortable debugging with GWt, Maven and Eclipse
+
+* Introduction
+
+  Usage of gwt-maven-plugin is divided to two alternatives - one using GEP launch configuration and one using standard Java launch configuration. Needed tools:
+
+    * Eclipse
+
+    * maven
+
+    * m2eclipse plugin
+
+    * (first alternative) Google Eclipse Plugin for GWT 1.6+ projects
+
+* Complex structure of multimodule maven project
+
+	The tutorial will use sample structure to describe setup of whole project in Eclipse with possibility to automatically propagate change in source files of dependent modules to final GUI. The sample structure is prepared for extending with new use cases.
+
+	Let's consider simplified scenario of one framework module and one customer's web portal.
+
+	* Framework module (fw1-mod) can be used by different portals in combination with different modules
+
+	* Framework module is developed by us and it is reflecting common behaviour used in these portals
+
+	* Customer's portal (cust-war) has also it's own shared module (cust-common) of common customer's behaviour
+
+	* Framework module is more generic, customer shared module is specific only to that customer
+
+	* framework module is located in <<<java/fw1/fw1-mod>>>
+
+	* customer's portal is located in <<<web/cust-portal/cust-war>>>
+
+	This step is common for both alternatives - import projects into Eclipse using m2eclipse facilities.
+
+	* File -> Import -> Maven -> Existing Maven Projects
+
+	* import fw1-mod, fw1-parent, cust-parent and cust-war
+
+	* ensure that Workspace resolution is enabled
+
+
+    <<<>>>
+
+[../images/user-guide/guidelinesenabled_workspace_resolution.png]
+
+* Generating Launch configuration
+
+    Steps needed to generate one of the launch configurations are as follows:
+
+    *
+       if you don't want to change the structure of your project to structure required by GWT 1.6 you will use standard Java launcher
+       <<<mvn -Duse.google.eclipse.plugin=false gwt:eclipse>>>
+
+    *
+       if you have GWT 1.6 compatible structure you can use GEP
+       <<<mvn gwt:eclipse>>>
+
+    * there will be a launch configuration generated e.g. <<<sk.seges.mmi.cust.Universe.launch>>>
+
+    * copy it to <<<.metadata/.plugins/org.eclipse.debug.core/.launches>>> directory of your workspace
+
+    * re/start eclipse
+
+** Google Eclipse Plugin Launch configuration
+
+    Just search the launch configuration in Eclipse and run it. All dependencies are resolved automatically and GEP is copying a change transparently. If you take a look on the classpath GEP has it will be the same as the one you would setup for Java App. launch configuration.
+
+** Java App. Launch configuration
+
+    For non-GWT 1.6 projects the hardest part, modification of the classpath of the launch configuration:
+
+    * open launch configuration
+
+    * follow these steps as described here
+
+[../images/user-guide/guidelinesadd_dependent_project.png]
+
+        * select "Classpath" tab
+
+        * select "User Entries"
+
+        * press "Advanced"
+
+        * select "Add folder", for each project that cust-war is dependent of add its source/resource directories
+
+    * these dependencies must be before "cust-war (default classpath)" so the hosted mode can recognize direct change - see the image below
+
+   <<<>>>
+
+[../images/user-guide/guidelinesmodule_cp_before.png]
+
+    Such launch configuration can be reused and doesn't need modification until dependency change. It is running hosted mode directly. If all dependent module classpaths are not before cust-war default classpath hosted mode doesn't know of the change and reinstall or clean of that changed project is needed.
+
+* Final word
+
+    With any launch configuration you can do following:
+
+    * run hosted mode with launcher
+
+    * modify e.g. a string in Location class in fw1-mod
+
+    * press <<<Ctrl+S>>> in Eclipse
+
+    * press Refresh button in hosted mode
+
+    * voila! change appears
+
