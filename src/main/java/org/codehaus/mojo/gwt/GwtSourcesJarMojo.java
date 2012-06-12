@@ -53,7 +53,7 @@ public class GwtSourcesJarMojo
     private String finalName;
 
     /**
-     * @parameter expression="${project.build.outputDirectory}"
+     * @parameter expression="${project.build.directory}"
      * @required
      * @readonly
      */
