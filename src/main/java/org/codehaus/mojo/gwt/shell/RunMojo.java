@@ -406,10 +406,6 @@ public class RunMojo
     protected void postProcessClassPath( Collection<File> classPath )
     {
         boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
-        if ( !isAppEngine )
-        {
-            return;
-        }
         List<Pattern> patternsToExclude = new ArrayList<Pattern>();
         if ( runClasspathExcludes != null && !runClasspathExcludes.isEmpty() )
         {
