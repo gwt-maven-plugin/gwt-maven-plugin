@@ -297,6 +297,7 @@ public class CompileMojo
 
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
+        addPersistentUnitCache(cmd);
 
         if ( workDir != null )
         {

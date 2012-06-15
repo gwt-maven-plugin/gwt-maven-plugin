@@ -129,6 +129,26 @@ public abstract class AbstractGwtShellMojo
      */
     private String[] compileSourcesArtifacts;
 
+    /**
+     * Whether to use the persistent unit cache or not.
+     * <p>
+     * Can be set from command line using '-Dgwt.persistentunitcache=...'
+     *
+     * @parameter expression="${gwt.persistentunitcache}"
+     * @since 2.5.0
+     */
+    private Boolean persistentunitcache;
+
+    /**
+     * The directory where the persistent unit cache will be created if enabled.
+     * <p>
+     * Can be set from command line using '-Dgwt.persistentunitcachedir=...'
+     *
+     * @parameter expression="${gwt.persistentunitcachedir}"
+     * @since 2.5.0
+     */
+    private File persistentunitcachedir;
+
     // methods
 
     /**
@@ -280,6 +300,17 @@ public abstract class AbstractGwtShellMojo
         if ( deploy != null )
         {
             cmd.arg( "-deploy" ).arg( String.valueOf( deploy ) );
+        }
+    }
+
+    protected void addPersistentUnitCache(JavaCommand cmd) {
+        if ( persistentunitcache != null )
+        {
+            cmd.systemProperty( "gwt.persistentunitcache", String.valueOf( persistentunitcache.booleanValue() ) );
+        }
+        if ( persistentunitcachedir != null )
+        {
+            cmd.systemProperty( "gwt.persistentunitcachedir", persistentunitcachedir.getAbsolutePath() );
         }
     }
 
