@@ -336,6 +336,7 @@ public class RunMojo
         cmd.withinScope( Artifact.SCOPE_RUNTIME );
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
+        addPersistentUnitCache(cmd);
 
         if ( !gwtSdkFirstInClasspath )
         {
