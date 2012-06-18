@@ -128,24 +128,6 @@ public class RunMojo
     private String server;
 
     /**
-     * Set GWT shell protocol/host whitelist.
-     * <p>
-     * Can be set from command line using '-Dgwt.whitelist=...'
-     *
-     * @parameter expression="${gwt.whitelist}"
-     */
-    private String whitelist;
-
-    /**
-     * Set GWT shell protocol/host blacklist.
-     * <p>
-     * Can be set from command line using '-Dgwt.blacklist=...'
-     *
-     * @parameter expression="${gwt.blacklist}"
-     */
-    private String blacklist;
-
-    /**
      * List of System properties to pass when running the hosted mode.
      *
      * @parameter
@@ -342,15 +324,6 @@ public class RunMojo
         if ( server != null )
         {
             cmd.arg( "-server", server );
-        }
-
-        if ( whitelist != null && whitelist.length() > 0 )
-        {
-            cmd.arg( "-whitelist", whitelist );
-        }
-        if ( blacklist != null && blacklist.length() > 0 )
-        {
-            cmd.arg( "-blacklist", blacklist );
         }
 
         if ( systemProperties != null && !systemProperties.isEmpty() )
