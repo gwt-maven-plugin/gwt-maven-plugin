@@ -56,17 +56,6 @@ public class DebugMojo
     private boolean attachDebugger;
 
     /**
-     * {@inheritDoc}
-     * 
-     * @see org.codehaus.mojo.gwt.shell.RunMojo#getFileName()
-     */
-    @Override
-    protected String getFileName()
-    {
-        return "debug";
-    }
-
-    /**
      * Override extraJVMArgs to append JVM debugger option
      * <p>
      * {@inheritDoc}
