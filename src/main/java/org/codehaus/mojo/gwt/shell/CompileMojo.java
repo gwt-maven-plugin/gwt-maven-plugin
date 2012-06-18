@@ -23,8 +23,6 @@ package org.codehaus.mojo.gwt.shell;
  *
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,7 +33,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.GwtModule;
-import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
@@ -242,7 +239,10 @@ public class CompileMojo
     {
         boolean upToDate = true;
 
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
+        JavaCommandRequest req = createJavaCommandRequest()
+            .setClassName( "com.google.gwt.dev.Compiler" )
+            .setClassPathFiles( getClasspath( Artifact.SCOPE_COMPILE ) );
+        JavaCommand cmd = new JavaCommand( req );
         if ( gwtSdkFirstInClasspath )
         {
             cmd.withinClasspath( getGwtUserJar() )
@@ -315,7 +315,14 @@ public class CompileMojo
         }
         if ( !upToDate )
         {
-            cmd.execute();
+            try
+            {
+                cmd.execute();
+            }
+            catch ( JavaCommandException e )
+            {
+                throw new MojoExecutionException( e.getMessage(), e );
+            }
         }
     }
 

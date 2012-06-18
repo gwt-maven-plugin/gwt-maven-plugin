@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -47,6 +48,7 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public class TestMojo
     extends AbstractGwtShellMojo
+    implements ClassPathProcessor
 {
 
     /**
@@ -233,9 +235,16 @@ public class TestMojo
             }
             try
             {
-                new JavaCommand( MavenTestRunner.class.getName() ).withinScope( Artifact.SCOPE_TEST ).arg( test )
+                JavaCommandRequest req = createJavaCommandRequest()
+                    .setClassName( MavenTestRunner.class.getName() )
+                    .setClassPathFiles( getClasspath( Artifact.SCOPE_TEST ) )
+                    .setClassPathProcessors( Collections.<ClassPathProcessor>singletonList( this ) );
+                new JavaCommand( req )
+                    .withinScope( Artifact.SCOPE_TEST )
+                    .arg( test )
                     .systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() )
-                    .systemProperty( "gwt.args", getGwtArgs() ).execute();
+                    .systemProperty( "gwt.args", getGwtArgs() )
+                    .execute();
             }
             catch ( ForkedProcessExecutionException e )
             {
@@ -281,8 +290,7 @@ public class TestMojo
         return sb.toString();
     }
 
-    @Override
-    protected void postProcessClassPath( Collection<File> classpath )
+    public void postProcessClassPath( List<File> classpath )
         throws MojoExecutionException
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );

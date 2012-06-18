@@ -91,16 +91,31 @@ public class I18NMojo
         setup();
         boolean generated = false;
 
+        JavaCommandRequest req = createJavaCommandRequest()
+            .setClassName( "com.google.gwt.i18n.tools.I18NSync" )
+            .setClassPathFiles( getClasspath( Artifact.SCOPE_COMPILE ) );
+
         // constants with lookup
         if ( i18nConstantsWithLookupBundles != null )
         {
             for ( String target : i18nConstantsWithLookupBundles )
             {
                 ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
-                    .arg( target ).execute();
+                try
+                {
+                    new JavaCommand( req )
+                        .withinScope( Artifact.SCOPE_COMPILE )
+                        .withinClasspath( getGwtUserJar() )
+                        .withinClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createConstantsWithLookup" )
+                        .arg( target )
+                        .execute();
+                }
+                catch ( JavaCommandException e )
+                {
+                    throw new MojoExecutionException( e.getMessage(), e );
+                }
                 generated = true;
             }
         }
@@ -111,9 +126,20 @@ public class I18NMojo
             for ( String target : i18nConstantsBundles )
             {
                 ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
+                try
+                {
+                    new JavaCommand( req )
+                        .withinScope( Artifact.SCOPE_COMPILE )
+                        .withinClasspath( getGwtUserJar() )
+                        .withinClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( target )
+                        .execute();
+                }
+                catch ( JavaCommandException e )
+                {
+                    throw new MojoExecutionException( e.getMessage(), e );
+                }
                 generated = true;
             }
         }
@@ -124,10 +150,21 @@ public class I18NMojo
             for ( String target : i18nMessagesBundles )
             {
                 ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
-                    .execute();
+                try
+                {
+                    new JavaCommand( req )
+                        .withinScope( Artifact.SCOPE_COMPILE )
+                        .withinClasspath( getGwtUserJar() )
+                        .withinClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createMessages" )
+                        .arg( target )
+                        .execute();
+                }
+                catch ( JavaCommandException e )
+                {
+                    throw new MojoExecutionException( e.getMessage(), e );
+                }
                 generated = true;
             }
         }

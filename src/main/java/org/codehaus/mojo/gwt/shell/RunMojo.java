@@ -19,17 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -39,8 +28,18 @@ import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Goal which run a GWT module in the GWT Hosted mode.
@@ -56,6 +55,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  */
 public class RunMojo
     extends AbstractGwtWebMojo
+    implements ClassPathProcessor
 {
     /**
      * Location of the hosted-mode web application structure.
@@ -311,7 +311,11 @@ public class RunMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+        JavaCommandRequest req = createJavaCommandRequest()
+            .setClassName( "com.google.gwt.dev.DevMode" )
+            .setClassPathFiles( getClasspath( Artifact.SCOPE_RUNTIME ) )
+            .setClassPathProcessors( Collections.<ClassPathProcessor>singletonList( this ) );
+        JavaCommand cmd = new JavaCommand( req );
 
         if ( gwtSdkFirstInClasspath )
         {
@@ -385,11 +389,17 @@ public class RunMojo
             cmd.arg( module );
         }
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
-    @Override
-    protected void postProcessClassPath( Collection<File> classPath )
+    public void postProcessClassPath( List<File> classPath )
     {
         boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
         List<Pattern> patternsToExclude = new ArrayList<Pattern>();

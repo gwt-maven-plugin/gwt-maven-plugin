@@ -50,12 +50,21 @@ public class BrowserManagerServerMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.junit.remote.BrowserManagerServer" )
+        JavaCommandRequest req= createJavaCommandRequest()
+            .setClassName( "com.google.gwt.junit.remote.BrowserManagerServer" );
+        JavaCommand cmd = new JavaCommand( req )
             .withinClasspath( getGwtUserJar() )
             .withinClasspath( getGwtDevJar() )
             .arg( server )
             .arg( browser.getAbsolutePath() );
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 }
