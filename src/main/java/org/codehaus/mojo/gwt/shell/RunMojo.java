@@ -102,13 +102,6 @@ public class RunMojo
     private int port;
 
     /**
-     * Specify the location on the filesystem for the generated embedded Tomcat directory.
-     *
-     * @parameter default-value="${project.build.directory}/tomcat"
-     */
-    private File tomcat;
-
-    /**
      * Location of the compiled classes.
      *
      * @parameter default-value="${project.build.outputDirectory}"
@@ -117,14 +110,6 @@ public class RunMojo
      */
     private File buildOutputDirectory;
 
-
-    /**
-     * Source Tomcat context.xml for GWT shell - copied to /gwt/localhost/ROOT.xml (used as the context.xml for the
-     * SHELL - requires Tomcat 5.0.x format - hence no default).
-     *
-     * @parameter
-     */
-    private File contextXml;
 
     /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
@@ -602,19 +587,9 @@ public class RunMojo
         }
     }
 
-    public File getContextXml()
-    {
-        return this.contextXml;
-    }
-
     public int getPort()
     {
         return this.port;
-    }
-
-    public File getTomcat()
-    {
-        return this.tomcat;
     }
 
     /**
