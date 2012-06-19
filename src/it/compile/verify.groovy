@@ -29,6 +29,8 @@ assert new File(basedir, 'target/workDir/org.codehaus.mojo.gwt.test.Hello').exis
 assert new File(basedir, 'target/deploy').exists();
 assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 
+assert !new File(basedir, 'target/.generated').exists();
+
 assert new File(basedir, 'build.log').exists();
 
 content = new File(basedir, 'build.log').text;

@@ -40,6 +40,7 @@
         <artifactId>gwt-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
+          <genParam>false</genParam>
           <inplace>true</inplace>
           <logLevel>INFO</logLevel>
           <style>OBF</style>
