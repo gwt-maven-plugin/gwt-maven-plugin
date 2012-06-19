@@ -288,16 +288,13 @@ public abstract class AbstractGwtMojo
 
         Collection<Artifact> resolved = result.getArtifacts();
         int i = 0;
-        // FIXME gwt 2.3.0 don't declare dependency on javax.validation, should be fix in next release
-        File[] files = new File[ resolved.size() + 1 + 2 ];
+        File[] files = new File[ resolved.size() + 1 ];
         files[i++] = gwtUserArtifact.getFile();
         for ( Artifact artifact : resolved )
         {
             files[i++] = artifact.getFile();
         }
 
-        files[i++] = getArtifact( "javax.validation", "validation-api" ).getFile();
-        files[i++] = getArtifact( "javax.validation", "validation-api", "sources" ).getFile();
         return files;
     }
 

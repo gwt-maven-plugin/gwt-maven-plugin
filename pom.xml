@@ -218,18 +218,6 @@
       <artifactId>gwt-user</artifactId>
       <version>${gwt.version}</version>
     </dependency>
-    <!-- gwt-user has dependency on javax.validation BUT don't declare dependencies -->
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-      <classifier>sources</classifier>
-    </dependency>
     <dependency>
       <!-- used to unpack gwt native libs -->
       <groupId>org.codehaus.plexus</groupId>
