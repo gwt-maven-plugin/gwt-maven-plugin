@@ -41,19 +41,19 @@ under the License.
     </links>
     <menu name="User Guide">
       <item name="Introduction" href="index.html"/>
-      <item name="What new in ${project.version}" href="whats_new.html"/>
+      <item name="What's new in ${project.version}" href="whats_new.html"/>
       <item name="Using the archetype" href="user-guide/archetype.html"/>
       <item name="Project organization" href="user-guide/project.html"/>
       <item name="Compile and Debug" href="user-guide/compile.html"/>
       <item name="Internationalization" href="user-guide/i18n.html"/>
       <item name="Testing" href="user-guide/testing.html"/>
-      <item name="Run Hosted Mode" href="user-guide/hosted.html"/>
+      <item name="Run Dev Mode" href="user-guide/hosted.html"/>
       <item name="Async interfaces" href="user-guide/async.html"/>
       <item name="Comfortable debugging" href="user-guide/comfortable_debugging.html"/>
       <item name="Productivity Tips" href="user-guide/productivity.html"/>
-      <item name="Using app Engine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
+      <item name="Using AppEngine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
       <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
-      <item name="Eclipse Google Plugin" href="eclipse/google_plugin.html" />
+      <item name="Google Plugin for Eclipse" href="eclipse/google_plugin.html" />
       <item name="Writing Library" href="user-guide/library.html" />
       <item name="Productivity" href="user-guide/productivity.html" />
       <item name="Compiler Report" href="user-guide/compiler-report.html"/>

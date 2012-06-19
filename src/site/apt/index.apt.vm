@@ -53,13 +53,13 @@ GWT Maven Plugin supports :
 
   * generate GWT internationalization ("i18n") interfaces from bundles {{{./user-guide/i18n.html}Internationalization}}
 
-  * running tests (or test suites) based on GWTTestCase framework as part of Maven build , {{{./user-guide/testing.html}Testing Support}}
+  * running tests (or test suites) based on GWTTestCase framework as part of Maven build, {{{./user-guide/testing.html}Testing Support}}
 
-  * run (or debug) the Hosted browser from Maven {{{./user-guide/hosted.html}Hosted Mode}}
+  * run (or debug) in DevMode from Maven {{{./user-guide/hosted.html}DevMode}}
 
   * generate boiler code for GWT-RPC Async interface from synchronous server-side interfaces {{{./user-guide/async.html}Generate Async interfaces for GWT-RPC}}
   
-  * integrate nicelly into Eclipse, thanks to M2Eclipse and Google Eclipse plugins.  
+  * integrate nicelly into Eclipse, thanks to M2Eclipse and the Google Plugin for Eclipse.  
 
 TIPS
 
