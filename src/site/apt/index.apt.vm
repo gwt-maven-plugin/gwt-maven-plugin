@@ -74,15 +74,15 @@ TIPS
 
 WANT TO CONTRIBUTE ?
 
-  We are big fans of {{{http://jenkins-ci.org/}Jenkins}} community model, and want to apply it to lower the contribution barrier.
-  Code is hosted on {{{https://github.com/gwt-maven-plugin/gwt-maven-plugin}GitHub}}, fork it, improve it, and send pull requests.
-  Just please log what's you're working for in {{{http://jira.codehaus.org/browse/MGWT}Jira}} and use the Jira ID as a profix for 
-  you commits. If you feel confortable with the code, just ask for commit permission to apply changes by yourself.
+  We are big fans of the {{{http://jenkins-ci.org/}Jenkins}} community model, and want to apply it to lower the contribution barrier.
+  Code is hosted on {{{https://github.com/gwt-maven-plugin/gwt-maven-plugin}GitHub}}: fork it, improve it, and send pull requests.
+  Just please log what you're working for in {{{http://jira.codehaus.org/browse/MGWT}JIRA}} and use the JIRA ID as a prefix for 
+  your commits. If you feel comfortable with the code, just ask for commit permission to apply changes by yourself.
 
 
   <<<>>>
 
   Development builds are tested on next GWT SDK milestones on 
-  {{{https://gwt-maven-plugin.ci.cloudbees.com/}CloudBees infrastructure}} 
+  {{{https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/}BuildHive}} 
 
-[http://static-www.cloudbees.com/images/badges/BuiltOnDEV.png]
+[https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/badge/icon]

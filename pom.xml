@@ -103,6 +103,10 @@
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MGWT</url>
   </issueManagement>
+  <ciManagement>
+    <system>buildhive</system>
+    <url>https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/</url>
+  </ciManagement>
   <properties>
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
