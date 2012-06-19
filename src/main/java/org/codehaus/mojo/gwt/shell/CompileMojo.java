@@ -256,8 +256,7 @@ public class CompileMojo
                .withinClasspath( getGwtDevJar() );
         }
 
-        cmd.arg( "-gen", getGen().getAbsolutePath() )
-            .arg( "-logLevel", getLogLevel() )
+        cmd.arg( "-logLevel", getLogLevel() )
             .arg( "-style", getStyle() )
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
@@ -297,6 +296,7 @@ public class CompileMojo
 
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
+        addArgumentGen( cmd );
 
         if ( workDir != null )
         {
