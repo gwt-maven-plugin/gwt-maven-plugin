@@ -231,11 +231,6 @@
       <classifier>sources</classifier>
     </dependency>
     <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-servlet</artifactId>
-      <version>${gwt.version}</version>
-    </dependency>
-    <dependency>
       <!-- used to unpack gwt native libs -->
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
