@@ -51,6 +51,8 @@
           <strict>true</strict>
           <workDir>${project.build.directory}/workDir</workDir>
           <deploy>${project.build.directory}/deploy</deploy>
+          <persistentunitcache>true</persistentunitcache>
+          <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
         </configuration>
         <executions>
           <execution>

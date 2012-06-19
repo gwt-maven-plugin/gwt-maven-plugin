@@ -337,6 +337,7 @@ public class RunMojo
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
         addArgumentGen( cmd );
+        addPersistentUnitCache(cmd);
 
         if ( !gwtSdkFirstInClasspath )
         {
