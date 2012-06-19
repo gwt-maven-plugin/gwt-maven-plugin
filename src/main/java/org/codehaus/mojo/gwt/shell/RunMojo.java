@@ -336,6 +336,7 @@ public class RunMojo
         cmd.withinScope( Artifact.SCOPE_RUNTIME );
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
+        addArgumentGen( cmd );
 
         if ( !gwtSdkFirstInClasspath )
         {
@@ -343,7 +344,6 @@ public class RunMojo
         }
 
         cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
-            .arg( "-gen", getGen().getAbsolutePath() )
             .arg( "-logLevel", getLogLevel() )
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-startupUrl", getStartupUrl() )

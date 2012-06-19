@@ -53,13 +53,23 @@ public abstract class AbstractGwtShellMojo
     extends AbstractGwtModuleMojo
 {
     /**
-     * Location on filesystem where GWT will write generated content for review (-gen option to GWTCompiler).
+     * Location on filesystem where GWT will write generated content for review (-gen option to GWT Compiler).
      * <p>
      * Can be set from command line using '-Dgwt.gen=...'
      * </p>
      * @parameter default-value="${project.build.directory}/.generated" expression="${gwt.gen}"
      */
     private File gen;
+
+    /**
+     * Whether to add -gen parameter to the compiler command line
+     * <p>
+     * Can be set from command line using '-Dgwt.genParam=false'. Defaults to 'true' for backwards compatibility.
+     * </p>
+     * @parameter default-value="true" expression="${gwt.genParam}"
+     * @since 2.5.0
+     */
+    private boolean genParam;
 
     /**
      * GWT logging level (-logLevel ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL).
@@ -148,11 +158,6 @@ public abstract class AbstractGwtShellMojo
     protected String getExtraJvmArgs()
     {
         return extraJvmArgs;
-    }
-
-    protected File getGen()
-    {
-        return this.gen;
     }
 
     protected String getLogLevel()
@@ -280,6 +285,18 @@ public abstract class AbstractGwtShellMojo
         if ( deploy != null )
         {
             cmd.arg( "-deploy" ).arg( String.valueOf( deploy ) );
+        }
+    }
+
+    protected void addArgumentGen( JavaCommand cmd )
+    {
+        if ( this.genParam )
+        {
+            if ( !this.gen.exists() )
+            {
+                this.gen.mkdirs();
+            }
+            cmd.arg( "-gen", this.gen.getAbsolutePath() );
         }
     }
 
