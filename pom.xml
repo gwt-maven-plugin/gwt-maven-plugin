@@ -54,6 +54,10 @@
       <name>Olivier Lamy</name>
       <email>olamy@apache.org</email>
     </developer>
+    <developer>
+      <name>Thomas Broyer</name>
+      <email>t.broyer@ltgt.net</email>
+    </developer>
   </developers>
   <contributors>
     <contributor>
