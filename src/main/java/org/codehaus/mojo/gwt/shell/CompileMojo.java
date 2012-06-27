@@ -299,7 +299,8 @@ public class CompileMojo
                .withinClasspath( getGwtDevJar() );
         }
 
-        cmd.arg( "-logLevel", getLogLevel() )
+        cmd.arg( "-XdisableUpdateCheck" )
+            .arg( "-logLevel", getLogLevel() )
             .arg( "-style", getStyle() )
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
