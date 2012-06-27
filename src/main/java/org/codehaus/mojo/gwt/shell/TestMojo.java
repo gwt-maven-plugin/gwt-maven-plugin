@@ -175,6 +175,31 @@ public class TestMojo
      * @parameter default-value="${project.build.directory}/surefire-reports"
      */
     private File reportsDirectory;
+    
+    /**
+     * Run each test using an HTML document in quirks mode (rather than standards mode)
+     * 
+     * @parameter default-value="false"
+     */
+    private boolean quirksMode;
+    
+    /**
+     * Specify the user agents to reduce the number of permutations in '-prod' mode;
+     * e.g. ie6,ie8,safari,gecko1_8,opera
+     * 
+     * @parameter expression="${gwt.test.userAgents}"
+     */
+    private String userAgents;
+    
+    /**
+     * Configure batch execution of tests.
+     * <p>
+     * Value must be one of 'none', 'class' or 'module'.
+     * </p>
+     * 
+     * @parameter expression="${gwt.test.batch}"
+     */
+    private String batch;
 
     /** failures counter */
     private int failures;
@@ -251,31 +276,43 @@ public class TestMojo
     protected String getGwtArgs()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( "-out " ).append( out ).append( " " );
-        sb.append( "-XdisableUpdateCheck" );
+        sb.append( "-out " ).append( out );
+        sb.append( " -XdisableUpdateCheck" );
         if ( webMode )
         {
-            sb.append( "-web " );
+            sb.append( " -web" );
         }
         if ( productionMode )
         {
-            sb.append( "-prod " );
+            sb.append( " -prod" );
         }
         if ( mode.equalsIgnoreCase( "manual" ) )
         {
-            sb.append( "-runStyle Manual:1 " );
+            sb.append( " -runStyle Manual:1 " );
         }
         else if ( mode.equalsIgnoreCase( "htmlunit" ) )
         {
-            sb.append( "-runStyle HtmlUnit:" + htmlunit );
+            sb.append( " -runStyle HtmlUnit:" + htmlunit );
         }
         else if ( mode.equalsIgnoreCase( "selenium" ) )
         {
-            sb.append( "-runStyle Selenium:" + selenium );
+            sb.append( " -runStyle Selenium:" + selenium );
         }
         else if ( mode.equalsIgnoreCase( "remoteweb" ) )
         {
-            sb.append( "-runStyle RemoteWeb:" + remoteweb );
+            sb.append( " -runStyle RemoteWeb:" + remoteweb );
+        }
+        if ( quirksMode )
+        {
+            sb.append( " -quirksMode" );
+        }
+        if ( userAgents != null && !userAgents.trim().isEmpty() )
+        {
+            sb.append( " -userAgents " ).append( userAgents );
+        }
+        if ( batch != null && !batch.trim().isEmpty() )
+        {
+            sb.append( " -batch " ).append( batch );
         }
         // TODO Is addArgumentDeploy(cmd) also needed to get readable test stacktraces with an alternative deploy dir?
 
