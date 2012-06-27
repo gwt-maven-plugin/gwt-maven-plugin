@@ -53,6 +53,10 @@
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
           <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
+          <enableClosureCompiler>true</enableClosureCompiler>
+          <disableAggressiveOptimization>true</disableAggressiveOptimization>
+          <compilerMetrics>true</compilerMetrics>
+          <fragmentCount>2</fragmentCount>
         </configuration>
         <executions>
           <execution>

@@ -38,6 +38,10 @@ content = new File(basedir, 'build.log').text;
 assert content.contains( '-draftCompile' );
 assert content.contains( '-strict' );
 assert content.contains( '-optimize 1' );
-assert content.contains( '-Dgwt.persistentunitcache=true' )
+assert content.contains( '-Dgwt.persistentunitcache=true' );
+assert content.contains( '-XenableClosureCompiler' );
+assert content.contains( '-XdisableAggressiveOptimization' );
+assert content.contains( '-XcompilerMetrics' );
+assert content.contains( '-XfragmentCount 2' );
   
 return true;

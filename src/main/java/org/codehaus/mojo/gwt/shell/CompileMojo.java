@@ -148,6 +148,9 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.draftCompile=true'.
      * </p>
+     * <p>
+     * This is equivalent to '-Dgwt.compiler.optimizationLevel=0 -Dgwt.compiler.disableAggressiveOptimization=true'.
+     * </p>
      *
      * @parameter default-value="false" expression="${gwt.draftCompile}"
      */
@@ -219,6 +222,46 @@ public class CompileMojo
      * @since 2.1.0-1
      */    
     private boolean strict;     
+    
+    /**
+     * EXPERIMENTAL: add -XenableClosureCompiler parameter to the compiler command line
+     * <p>
+     * Can be set from the command line using '-Dgwt.compiler.enableClosureCompiler=true'
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.enableClosureCompiler}"
+     * @since 2.5.0
+     */
+    private boolean enableClosureCompiler;
+
+    /**
+     * EXPERIMENTAL: add -XdisableAggressiveOptimization parameter to the compiler command line
+     * <p>
+     * Can be set from the command line using '-Dgwt.compiler.disableAggressiveOptimization=true'
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.disableAggressiveOptimization}"
+     * @since 2.5.0
+     */
+    private boolean disableAggressiveOptimization;
+
+    /**
+     * EXPERIMENTAL: add -XcompilerMetrics parameter to the compiler command line
+     * <p>
+     * Can be set from the command line using '-Dgwt.compiler.compilerMetrics=true'
+     * </p>
+     * @parameter default-value="false" expression="${gwt.compiler.compilerMetrics}"
+     * @since 2.5.0
+     */
+    private boolean compilerMetrics;
+
+    /**
+     * EXPERIMENTAL: add -XfragmentCount parameter to the compiler command line
+     * <p>
+     * Can be set from the command line using '-Dgwt.compiler.fragmentCount=n'
+     * </p>
+     * @parameter default-value="-1" expression="${gwt.compiler.fragmentCount}"
+     * @since 2.5.0
+     */
+    private int fragmentCount;
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -267,7 +310,11 @@ public class CompileMojo
             .arg( disableCastChecking, "-XdisableCastChecking" )
             .arg( disableRunAsync, "-XdisableRunAsync" )
             .arg( strict, "-strict" )
-            .arg( soycDetailed, "-XsoycDetailed" );
+            .arg( soycDetailed, "-XsoycDetailed" )
+            .arg( enableClosureCompiler, "-XenableClosureCompiler" )
+            .arg( compilerMetrics, "-XcompilerMetrics" )
+            .arg( disableAggressiveOptimization, "-XdisableAggressiveOptimization" )
+            .arg( "-XfragmentCount", String.valueOf( fragmentCount ) );
 
 
         if ( optimizationLevel >= 0 )
