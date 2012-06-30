@@ -29,7 +29,7 @@
 Using the Archetype
 
  Using the archetype is the simpliest way to get a clean, ready for development
- GWT application. It is comparable to the application created wy SDK webAppCreator
+ GWT application. It is comparable to the application created by SDK webAppCreator
  with the ''-maven'' option, with some tweaks to nicelly integrate with Google
  Eclipse and M2Eclipse plugins.
 
@@ -37,18 +37,8 @@ Using the Archetype
 
  Use it as you would any other Maven archetype to create a template/stub project.
  
- Due to an archetype maven project issue {{{http://jira.codehaus.org/browse/ARCHETYPE-351}ARCHETYPE-351}}
- you must add the archetype repository used via the following parameter
- 
-+--
- -DarchetypeRepository=repo1.maven.org
-+-- 
-
- The full command line until fix of archetype issue is :
-  
 +--
  mvn archetype:generate \
-   -DarchetypeRepository=repo1.maven.org \
    -DarchetypeGroupId=org.codehaus.mojo \
    -DarchetypeArtifactId=gwt-maven-plugin \
    -DarchetypeVersion=${project.version}
@@ -70,8 +60,3 @@ Using the Archetype
 
   It uses M2Eclipse for classpath management and Google Eclipse Plugin for nice GWT
   support inside Eclipse.
-  
-  Note before importing your project you must configure M2eclipse as it.
-  See box : Goals to run on project import.
-  
-[../images/user-guide/eclipse-m2-conf.jpg]  
