@@ -55,6 +55,7 @@
       <email>olamy@apache.org</email>
     </developer>
     <developer>
+      <id>t.broyer</id>
       <name>Thomas Broyer</name>
       <email>t.broyer@ltgt.net</email>
     </developer>
@@ -215,6 +216,11 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
+      <version>${gwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-codeserver</artifactId>
       <version>${gwt.version}</version>
     </dependency>
     <dependency>

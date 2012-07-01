@@ -258,6 +258,12 @@ public abstract class AbstractGwtMojo
         return getArtifact( "com.google.gwt", "gwt-dev" ).getFile();
     }
 
+    protected File getGwtCodeServerJar()
+        throws MojoExecutionException
+    {
+        checkGwtUserVersion();
+        return getArtifact( "com.google.gwt", "gwt-codeserver" ).getFile();
+    }
 
     protected Artifact getArtifact( String groupId, String artifactId )
     {
