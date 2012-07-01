@@ -24,8 +24,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.File;
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * EXPERIMENTAL: Runs GWT modules with Super Dev Mode.
