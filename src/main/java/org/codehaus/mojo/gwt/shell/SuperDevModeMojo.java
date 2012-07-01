@@ -64,15 +64,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      */
     private File codeServerWorkDir;
 
-    /**
-     * <p>
-     * List of {@link Pattern} jars to exclude from the classPath when running
-     * dev mode
-     * </p>
-     * @parameter 
-     */
-    private List<String> runClasspathExcludes;
-
     @Override
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
