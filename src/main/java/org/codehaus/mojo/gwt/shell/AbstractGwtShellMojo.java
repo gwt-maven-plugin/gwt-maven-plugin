@@ -67,7 +67,7 @@ public abstract class AbstractGwtShellMojo
      * Can be set from command line using '-Dgwt.genParam=false'. Defaults to 'true' for backwards compatibility.
      * </p>
      * @parameter default-value="true" expression="${gwt.genParam}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private boolean genParam;
 
@@ -145,7 +145,7 @@ public abstract class AbstractGwtShellMojo
      * Can be set from command line using '-Dgwt.persistentunitcache=...'
      *
      * @parameter expression="${gwt.persistentunitcache}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private Boolean persistentunitcache;
 
@@ -155,7 +155,7 @@ public abstract class AbstractGwtShellMojo
      * Can be set from command line using '-Dgwt.persistentunitcachedir=...'
      *
      * @parameter expression="${gwt.persistentunitcachedir}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private File persistentunitcachedir;
 

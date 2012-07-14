@@ -229,7 +229,7 @@ public class CompileMojo
      * Can be set from the command line using '-Dgwt.compiler.enableClosureCompiler=true'
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.enableClosureCompiler}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private boolean enableClosureCompiler;
 
@@ -239,7 +239,7 @@ public class CompileMojo
      * Can be set from the command line using '-Dgwt.compiler.disableAggressiveOptimization=true'
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.disableAggressiveOptimization}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private boolean disableAggressiveOptimization;
 
@@ -249,7 +249,7 @@ public class CompileMojo
      * Can be set from the command line using '-Dgwt.compiler.compilerMetrics=true'
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.compilerMetrics}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private boolean compilerMetrics;
 
@@ -259,7 +259,7 @@ public class CompileMojo
      * Can be set from the command line using '-Dgwt.compiler.fragmentCount=n'
      * </p>
      * @parameter default-value="-1" expression="${gwt.compiler.fragmentCount}"
-     * @since 2.5.0
+     * @since 2.5.0-rc1
      */
     private int fragmentCount;
 
