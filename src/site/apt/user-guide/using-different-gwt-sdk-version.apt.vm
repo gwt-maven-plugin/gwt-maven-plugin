@@ -1,9 +1,10 @@
  ------
- Using different GWT SDK Version
+ Using a different GWT SDK version
  ------
  Olivier Lamy
+Thomas Broyer
  ------
- 2010-12-09
+ 2012-07-14
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -25,16 +26,16 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-Using different GWT SDK Version
+Using a different GWT SDK version
 
-  Currently the mojo use and has been tested with following gwt sdk version ${gwtVersion}.
-  This version is defined in the plugin dependencies, so if you want an other (newer) version you must change
-  your pom as it
+  Currently the plugin uses and has been tested with GWT ${gwtVersion}.
+  This version is defined in the plugin dependencies, so if you want another (newer) version you must change
+  your pom as follows:
   
 +--
 <project>
   <properties>
-    <gwt.version>here your prefered gwt sdk version</gwt.version>
+    <gwt.version>your preferred GWT SDK version here</gwt.version>
   </properties>
   [...]
   <build>
@@ -55,6 +56,11 @@ Using different GWT SDK Version
             <artifactId>gwt-dev</artifactId>
             <version>${gwt.version}</version>
           </dependency>
+          <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-codeserver</artifactId>
+            <version>${gwt.version}</version>
+          </dependency>
         </dependencies>
       </plugin>
       [...]
@@ -63,3 +69,7 @@ Using different GWT SDK Version
   [...]
 </project>
 +--  
+
+  Note that starting with 2.5.0-rc1, the plugin depends on <<<gwt-user>>>, <<<gwt-dev>>> and <<<gwt-codeserver>>>.
+  Previous versions depended on <<<gwt-user>>>, <<<gwt-dev>>> and <<<gwt-servlet>>>.
+  All dependencies should be overridden.

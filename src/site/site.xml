@@ -36,8 +36,8 @@ under the License.
   <body>
     <links>
       <item name="Maven" href="http://maven.apache.org/"/>
-      <item name="Google Web Toolkit" href="http://code.google.com/webtoolkit/"/>
-      <item name="Google Eclipse Plugin" href="http://code.google.com/intl/en/eclipse"/>
+      <item name="Google Web Toolkit" href="https://developers.google.com/web-toolkit/"/>
+      <item name="Google Plugin for Eclipse" href="https://developers.google.com/eclipse/"/>
     </links>
     <menu name="User Guide">
       <item name="Introduction" href="index.html"/>
@@ -54,11 +54,10 @@ under the License.
       <item name="Using AppEngine launcher in dev mode" href="user-guide/appengine-launcher.html"/>
       <item name="Using the CSS Interface Generator" href="user-guide/css-interface-generator.html"/>
       <item name="Google Plugin for Eclipse" href="eclipse/google_plugin.html" />
-      <item name="Writing Library" href="user-guide/library.html" />
-      <item name="Productivity" href="user-guide/productivity.html" />
+      <item name="Writing a Library" href="user-guide/library.html" />
       <item name="Compiler Report" href="user-guide/compiler-report.html"/>
       <item name="Processing Annotation @RemoteServiceRelativePath" href="user-guide/remoteservicerelativepath-annotation.html"/>
-      <item name="Using different GWT SDK Version" href="user-guide/using-different-gwt-sdk-version.html"/>
+      <item name="Using a different GWT SDK Version" href="user-guide/using-different-gwt-sdk-version.html"/>
       
     </menu>
     <menu name="Reference">

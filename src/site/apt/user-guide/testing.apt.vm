@@ -31,15 +31,15 @@ Testing GWT code with Maven
   One special aspect of gwt-maven-plugin to be familiar with is that it runs its own special <<<test>>> goal
   in order to support <<<GWTTestCase>>> and <<<GWTTestSuite>>> derived GWT tests. If you're not familiar with
   GWT testing support you should first read the related
-  {{{http://code.google.com/intl/fr/webtoolkit/articles/testing_methodologies_using_gwt.html}documentation}}.
+  {{{https://developers.google.com/web-toolkit/articles/testing_methodologies_using_gwt}documentation}}.
 
   We do not consider GWTTestCase to be unit test as they require the whole GWT Module to run. For this reason, the <<<test>>> goal is
   bound by default to <<<integration-test>>> phase. But this is only our point of view and you may want to run such test during the
   standard <<<test>>> phase, and maybe use a profile and naming convention to execute such tests on demand.
 
-  Another option is to {{{http://code.google.com/events/io/2009/sessions/GoogleWebToolkitBestPractices.html}use the MVP design pattern}}
+  Another option is to {{{http://www.google.com/events/io/2009/sessions/GoogleWebToolkitBestPractices.html}use the MVP design pattern}}
    to keep your code and UI components separated. In such case,
-  GWT {{{http://code.google.com/p/google-web-toolkit/source/browse/releases/2.1/user/src/com/google/gwt/junit/GWTMockUtilities.java}MockUtilities}}
+  GWT {{{http://google-web-toolkit.googlecode.com/svn/javadoc/latest/com/google/gwt/junit/GWTMockUtilities.java}MockUtilities}}
   will help you disable Defered Binding (that requires a full GWT stack) and use mock components.
 
 * Using Surefire
@@ -62,7 +62,7 @@ Testing GWT code with Maven
       <systemProperties>
         <property>
           <name>gwt.args</name>
-          <value>-out \${webAppDirectory}</value>
+          <value>-out ${webAppDirectory}</value>
         </property>
       </systemProperties>
     </configuration>
@@ -72,8 +72,8 @@ Testing GWT code with Maven
 * Using gwt-maven-plugin <<<test>>> goal
 
   The gwt-maven-plugin testing support is <<not>> intended to be run standalone, rather it is bound to
-  the Maven <<<integration-test>>> phase. To get <<<gwt:test>>> to run, you should include the"<<<test>>>
-  goal in your plugin configuration executions, and you should invoke <<<mvn integration-test>>> (or <<<mvn install>>>).
+  the Maven <<<integration-test>>> phase. To get <<<gwt:test>>> to run, you should include the <<<test>>>
+  goal in your plugin configuration executions, and you should invoke <<<mvn verify>>> (or <<<mvn install>>>).
 
 +--
 <project>
@@ -121,7 +121,7 @@ Testing GWT code with Maven
   </plugin>
 +--
 
-  A simplier way to separate classic and GWT tests is to name latests <<<GwtTest"Something.java>>>.
+  A simpler way to separate classic and GWT tests is to name latests <<<GwtTest"Something".java>>>.
   As surefire looks for tests that are named <<<Something"Test".java>>> by default, they will be ignored during
   <<<test>>> phase.
 
@@ -155,7 +155,7 @@ Testing GWT code with Maven
 
 * About GwtTestSuite
 
-  The {{{http://code.google.com/p/google-web-toolkit-doc-1-5/wiki/DevGuideJUnitSuites}Official GWT documentation}}
+  The {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideTesting#DevGuideJUnitSuites}Official GWT documentation}}
   on TestSuites suggest to grouping your GWT tests in a suite by extending GwtTestSuite. Maven will not be able to
   run such a Suite. The snippet below is what will allow both the Eclipse Junit Runner and Maven to run the test cases.
 
@@ -172,9 +172,9 @@ Testing GWT code with Maven
 
 * Use GWTTestSuite padawan
 
-  {{{http://google-web-toolkit.googlecode.com/svn/javadoc/2.1/com/google/gwt/junit/client/GWTTestCase.html}<<<GWTTestCase>>>}}
+  {{{http://google-web-toolkit.googlecode.com/svn/javadoc/latest/com/google/gwt/junit/client/GWTTestCase.html}<<<GWTTestCase>>>}}
   derived tests are slow. This is because the JUnitShell has to load the module for each test (create the shell, hook into it, etc).
-  {{{http://google-web-toolkit.googlecode.com/svn/javadoc/2.1/com/google/gwt/junit/tools/GWTTestSuite.html}<<<GWTTestSuite>>>}}
+  {{{http://google-web-toolkit.googlecode.com/svn/javadoc/latest/com/google/gwt/junit/tools/GWTTestSuite.html}<<<GWTTestSuite>>>}}
   mitigates this by grouping all the tests that are for the same module (those that return the same value for getModuleName) together and running them via the same
   shell instance.
 
@@ -188,39 +188,27 @@ Testing GWT code with Maven
 
 * testing modes
 
-  GwtTestCase uses an invisible "headless" browser to run your code. As an option, you can run your code compiled to JavaScript instead
-  of using the hosted mode bridge between Java and JavaScript, using the <<<productionMode>>> parameter. GWT Team suggest that you run your
-  tests in both modes to detect {{{http://code.google.com/p/google-web-toolkit-doc-1-5/wiki/DevGuideJavaCompatibility}differences between
+  GWTTestCase uses HTMLUnit to run your code. {{{http://htmlunit.sourceforge.net/}HTMLUnit}} doesn't provide a full
+  browser with GUI components, but is 100% Java based so it doesn't require a native process and can run in your favorite debugger.
+  Please note this is only emulation, always validate test results with a real browser.
+
+  By default, tests run in DevMode. As an option, you can run your code compiled to JavaScript instead
+  of using the dev mode bridge between Java and JavaScript, using the <<<productionMode>>> parameter. GWT Team suggest that you run your
+  tests in both modes to detect {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsCompatibility}differences between
   Java and JavaScript}}. You may configure your continuous integration server with <<<-Dgwt.test.prod=true>>> system property to check this.
-
-  You can also use HTMLUnit as alternative to the embedded browser. {{{http://htmlunit.sourceforge.net/}HTMLUnit}} don't provide a full
-  browser with GUI components, but is 100% Java based so don't require a native process and can run in your favorite debugger.
-  To run tests with HTMLUnit, set the <<<mode>>> parameter (or <<<Dgwt.test.mode>>> system property) to "htmlunit". You can set
-  the <<<htmlunit>>> with a list of emulated browsers - please not this is only emulation, always validate test results with a real browser.
-
-+---
-  <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>gwt-maven-plugin</artifactId>
-    <version>${project.version}</version>
-    <configuration>
-      <htmlunit>IE6,IE7,IE8</htmlunit>
-    </configuration>
-  </plugin>
-+---
 
 * testing with "real" browsers
 
   Running headless is usefull, but when it fails you'll need to see what happen and use your own browser. In such case, use the manual mode
-  using the <<<mode>>> parameter (or <<<Dgwt.test.mode>>> system property) to "manual". GWT will then print an URL to access from your browser.
+  using the <<<mode>>> parameter (or <<<gwt.test.mode>>> system property) to "manual". GWT will then print a URL to access from your browser.
 
   You may also want to test your code on various browser, not just the hosted mode embeded one. You then need a remote browser available
-  for testing. See {{{http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTestingRemoteTesting.html}GWT documentation}} for more
+  for testing. See {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideTestingRemoteTesting}GWT documentation}} for more
   explanations.
 
   Selenium mode can be used for running your test suite on real browsers using Selenium RC. Set the <<<mode>>> parameter
   (or <<<gwt.test.mode>>> system property) to "selenium". Don't forget to configure the <<<selenium>>> parameter with the host running the Selenium RC
-  browser :
+  browser:
 
 +---
   <plugin>
@@ -236,7 +224,7 @@ Testing GWT code with Maven
   Selenium may not fit your needs, then GWT comes with a custom RemoteBrowserServer. You can lauch such a server using <<<gwt:browser>>> goal,
   by default it will run Internet Explorer on a Windows box as "ie". You can then run your testsuite on this remote browser, by setting
   the the <<<mode>>> parameter (or <<<gwt.test.mode>>> system property) to "remoteweb". You'll have to configure the <<<remoteweb>>>
-  parameter to declare your remoteBrowserServer :
+  parameter to declare your remoteBrowserServer:
 
 +---
   <plugin>

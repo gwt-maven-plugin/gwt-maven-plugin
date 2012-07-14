@@ -140,9 +140,9 @@ Compile GWT application
   package/deploy/restart cycle.
 
   Using this folder is also very usefull for those of us that run a server using
-  {{{http://mojo.codehaus.org/tomcat-maven-plugin/run-mojo.htm}tomcat:run}} or
+  {{{http://tomcat.apache.org/maven-plugin-2/run-mojo-features.html}tomcat7:run}} or
   {{{http://jetty.mortbay.org/jetty/maven-plugin/run-mojo.html}jetty:run}} goals. Those plugins don't require any packaging
-  to launch the webapp, and handle nicelly Maven dependencies and classes without requirement for a <<<WEB-INF/lib>>> and
+  to launch the webapp, and handle nicely Maven dependencies and classes without requirement for a <<<WEB-INF/lib>>> and
   <<<WEB-INF/classes>>>. With this default GWTCompiler output directory, the application can be run as is with no packaging
   requirement.
 

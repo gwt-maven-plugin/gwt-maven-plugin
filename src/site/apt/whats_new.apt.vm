@@ -3,8 +3,9 @@
  ------
  Nicolas de Loof
  Olivier Lamy
+ Thomas Broyer
  ------
- 2010-11-26 
+ 2012-07-14 
  
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -27,17 +28,23 @@
 ~~ http://maven.apache.org/doxia/references/apt-format.html 
 
 What's new in gwt-maven-plugin ${project.version}
- 
- * code has moved to {{{https://github.com/gwt-maven-plugin/gwt-maven-plugin}GitHub}}, contributors are welcome to fork, send pull request
-   or request for commit if you feel confident with the code.
 
- * {{{./user-guide/appengine-launcher.html}AppEngine Launch}}
+ * Update to GWT 2.5.0-rc1
  
- * {{{./user-guide/css-interface-generator.html}Css Interface Generator}}
+ * More GWT compiler options: <<<-Dgwt.persistentunitcache>>> and <<<-Dgwt.persistentunitcachedir>>>, <<<-XenableClosureCompiler>>>,
+   <<<-XdisableAggressiveOptimization>>>, <<<-XcompilerMetrics>>>, <<<-XfragmentCount>>> (see the {{{./compile-mojo.html}Compile mojo}})  
  
- * More Gwt compiler options : -compileReport, -optimize, -XsoycDetailed, -strict (see the mojo {{{./compile-mojo.html}Compile Mojo}} )  
+ * New <<<genParam>>> configuration parameter to toggle the <<<-gen>>> off and cut I/O needs down by an order of magnitude (speeding up compilation)
  
- * {{{./user-guide/compiler-report.html} Compiler Report}} 
+ * New <<<quirksMode>>>, <<<userAgents>>> and <<<batch>>> parameters for the {{{./test-mojo.html}Test mojo}}
  
- * {{{./user-guide/remoteservicerelativepath-annotation.html} @RemoteServiceRelativePath annotation processing}} 
+ * Support for {{{./run-codeserver-mojo.html} Super Dev Mode}} 
+ 
+ * GWT's internal check for updates is disabled everywhere possible
+
+ * {{{./css-mojo.html}Css mojo}} is now bound to the <<<generate-sources>>> phase by default
+
+ []
+
+ Read the {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11860&version=17850}full release notes}} for the list of fixed issues.
 

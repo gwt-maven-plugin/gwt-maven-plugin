@@ -28,13 +28,13 @@
 
 GWT Maven Plugin
 
- Welcome to the {{{http://code.google.com/intl/fr/webtoolkit/}Google Web Toolkit}} Maven Plugin
+ Welcome to the {{{https://developers.google.com/web-toolkit/}Google Web Toolkit}} Maven Plugin
  User Guide. This documentation will drive you to setup you GWT web application development
  using Maven as build tool. This guide covers project organisation and setup, integration with
  development environment, and running GWT SDK tools from maven command line.
 
  If you're new to GWT or Maven, you might want to first read the
- {{{http://code.google.com/intl/fr/webtoolkit/overview.html}GWT documentation}} and get more
+ {{{https://developers.google.com/web-toolkit/doc/latest/DevGuide}GWT documentation}} and get more
  familiar with Maven by reading at least its
  {{{http://maven.apache.org/guides/getting-started/index.html}getting started guide}}
  or by reading the online
