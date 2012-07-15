@@ -34,6 +34,7 @@ import java.io.File;
  * @requiresDependencyResolution compile
  * @description EXPERIMENTAL: Runs the project in GWT SuperDevMode for development.
  * @author t.broyer
+ * @since 2.5.0-rc1
  */
 public class SuperDevModeMojo extends AbstractGwtShellMojo
 {
