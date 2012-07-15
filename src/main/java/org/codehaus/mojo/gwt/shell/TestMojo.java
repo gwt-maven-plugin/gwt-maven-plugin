@@ -180,6 +180,7 @@ public class TestMojo
      * Run each test using an HTML document in quirks mode (rather than standards mode)
      * 
      * @parameter default-value="false"
+     * @since 2.5.0-rc1
      */
     private boolean quirksMode;
     
@@ -188,6 +189,7 @@ public class TestMojo
      * e.g. ie6,ie8,safari,gecko1_8,opera
      * 
      * @parameter expression="${gwt.test.userAgents}"
+     * @since 2.5.0-rc1
      */
     private String userAgents;
     
@@ -198,6 +200,7 @@ public class TestMojo
      * </p>
      * 
      * @parameter expression="${gwt.test.batch}"
+     * @since 2.5.0-rc1
      */
     private String batch;
 
