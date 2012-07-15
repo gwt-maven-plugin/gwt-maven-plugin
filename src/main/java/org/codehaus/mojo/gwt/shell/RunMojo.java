@@ -19,17 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -39,8 +28,18 @@ import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Goal which run a GWT module in the GWT Hosted mode.
@@ -56,6 +55,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  */
 public class RunMojo
     extends AbstractGwtWebMojo
+    implements ClassPathProcessor
 {
     /**
      * Location of the hosted-mode web application structure.
@@ -102,13 +102,6 @@ public class RunMojo
     private int port;
 
     /**
-     * Specify the location on the filesystem for the generated embedded Tomcat directory.
-     *
-     * @parameter default-value="${project.build.directory}/tomcat"
-     */
-    private File tomcat;
-
-    /**
      * Location of the compiled classes.
      *
      * @parameter default-value="${project.build.outputDirectory}"
@@ -117,14 +110,6 @@ public class RunMojo
      */
     private File buildOutputDirectory;
 
-
-    /**
-     * Source Tomcat context.xml for GWT shell - copied to /gwt/localhost/ROOT.xml (used as the context.xml for the
-     * SHELL - requires Tomcat 5.0.x format - hence no default).
-     *
-     * @parameter
-     */
-    private File contextXml;
 
     /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
@@ -141,24 +126,6 @@ public class RunMojo
      * @parameter expression="${gwt.server}"
      */
     private String server;
-
-    /**
-     * Set GWT shell protocol/host whitelist.
-     * <p>
-     * Can be set from command line using '-Dgwt.whitelist=...'
-     *
-     * @parameter expression="${gwt.whitelist}"
-     */
-    private String whitelist;
-
-    /**
-     * Set GWT shell protocol/host blacklist.
-     * <p>
-     * Can be set from command line using '-Dgwt.blacklist=...'
-     *
-     * @parameter expression="${gwt.blacklist}"
-     */
-    private String blacklist;
 
     /**
      * List of System properties to pass when running the hosted mode.
@@ -245,43 +212,6 @@ public class RunMojo
      */
     private String bindAddress;    
 
-    public String getRunTarget()
-    {
-        return this.runTarget;
-    }
-
-    /**
-     * @return the GWT module to run (gwt 1.6+) -- expected to be unique
-     */
-    public String getRunModule()
-        throws MojoExecutionException
-    {
-        String[] modules = getModules();
-        if ( noServer )
-        {
-            if (modules.length != 1)
-            {
-                getLog().error(
-                    "Running in 'noserver' mode you must specify the single module to run using -Dgwt.module=..." );
-                throw new MojoExecutionException( "No single module specified" );
-            }
-            return modules[0];
-        }
-        if ( modules.length == 1 )
-        {
-            // A single module is set, no ambiguity
-            return modules[0];
-        }
-        int dash = runTarget.indexOf( '/' );
-        if ( dash > 0 )
-        {
-            return runTarget.substring( 0, dash );
-        }
-        // The runTarget MUST start with the full GWT module path
-        throw new MojoExecutionException(
-            "Unable to choose a GWT module to run. Please specify your module(s) in the configuration" );
-    }
-
     /**
      * @return the startup URL to open in hosted browser (gwt 1.6+)
      */
@@ -318,15 +248,14 @@ public class RunMojo
         return runTarget;
     }
 
-    protected String getFileName()
-    {
-        return "run";
-    }
-
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+        JavaCommandRequest req = createJavaCommandRequest()
+            .setClassName( "com.google.gwt.dev.DevMode" )
+            .setClassPathFiles( getClasspath( Artifact.SCOPE_RUNTIME ) )
+            .setClassPathProcessors( Collections.<ClassPathProcessor>singletonList( this ) );
+        JavaCommand cmd = new JavaCommand( req );
 
         if ( gwtSdkFirstInClasspath )
         {
@@ -354,15 +283,6 @@ public class RunMojo
         if ( server != null )
         {
             cmd.arg( "-server", server );
-        }
-
-        if ( whitelist != null && whitelist.length() > 0 )
-        {
-            cmd.arg( "-whitelist", whitelist );
-        }
-        if ( blacklist != null && blacklist.length() > 0 )
-        {
-            cmd.arg( "-blacklist", blacklist );
         }
 
         if ( systemProperties != null && !systemProperties.isEmpty() )
@@ -401,11 +321,17 @@ public class RunMojo
             cmd.arg( module );
         }
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
-    @Override
-    protected void postProcessClassPath( Collection<File> classPath )
+    public void postProcessClassPath( List<File> classPath )
     {
         boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
         List<Pattern> patternsToExclude = new ArrayList<Pattern>();
@@ -603,19 +529,9 @@ public class RunMojo
         }
     }
 
-    public File getContextXml()
-    {
-        return this.contextXml;
-    }
-
     public int getPort()
     {
         return this.port;
-    }
-
-    public File getTomcat()
-    {
-        return this.tomcat;
     }
 
     /**

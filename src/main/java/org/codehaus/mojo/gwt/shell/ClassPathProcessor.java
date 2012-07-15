@@ -19,6 +19,8 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
+import org.apache.maven.plugin.MojoExecutionException;
+
 import java.io.File;
 import java.util.List;
 
@@ -28,5 +30,5 @@ import java.util.List;
  */
 public interface ClassPathProcessor
 {
-    void postProcessClassPath(List<File> files);
+    void postProcessClassPath(List<File> files) throws MojoExecutionException;
 }

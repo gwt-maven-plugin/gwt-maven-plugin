@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -47,6 +48,7 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public class TestMojo
     extends AbstractGwtShellMojo
+    implements ClassPathProcessor
 {
 
     /**
@@ -261,9 +263,16 @@ public class TestMojo
             }
             try
             {
-                new JavaCommand( MavenTestRunner.class.getName() ).withinScope( Artifact.SCOPE_TEST ).arg( test )
+                JavaCommandRequest req = createJavaCommandRequest()
+                    .setClassName( MavenTestRunner.class.getName() )
+                    .setClassPathFiles( getClasspath( Artifact.SCOPE_TEST ) )
+                    .setClassPathProcessors( Collections.<ClassPathProcessor>singletonList( this ) );
+                new JavaCommand( req )
+                    .withinScope( Artifact.SCOPE_TEST )
+                    .arg( test )
                     .systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() )
-                    .systemProperty( "gwt.args", getGwtArgs() ).execute();
+                    .systemProperty( "gwt.args", getGwtArgs() )
+                    .execute();
             }
             catch ( ForkedProcessExecutionException e )
             {
@@ -322,8 +331,7 @@ public class TestMojo
         return sb.toString();
     }
 
-    @Override
-    protected void postProcessClassPath( Collection<File> classpath )
+    public void postProcessClassPath( List<File> classpath )
         throws MojoExecutionException
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );
@@ -364,103 +372,6 @@ public class TestMojo
         File file = new File( path );
         getLog().debug( "getClassPathElementFor " + clazz.getName() + " file " + file.getPath() );
         return file;
-    }
-
-    /**
-     * @return the project classloader
-     * @throws DependencyResolutionRequiredException failed to resolve project dependencies
-     * @throws MalformedURLException configuration issue ?
-     */
-    protected ClassLoader getProjectClassLoader()
-        throws DependencyResolutionRequiredException, MalformedURLException
-    {
-        getLog().debug( "TestMojo#getProjectClassLoader()" );
-
-        List<?> compile = getProject().getCompileClasspathElements();
-        URL[] urls = new URL[compile.size()];
-        int i = 0;
-        for ( Object object : compile )
-        {
-            if ( object instanceof Artifact )
-            {
-                urls[i] = ( (Artifact) object ).getFile().toURI().toURL();
-            }
-            else
-            {
-                urls[i] = new File( (String) object ).toURI().toURL();
-            }
-            i++;
-        }
-        return new URLClassLoader( urls, ClassLoader.getSystemClassLoader() );
-    }
-
-    /**
-     * @param path file to add to the project compile directories
-     */
-    protected void addCompileSourceRoot( File path )
-    {
-        getProject().addCompileSourceRoot( path.getAbsolutePath() );
-    }
-
-    /**
-     * Add project classpath element to a classpath URL set
-     * 
-     * @param originalUrls the initial URL set
-     * @return full classpath URL set
-     * @throws MojoExecutionException some error occured
-     */
-    protected URL[] addProjectClasspathElements( URL[] originalUrls )
-        throws MojoExecutionException
-    {
-        Collection<?> sources = getProject().getCompileSourceRoots();
-        Collection<?> resources = getProject().getResources();
-        Collection<?> dependencies = getProject().getArtifacts();
-        URL[] urls = new URL[originalUrls.length + sources.size() + resources.size() + dependencies.size() + 2];
-
-        int i = originalUrls.length;
-        getLog().debug( "add compile source roots to GWTCompiler classpath " + sources.size() );
-        i = addClasspathElements( sources, urls, i );
-        getLog().debug( "add resources to GWTCompiler classpath " + resources.size() );
-        i = addClasspathElements( resources, urls, i );
-        getLog().debug( "add project dependencies to GWTCompiler  classpath " + dependencies.size() );
-        i = addClasspathElements( dependencies, urls, i );
-        try
-        {
-            urls[i++] = getGenerateDirectory().toURI().toURL();
-            urls[i] = new File( getProject().getBuild().getOutputDirectory() ).toURI().toURL();
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new MojoExecutionException( "Failed to convert project.build.outputDirectory to URL", e );
-        }
-        return urls;
-    }
-
-    /**
-     * Need this to run both pre- and post- PLX-220 fix.
-     * 
-     * @return a ClassLoader including plugin dependencies and project source foler
-     * @throws MojoExecutionException failed to configure ClassLoader
-     */
-    protected ClassLoader getClassLoader()
-        throws MojoExecutionException
-    {
-        try
-        {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
-            URL[] urls = new URL[classpath.size()];
-            int i = 0;
-            for ( File file : classpath )
-            {
-                urls[i++] = file.toURI().toURL();
-            }
-            ClassLoader parent = getClass().getClassLoader();
-            return new URLClassLoader( urls, parent.getParent() );
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new MojoExecutionException( "Unexpecetd internal error" );
-        }
     }
 
     /**

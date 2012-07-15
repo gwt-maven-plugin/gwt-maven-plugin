@@ -27,6 +27,7 @@ import java.util.Set;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
 
@@ -154,7 +155,7 @@ abstract class GwtResourcesBaseMojo
     private ResourceFile getDescriptor( GwtModule module, Set<String> paths )
         throws MojoExecutionException
     {
-        String moduleFilePath = module.getName().replace( '.', '/' ) + GWT_MODULE_EXTENSION;
+        String moduleFilePath = module.getName().replace( '.', '/' ) + DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
         for ( String path : paths )
         {
             File basedir = new File( path );

@@ -77,13 +77,6 @@ public class CSSMojo
                 final File javaOutput =
                     new File( getGenerateDirectory(), typeName.replace( '.', File.separatorChar ) + ".java" );
                 final StringBuilder content = new StringBuilder();
-                out = new StreamConsumer()
-                {
-                    public void consumeLine( String line )
-                    {
-                        content.append( line ).append( SystemUtils.LINE_SEPARATOR );
-                    }
-                };
                 for ( Resource resource : (List<Resource>) getProject().getResources() )
                 {
                     final File candidate = new File( resource.getDirectory(), file );
@@ -95,7 +88,20 @@ public class CSSMojo
                         
                         try
                         {
-                            new JavaCommand( "com.google.gwt.resources.css.InterfaceGenerator" )
+                            JavaCommandRequest req = createJavaCommandRequest()
+                                .setClassName( "com.google.gwt.resources.css.InterfaceGenerator" )
+                                .setClassPathFiles( getClasspath( Artifact.SCOPE_COMPILE ) );
+                            new JavaCommand( req ) {
+                                {
+                                    out = new StreamConsumer()
+                                    {
+                                        public void consumeLine( String line )
+                                        {
+                                            content.append( line ).append( SystemUtils.LINE_SEPARATOR );
+                                        }
+                                    };
+                                }
+                            }
                             .withinScope( Artifact.SCOPE_COMPILE )
                             .arg( "-standalone" )
                             .arg( "-typeName" )
@@ -112,6 +118,10 @@ public class CSSMojo
                         catch ( IOException e )
                         {
                             throw new MojoExecutionException( "Failed to write to file: " + javaOutput );
+                        }
+                        catch ( JavaCommandException e )
+                        {
+                            new MojoExecutionException( e.getMessage(), e );
                         }
                         generated = true;
                         break;
