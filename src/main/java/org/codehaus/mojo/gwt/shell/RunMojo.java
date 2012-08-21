@@ -97,9 +97,16 @@ public class RunMojo
     /**
      * Runs the embedded GWT server on the specified port.
      *
-     * @parameter default-value="8888"
+     * @parameter default-value="8888" expression="${gwt.port}"
      */
     private int port;
+
+    /**
+     * Runs the code server on the specified port.
+     *
+     * @parameter default-value="9997" expression="${gwt.codeServerPort}"
+     */
+    private int codeServerPort;
 
     /**
      * Specify the location on the filesystem for the generated embedded Tomcat directory.
@@ -348,6 +355,7 @@ public class RunMojo
             .arg( "-war", hostedWebapp.getAbsolutePath() )
             .arg( "-logLevel", getLogLevel() )
             .arg( "-port", Integer.toString( getPort() ) )
+            .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
             .arg( noServer, "-noserver" );
 
