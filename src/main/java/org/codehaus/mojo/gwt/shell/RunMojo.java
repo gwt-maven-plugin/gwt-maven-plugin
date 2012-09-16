@@ -344,8 +344,7 @@ public class RunMojo
             cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
         }
 
-        cmd.arg( "-XdisableUpdateCheck" )
-            .arg( "-war", hostedWebapp.getAbsolutePath() )
+        cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
             .arg( "-logLevel", getLogLevel() )
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-startupUrl", getStartupUrl() )

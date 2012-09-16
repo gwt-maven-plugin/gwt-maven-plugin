@@ -87,9 +87,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
                 .withinClasspath( getGwtCodeServerJar() );
         }
 
-        // FIXME: add it when CodeServer has it
-        // cmd.arg( "-XdisableUpdateCheck" )
-
         if ( bindAddress != null && bindAddress.length() > 0 )
         {
             cmd.arg( "-bindAddress" ).arg( bindAddress );

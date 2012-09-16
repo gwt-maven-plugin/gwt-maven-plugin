@@ -280,7 +280,6 @@ public class TestMojo
     {
         StringBuilder sb = new StringBuilder();
         sb.append( "-out " ).append( out );
-        sb.append( " -XdisableUpdateCheck" );
         if ( webMode )
         {
             sb.append( " -web" );
