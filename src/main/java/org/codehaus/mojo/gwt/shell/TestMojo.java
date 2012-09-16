@@ -31,6 +31,7 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.surefire.report.ReporterManager;
+import org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo.JavaCommand;
 import org.codehaus.mojo.gwt.test.MavenTestRunner;
 import org.codehaus.mojo.gwt.test.TestTemplate;
 import org.codehaus.plexus.util.StringUtils;
@@ -254,16 +255,34 @@ public class TestMojo
             File outFile = new File(out);
             if (outFile.isAbsolute())
             {
-  		outFile.mkdirs();
+                outFile.mkdirs();
             }
-	    else{
-        	new File( getProject().getBasedir(), out ).mkdirs();
+            else
+            {
+                new File( getProject().getBasedir(), out ).mkdirs();
             }
             try
             {
-                new JavaCommand( MavenTestRunner.class.getName() ).withinScope( Artifact.SCOPE_TEST ).arg( test )
-                    .systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() )
-                    .systemProperty( "gwt.args", getGwtArgs() ).execute();
+                JavaCommand cmd = new JavaCommand( MavenTestRunner.class.getName() );
+                if ( gwtSdkFirstInClasspath )
+                {
+                    cmd.withinClasspath( getGwtUserJar() )
+                       .withinClasspath( getGwtDevJar() );
+                }
+                cmd.withinScope( Artifact.SCOPE_TEST );
+                if ( !gwtSdkFirstInClasspath )
+                {
+                    cmd.withinClasspath( getGwtUserJar() )
+                       .withinClasspath( getGwtDevJar() );
+                }
+
+                addCompileSourceArtifacts( cmd );
+
+                cmd.arg( test );
+                cmd.systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() );
+                cmd.systemProperty( "gwt.args", getGwtArgs() );
+
+                cmd.execute();
             }
             catch ( ForkedProcessExecutionException e )
             {
@@ -327,7 +346,6 @@ public class TestMojo
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );
         classpath.add( getClassPathElementFor( ReporterManager.class ) );
-        classpath.add( getGwtDevJar() );
     }
 
     /**
