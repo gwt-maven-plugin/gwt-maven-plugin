@@ -28,6 +28,7 @@ import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,11 +37,13 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.ProjectBuildingException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * Util to consolidate classpath manipulation stuff in one place.
- * 
+ *
  * @author ccollins
  * @version $Id$
  * @plexus.component role="org.codehaus.mojo.gwt.ClasspathBuilder"
@@ -49,6 +52,13 @@ public class ClasspathBuilder
     extends AbstractLogEnabled
 {
 
+      public Collection<File> buildClasspathList( final MavenProject project, final String scope,
+          Set<Artifact> artifacts )
+    throws ClasspathBuilderException
+    {
+        return buildClasspathList(project, scope, artifacts, null);
+    }
+    
     /**
      * Build classpath list using either gwtHome (if present) or using *project* dependencies. Note that this is ONLY
      * used for the script/cmd writers (so the scopes are not for the compiler, or war plugins, etc). This is required
@@ -60,11 +70,11 @@ public class ClasspathBuilder
      * @param artifacts the project artifacts (all scopes)
      * @param scope artifact scope to use
      * @return file collection for classpath
-     * @throws MojoExecutionException 
+     * @throws MojoExecutionException
      */
     @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
-                                                Set<Artifact> artifacts )
+                                                Set<Artifact> artifacts, final MavenProjectBuilder mavenProjectBuilder )
         throws ClasspathBuilderException
     {
         getLogger().debug( "establishing classpath list (scope = " + scope + ")" );
@@ -83,7 +93,6 @@ public class ClasspathBuilder
 
         // Use our own ClasspathElements fitering, as for RUNTIME we need to include PROVIDED artifacts,
         // that is not the default Maven policy, as RUNTIME is used here to build the GWTShell execution classpath
-
         if ( scope.equals( SCOPE_TEST ) )
         {
             addSources( items, project.getTestCompileSourceRoots() );
@@ -93,7 +102,7 @@ public class ClasspathBuilder
             // Add all project dependencies in classpath
             for ( Artifact artifact : artifacts )
             {
-                items.add( artifact.getFile() );
+                items.addAll( buildClasspathList( artifact, scope, project, mavenProjectBuilder ) );
             }
         }
         else if ( scope.equals( SCOPE_COMPILE ) )
@@ -106,7 +115,7 @@ public class ClasspathBuilder
                 if ( SCOPE_COMPILE.equals( artifactScope ) || SCOPE_PROVIDED.equals( artifactScope )
                     || SCOPE_SYSTEM.equals( artifactScope ) )
                 {
-                    items.add( artifact.getFile() );
+                    items.addAll( buildClasspathList( artifact, scope, project, mavenProjectBuilder ) );
                 }
             }
         }
@@ -119,7 +128,7 @@ public class ClasspathBuilder
                 getLogger().debug( "candidate artifact : " + artifact );
                 if ( !artifact.getScope().equals( SCOPE_TEST ) && artifact.getArtifactHandler().isAddedToClasspath() )
                 {
-                    items.add( artifact.getFile() );
+                    items.addAll( buildClasspathList( artifact, scope, project, mavenProjectBuilder ) );
                 }
             }
         }
@@ -180,6 +189,79 @@ public class ClasspathBuilder
                 addResources( items, getResources( refProject, scope ) );
             }
         }
+    }
+    
+    /**
+     * Build classpath list using either the artifact's local sources or its jar
+     *
+     * @param artifact the artifact to add
+     * @param scope artifact scope to use
+     * @param project The maven project the Mojo is running for
+     * @param mavenProjectBuilder
+     * @return file collection for classpath
+     * @throws ClasspathBuilderException
+     */
+    @SuppressWarnings("unchecked")
+    private Collection<File> buildClasspathList( final Artifact artifact, final String scope, 
+                                                 final MavenProject project, 
+                                                 final MavenProjectBuilder mavenProjectBuilder ) 
+        throws ClasspathBuilderException 
+    {
+        MavenProject depProject = getParentProjectForModuleName(project, artifact.getArtifactId());
+        if ( depProject != null )
+        {
+            depProject = getMavenProjectForModuleName(depProject, artifact.getArtifactId(), mavenProjectBuilder);
+            if ( depProject != null )
+            {
+                return buildClasspathList(depProject, scope, depProject.getArtifacts(),  mavenProjectBuilder);
+            }
+        }
+        return Collections.singletonList( artifact.getFile() );
+    }
+    
+    /**
+     * Given a parent MavenProject and a submodules name, get its MavenProject instance
+     * 
+     * @param parentProject The parent maven project the module if child of
+     * @param module name to fetch its MavenProject instance
+     * @param mavenProjectBuilder
+     * @return MavenProject instance of the given module
+     */
+    private MavenProject getMavenProjectForModuleName( MavenProject parentProject, String module, final MavenProjectBuilder mavenProjectBuilder )
+    {
+        File f = new File( parentProject.getBasedir(), module + "/pom.xml" );
+        if ( f.exists() )
+        {
+            try
+            {
+                return mavenProjectBuilder.build( f, parentProject.getDistributionManagementArtifactRepository(), null );
+            }
+            catch ( ProjectBuildingException e )
+            {
+                getLogger().error( "Unable to read local module-POM \"" + module + "\".", e );
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This is a recursive method to find the parent MavenProject where the given
+     * module name is a submodule of.
+     * 
+     * @param parentProject to search on
+     * @param moduleName 
+     * @return parent MavenProject of the given module name 
+     */
+    @SuppressWarnings("unchecked")
+    private MavenProject getParentProjectForModuleName( MavenProject parentProject, String moduleName )
+    {
+        if (parentProject == null) return null;
+        for (String module : (List<String>) parentProject.getModules()) {
+            if (module.equals(moduleName)) {
+              return parentProject;
+            }
+        }
+        return getParentProjectForModuleName(parentProject.getParent(), moduleName);
     }
 
     /**

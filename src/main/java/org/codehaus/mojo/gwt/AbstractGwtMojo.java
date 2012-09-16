@@ -50,6 +50,7 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
 
 /**
  * Abstract Support class for all GWT-related operations.
@@ -119,6 +120,13 @@ public abstract class AbstractGwtMojo
      * @component
      */
     protected ArtifactMetadataSource artifactMetadataSource;
+    
+    /**
+     * Project builder
+     *
+     * @component
+     */
+    protected MavenProjectBuilder mavenProjectBuilder;
 
     /**
      * The maven project descriptor
@@ -230,7 +238,7 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts() );
+            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), mavenProjectBuilder );
 
             if ( getLog().isDebugEnabled() )
             {
