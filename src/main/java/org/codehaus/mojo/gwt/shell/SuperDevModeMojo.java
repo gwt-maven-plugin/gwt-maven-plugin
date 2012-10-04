@@ -51,9 +51,9 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     /**
      * The port where the code server will run.
      *
-     * @parameter
+     * @parameter expression="${gwt.codeServerPort}"
      */
-    private Integer port;
+    private Integer codeServerPort;
 
     /**
      * The root of the directory tree where the code server will write compiler output.
@@ -91,9 +91,9 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         {
             cmd.arg( "-bindAddress" ).arg( bindAddress );
         }
-        if ( port != null )
+        if ( codeServerPort != null )
         {
-            cmd.arg( "-port", String.valueOf( port ) );
+            cmd.arg( "-port", String.valueOf( codeServerPort ) );
         }
         if ( codeServerWorkDir != null )
         {
