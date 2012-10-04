@@ -193,6 +193,7 @@ public class GenerateAsyncMojo
             JavaClass clazz = builder.getClassByName( className );
             if ( isEligibleForGeneration( clazz ) )
             {
+                getLog().debug( "Generating async interface for service " + className );
                 targetFile.getParentFile().mkdirs();
                 generateAsync( clazz, targetFile );
                 fileGenerated = true;
@@ -313,10 +314,9 @@ public class GenerateAsyncMojo
                 getLog().debug( "annotation found on service interface " + annotation );
                 if ( annotation.getType().getValue().equals( "com.google.gwt.user.client.rpc.RemoteServiceRelativePath" ) )
                 {
-                    uri = annotation.getNamedParameter( "value" ).toString();
-                    // remove quotes
-                    uri = uri.substring( 1, uri.length() - 1 );
-                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface " + uri );
+                    uri = null;
+                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface" );
+                    break;
                 }
             }
         }
@@ -333,8 +333,11 @@ public class GenerateAsyncMojo
         writer.println( "            if ( instance == null )" );
         writer.println( "            {" );
         writer.println( "                instance = (" + className + "Async) GWT.create( " + className + ".class );" );
-        writer.println( "                ServiceDefTarget target = (ServiceDefTarget) instance;" );
-        writer.println( "                target.setServiceEntryPoint( GWT.getModuleBaseURL() + \"" + uri + "\" );" );
+        if (uri != null) {
+            // null is used as a marker for the presence of a @RemoteServiceRelativePath annotation, which is handled by the GWT generator
+            writer.println( "                ServiceDefTarget target = (ServiceDefTarget) instance;" );
+            writer.println( "                target.setServiceEntryPoint( GWT.getModuleBaseURL() + \"" + uri + "\" );" );
+        }
         writer.println( "            }" );
         writer.println( "            return instance;" );
         writer.println( "        }" );
