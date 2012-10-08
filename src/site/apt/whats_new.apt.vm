@@ -5,7 +5,7 @@
  Olivier Lamy
  Thomas Broyer
  ------
- 2012-07-14 
+ 2012-10-08
  
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -29,22 +29,15 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Update to GWT 2.5.0-rc1
- 
- * More GWT compiler options: <<<-Dgwt.persistentunitcache>>> and <<<-Dgwt.persistentunitcachedir>>>, <<<-XenableClosureCompiler>>>,
-   <<<-XdisableAggressiveOptimization>>>, <<<-XcompilerMetrics>>>, <<<-XfragmentCount>>> (see the {{{./compile-mojo.html}Compile mojo}})  
- 
- * New <<<genParam>>> configuration parameter to toggle the <<<-gen>>> off and cut I/O needs down by an order of magnitude (speeding up compilation)
- 
- * New <<<quirksMode>>>, <<<userAgents>>> and <<<batch>>> parameters for the {{{./test-mojo.html}Test mojo}}
- 
- * Support for {{{./run-codeserver-mojo.html} Super Dev Mode}} 
- 
- * GWT's internal check for updates is disabled everywhere possible
+ * Update to GWT 2.5.0-rc2
 
- * {{{./css-mojo.html}Css mojo}} is now bound to the <<<generate-sources>>> phase by default
+ * Add support for <<<codeServerPort>>> option for <<<gwt:run>>> goal. The <<<port>>> configuration for
+   the <<<gwt:run-codeserver>>> goal has been renamed to <<<codeServerPort>>> for consistency; this is
+   a breaking change.
+ 
+ * GWT's internal check for updates has been re-enabled, the pings are useful to gather usage statistics
 
  []
 
- Read the {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11860&version=17850}full release notes}} for the list of fixed issues.
+ Read the {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11860&version=18851}full release notes}} for the list of fixed issues.
 
