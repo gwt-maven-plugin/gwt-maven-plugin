@@ -180,20 +180,24 @@ public class I18NMojo extends AbstractGwtShellMojo {
         }
 
         // Get the files matching the messages patterns
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir(getProject().getBuild().getSourceDirectory());
-        ds.setIncludes(newMessages);
-        ds.scan();
-        newMessages = ds.getIncludedFiles();
+        File srcDirectory = new File(getProject().getBuild().getSourceDirectory());
+        if (srcDirectory.exists()) {
+            DirectoryScanner ds = new DirectoryScanner();
+            ds.setBasedir(getProject().getBuild().getSourceDirectory());
+            ds.setIncludes(newMessages);
+            ds.scan();
+            newMessages = ds.getIncludedFiles();
 
-        // Format the output to a package format (with '.')
-        for (int i = 0; i < newMessages.length; i++) {
-            newMessages[i] = newMessages[i].substring(0, newMessages[i].lastIndexOf('.')).replace(
-                    File.separatorChar, '.');
+            // Format the output to a package format (with '.')
+            for (int i = 0; i < newMessages.length; i++) {
+                newMessages[i] = newMessages[i].substring(0, newMessages[i].lastIndexOf('.')).replace(
+                        File.separatorChar, '.');
+            }
+
+            getLog().info(
+                    "Wildcard patterns " + Arrays.asList(messages) + " resolved to "
+                            + Arrays.asList(newMessages));
         }
-
-        getLog().info(
-                "Wildcard patterns " + Arrays.asList(messages) + " resolved to " + Arrays.asList(newMessages));
 
         return newMessages;
     }
