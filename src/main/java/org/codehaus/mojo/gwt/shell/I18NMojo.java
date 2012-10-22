@@ -22,28 +22,30 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.tools.ant.DirectoryScanner;
 
 /**
  * Creates I18N interfaces for constants and messages files.
- *
+ * 
  * @goal i18n
  * @phase generate-sources
  * @requiresDependencyResolution compile
  * @description Creates I18N interfaces for constants and messages files.
  * @author Sascha-Matthias Kulawik <sascha@kulawik.de>
  * @author ccollins
+ * @author Aymeric Caroff
  * @version $Id$
  */
-public class I18NMojo
-    extends AbstractGwtShellMojo
-{
+public class I18NMojo extends AbstractGwtShellMojo {
     /**
-     * List of resourceBundles that should be used to generate i18n Messages interfaces.
-     *
+     * List of resourceBundles that should be used to generate i18n Messages
+     * interfaces.
+     * 
      * @parameter
      * @alias i18nMessagesNames
      */
@@ -51,14 +53,15 @@ public class I18NMojo
 
     /**
      * Shortcut for a single i18nMessagesBundle
-     *
+     * 
      * @parameter
      */
     private String i18nMessagesBundle;
 
     /**
-     * List of resourceBundles that should be used to generate i18n Constants interfaces.
-     *
+     * List of resourceBundles that should be used to generate i18n Constants
+     * interfaces.
+     * 
      * @parameter
      * @alias i18nConstantsNames
      */
@@ -66,117 +69,133 @@ public class I18NMojo
 
     /**
      * Shortcut for a single i18nConstantsBundle
-     *
+     * 
      * @parameter
      */
     private String i18nConstantsBundle;
 
     /**
-     * List of resourceBundles that should be used to generate i18n ConstantsWithLookup interfaces.
-     *
+     * List of resourceBundles that should be used to generate i18n
+     * ConstantsWithLookup interfaces.
+     * 
      * @parameter
      */
     private String[] i18nConstantsWithLookupBundles;
 
     /**
      * Shortcut for a single i18nConstantsWithLookupBundle
-     *
+     * 
      * @parameter
      */
     private String i18nConstantsWithLookupBundle;
 
-    public void doExecute( )
-        throws MojoExecutionException, MojoFailureException
-    {
+    @Override
+    public void doExecute() throws MojoExecutionException, MojoFailureException {
         setup();
         boolean generated = false;
 
         // constants with lookup
-        if ( i18nConstantsWithLookupBundles != null )
-        {
-            for ( String target : i18nConstantsWithLookupBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
-                    .arg( target ).execute();
+        if (i18nConstantsWithLookupBundles != null) {
+            String[] constantWithLookupBundles = getFilesFromRegex(i18nConstantsWithLookupBundles);
+            for (String target : constantWithLookupBundles) {
+                ensureTargetPackageExists(getGenerateDirectory(), target);
+                new JavaCommand("com.google.gwt.i18n.tools.I18NSync").withinScope(Artifact.SCOPE_COMPILE)
+                        .withinClasspath(getGwtUserJar()).withinClasspath(getGwtDevJar())
+                        .arg("-out", getGenerateDirectory().getAbsolutePath())
+                        .arg("-createConstantsWithLookup").arg(target).execute();
                 generated = true;
             }
         }
 
         // constants
-        if ( i18nConstantsBundles != null )
-        {
-            for ( String target : i18nConstantsBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
+        if (i18nConstantsBundles != null) {
+            String[] constantBundles = getFilesFromRegex(i18nConstantsBundles);
+            for (String target : constantBundles) {
+                ensureTargetPackageExists(getGenerateDirectory(), target);
+                new JavaCommand("com.google.gwt.i18n.tools.I18NSync").withinScope(Artifact.SCOPE_COMPILE)
+                        .withinClasspath(getGwtUserJar()).withinClasspath(getGwtDevJar())
+                        .arg("-out", getGenerateDirectory().getAbsolutePath()).arg(target).execute();
                 generated = true;
             }
         }
 
         // messages
-        if ( i18nMessagesBundles != null )
-        {
-            for ( String target : i18nMessagesBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
-                    .execute();
+        if (i18nMessagesBundles != null) {
+            String[] messages = getFilesFromRegex(i18nMessagesBundles);
+            for (String target : messages) {
+                ensureTargetPackageExists(getGenerateDirectory(), target);
+                new JavaCommand("com.google.gwt.i18n.tools.I18NSync").withinScope(Artifact.SCOPE_COMPILE)
+                        .withinClasspath(getGwtUserJar()).withinClasspath(getGwtDevJar())
+                        .arg("-out", getGenerateDirectory().getAbsolutePath()).arg("-createMessages")
+                        .arg(target).execute();
                 generated = true;
             }
         }
 
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
+        if (generated) {
+            getLog().debug("add compile source root " + getGenerateDirectory());
+            addCompileSourceRoot(getGenerateDirectory());
         }
     }
 
-
-    private void setup()
-        throws MojoExecutionException
-    {
-        if ( i18nConstantsWithLookupBundles == null && i18nConstantsWithLookupBundle != null )
-        {
+    private void setup() throws MojoExecutionException {
+        if (i18nConstantsWithLookupBundles == null && i18nConstantsWithLookupBundle != null) {
             i18nConstantsWithLookupBundles = new String[] { i18nConstantsWithLookupBundle };
         }
 
-        if ( i18nConstantsBundles == null && i18nConstantsBundle != null )
-        {
+        if (i18nConstantsBundles == null && i18nConstantsBundle != null) {
             i18nConstantsBundles = new String[] { i18nConstantsBundle };
         }
 
-        if ( i18nMessagesBundles == null && i18nMessagesBundle != null )
-        {
+        if (i18nMessagesBundles == null && i18nMessagesBundle != null) {
             i18nMessagesBundles = new String[] { i18nMessagesBundle };
         }
 
-        if ( i18nMessagesBundles == null && i18nConstantsBundles == null && i18nConstantsWithLookupBundles == null )
-        {
+        if (i18nMessagesBundles == null && i18nConstantsBundles == null
+                && i18nConstantsWithLookupBundles == null) {
             throw new MojoExecutionException(
-                "neither i18nConstantsBundles, i18nMessagesBundles nor i18nConstantsWithLookupBundles present. \n"
-                + "Cannot execute i18n goal" );
+                    "neither i18nConstantsBundles, i18nMessagesBundles nor i18nConstantsWithLookupBundles present. \n"
+                            + "Cannot execute i18n goal");
         }
     }
 
-
-    private void ensureTargetPackageExists( File generateDirectory, String targetName )
-    {
-        targetName = targetName.substring( 0, targetName.lastIndexOf( '.' ) );
-        String targetPackage = targetName.replace( '.', File.separatorChar );
-        getLog().debug( "ensureTargetPackageExists, targetName : " + targetName + ", targetPackage : " + targetPackage );
-        File targetPackageDirectory = new File( generateDirectory, targetPackage );
-        if ( !targetPackageDirectory.exists() )
-        {
+    private void ensureTargetPackageExists(File generateDirectory, String targetName) {
+        targetName = targetName.substring(0, targetName.lastIndexOf('.'));
+        String targetPackage = targetName.replace('.', File.separatorChar);
+        getLog().debug(
+                "ensureTargetPackageExists, targetName : " + targetName + ", targetPackage : "
+                        + targetPackage);
+        File targetPackageDirectory = new File(generateDirectory, targetPackage);
+        if (!targetPackageDirectory.exists()) {
             targetPackageDirectory.mkdirs();
         }
+    }
+
+    private String[] getFilesFromRegex(String[] messages) {
+        // Replace any potential '.' from a package formatted message by a '/'
+        // (not File.separator since ANT uses '/')
+        String[] newMessages = Arrays.copyOf(messages, messages.length);
+        for (int i = 0; i < newMessages.length; i++) {
+            newMessages[i] = newMessages[i].replace('.', '/') + ".properties";
+        }
+
+        // Get the files matching the messages patterns
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setBasedir(getProject().getBuild().getSourceDirectory());
+        ds.setIncludes(newMessages);
+        ds.scan();
+        newMessages = ds.getIncludedFiles();
+
+        // Format the output to a package format (with '.')
+        for (int i = 0; i < newMessages.length; i++) {
+            newMessages[i] = newMessages[i].substring(0, newMessages[i].lastIndexOf('.')).replace(
+                    File.separatorChar, '.');
+        }
+
+        getLog().info(
+                "Wildcard patterns " + Arrays.asList(messages) + " resolved to " + Arrays.asList(newMessages));
+
+        return newMessages;
     }
 
 }
