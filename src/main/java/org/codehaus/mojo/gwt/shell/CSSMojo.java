@@ -147,15 +147,21 @@ public class CSSMojo extends AbstractGwtShellMojo {
         }
 
         // Get the files matching the messages patterns
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir(getProject().getBuild().getSourceDirectory());
-        ds.setIncludes(newMessages);
-        ds.scan();
-        newMessages = ds.getIncludedFiles();
+        for (Resource resource : (List<Resource>) getProject().getResources()) {
+            final File candidate = new File(resource.getDirectory());
+            if (candidate.exists()) {
+                DirectoryScanner ds = new DirectoryScanner();
+                ds.setBasedir(candidate);
+                ds.setIncludes(newMessages);
+                ds.scan();
+                newMessages = ds.getIncludedFiles();
 
-        getLog().info(
-                "Wildcard patterns " + Arrays.asList(messages) + " resolved to " + Arrays.asList(newMessages));
+                getLog().info(
+                        "Wildcard patterns " + Arrays.asList(messages) + " resolved to "
+                                + Arrays.asList(newMessages));
+            }
 
+        }
         return newMessages;
     }
 
