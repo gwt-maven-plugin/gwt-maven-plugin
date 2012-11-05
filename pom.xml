@@ -312,11 +312,6 @@
       <artifactId>plexus-compiler-api</artifactId>
       <version>1.5.3</version>
     </dependency>
-    <dependency>
-      <groupId>org.sonatype.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
-      <version>0.0.7</version>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
