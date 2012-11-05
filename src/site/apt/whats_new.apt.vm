@@ -5,7 +5,7 @@
  Olivier Lamy
  Thomas Broyer
  ------
- 2012-10-08
+ 2012-11-05
  
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -29,15 +29,8 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Update to GWT 2.5.0-rc2
-
- * Add support for <<<codeServerPort>>> option for <<<gwt:run>>> goal. The <<<port>>> configuration for
-   the <<<gwt:run-codeserver>>> goal has been renamed to <<<codeServerPort>>> for consistency; this is
-   a breaking change.
- 
- * GWT's internal check for updates has been re-enabled, the pings are useful to gather usage statistics
+ * Update to GWT 2.5.0
 
  []
 
- Read the {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11860&version=18851}full release notes}} for the list of fixed issues.
 
