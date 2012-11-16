@@ -230,7 +230,7 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts() );
+            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), prependOutputToClasspath() );
 
             if ( getLog().isDebugEnabled() )
             {
@@ -249,7 +249,11 @@ public abstract class AbstractGwtMojo
     }
 
 
-    // FIXME move to GwtDevHelper stuff to avoid duplicates
+    protected boolean prependOutputToClasspath() {
+		return true;
+	}
+
+	// FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
         throws MojoExecutionException
     {

@@ -64,7 +64,7 @@ public class ClasspathBuilder
      */
     @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
-                                                Set<Artifact> artifacts )
+                                                Set<Artifact> artifacts, boolean prependOutputToClasspath )
         throws ClasspathBuilderException
     {
         getLogger().debug( "establishing classpath list (scope = " + scope + ")" );
@@ -77,7 +77,9 @@ public class ClasspathBuilder
         // addSourceWithActiveProject would make some java sources available to GWT compiler that should not be accessible in
         // a non-reactor build, making the build less deterministic and encouraging bad design.
 
-        items.add( new File( project.getBuild().getOutputDirectory() ) );
+        if(prependOutputToClasspath) {
+            items.add( new File( project.getBuild().getOutputDirectory() ) );
+        }
         addSources( items, project.getCompileSourceRoots() );
         addResources( items, project.getResources() );
 
