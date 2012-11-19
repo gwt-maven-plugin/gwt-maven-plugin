@@ -95,8 +95,8 @@ public class MergeWebXmlMojo
     }
 
     @Override
-    protected boolean prependOutputToClasspath() {
-        return false;
+    protected boolean isGenerator() {
+        return true;
     }
 
     
@@ -171,7 +171,7 @@ public class MergeWebXmlMojo
     private ClassLoader getAnnotationSearchClassLoader()
         throws ClasspathBuilderException, MalformedURLException
     {
-        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet(), true );
+        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet(), false );
 
         List<URL> urls = new ArrayList<URL>( classPathFiles.size() );
 

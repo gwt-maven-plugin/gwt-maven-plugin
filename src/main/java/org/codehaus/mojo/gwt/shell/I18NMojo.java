@@ -87,8 +87,8 @@ public class I18NMojo
 
     
     @Override
-    protected boolean prependOutputToClasspath() {
-        return false;
+    protected boolean isGenerator() {
+        return true;
     }
     
     public void doExecute( )

@@ -114,8 +114,8 @@ public class GenerateAsyncMojo
 
     
     @Override
-    protected boolean prependOutputToClasspath() {
-        return false;
+    protected boolean isGenerator() {
+        return true;
     }
     
     /**

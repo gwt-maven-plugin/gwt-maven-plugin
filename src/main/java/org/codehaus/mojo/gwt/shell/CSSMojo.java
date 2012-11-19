@@ -60,8 +60,8 @@ public class CSSMojo
     private String cssFile;
 
     @Override
-    protected boolean prependOutputToClasspath() {
-        return false;
+    protected boolean isGenerator() {
+        return true;
     }
 
     public void doExecute()

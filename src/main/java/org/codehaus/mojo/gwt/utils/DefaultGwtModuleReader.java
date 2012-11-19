@@ -207,7 +207,7 @@ public class DefaultGwtModuleReader
     public Collection<File> getClasspath( String scope )
         throws ClasspathBuilderException
     {
-        Collection<File> files = classpathBuilder.buildClasspathList( mavenProject, scope, mavenProject.getArtifacts(), true );
+        Collection<File> files = classpathBuilder.buildClasspathList( mavenProject, scope, mavenProject.getArtifacts(), false );
 
         if ( log.isDebugEnabled() )
         {

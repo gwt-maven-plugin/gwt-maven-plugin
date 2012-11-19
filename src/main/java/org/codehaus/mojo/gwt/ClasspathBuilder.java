@@ -59,12 +59,13 @@ public class ClasspathBuilder
      * @param project The maven project the Mojo is running for
      * @param artifacts the project artifacts (all scopes)
      * @param scope artifact scope to use
+     * @param isGenerator
      * @return file collection for classpath
      * @throws MojoExecutionException 
      */
     @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
-                                                Set<Artifact> artifacts, boolean prependOutputToClasspath )
+                                                Set<Artifact> artifacts, boolean isGenerator )
         throws ClasspathBuilderException
     {
         getLogger().debug( "establishing classpath list (scope = " + scope + ")" );
@@ -77,12 +78,13 @@ public class ClasspathBuilder
         // addSourceWithActiveProject would make some java sources available to GWT compiler that should not be accessible in
         // a non-reactor build, making the build less deterministic and encouraging bad design.
 
-        if(prependOutputToClasspath) {
+        if(isGenerator==false) {
             items.add( new File( project.getBuild().getOutputDirectory() ) );
         }
         addSources( items, project.getCompileSourceRoots() );
-        addResources( items, project.getResources() );
-
+        if(isGenerator) {
+        	addResources( items, project.getResources() );
+        }
         // Use our own ClasspathElements fitering, as for RUNTIME we need to include PROVIDED artifacts,
         // that is not the default Maven policy, as RUNTIME is used here to build the GWTShell execution classpath
 
