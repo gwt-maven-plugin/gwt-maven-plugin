@@ -94,6 +94,12 @@ public class MergeWebXmlMojo
         super();
     }
 
+    @Override
+    protected boolean prependOutputToClasspath() {
+        return false;
+    }
+
+    
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {

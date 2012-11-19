@@ -112,6 +112,12 @@ public class GenerateAsyncMojo
      */
     private String encoding;
 
+    
+    @Override
+    protected boolean prependOutputToClasspath() {
+        return false;
+    }
+    
     /**
      * {@inheritDoc}
      */

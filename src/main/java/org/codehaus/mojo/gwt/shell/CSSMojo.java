@@ -59,6 +59,11 @@ public class CSSMojo
      */
     private String cssFile;
 
+    @Override
+    protected boolean prependOutputToClasspath() {
+        return false;
+    }
+
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
