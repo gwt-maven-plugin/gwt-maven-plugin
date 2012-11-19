@@ -230,7 +230,7 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts() );
+            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
 
             if ( getLog().isDebugEnabled() )
             {
@@ -249,7 +249,14 @@ public abstract class AbstractGwtMojo
     }
 
 
-    // FIXME move to GwtDevHelper stuff to avoid duplicates
+    /**
+     * Whether to use processed resources and compiled classes ({@code false}), or raw resources ({@code true }).
+     */
+    protected boolean isGenerator() {
+        return false;
+    }
+
+	// FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
         throws MojoExecutionException
     {
