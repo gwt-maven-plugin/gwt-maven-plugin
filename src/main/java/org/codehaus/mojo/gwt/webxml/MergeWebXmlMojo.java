@@ -94,6 +94,12 @@ public class MergeWebXmlMojo
         super();
     }
 
+    @Override
+    protected boolean isGenerator() {
+        return true;
+    }
+
+    
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -165,7 +171,7 @@ public class MergeWebXmlMojo
     private ClassLoader getAnnotationSearchClassLoader()
         throws ClasspathBuilderException, MalformedURLException
     {
-        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet() );
+        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet(), false );
 
         List<URL> urls = new ArrayList<URL>( classPathFiles.size() );
 

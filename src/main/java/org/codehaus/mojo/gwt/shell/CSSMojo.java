@@ -59,6 +59,11 @@ public class CSSMojo
      */
     private String cssFile;
 
+    @Override
+    protected boolean isGenerator() {
+        return true;
+    }
+
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {

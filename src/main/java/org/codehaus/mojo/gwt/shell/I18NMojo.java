@@ -85,6 +85,12 @@ public class I18NMojo
      */
     private String i18nConstantsWithLookupBundle;
 
+    
+    @Override
+    protected boolean isGenerator() {
+        return true;
+    }
+    
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
