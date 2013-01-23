@@ -107,7 +107,7 @@ public class TestMojo
     private boolean productionMode;
 
     /**
-     * Configure test mode. Can be set to "manual", "htmlunit", "selenium" or "remoteweb".
+     * Configure test mode. Can be set to "manual", "htmlunit", "selenium", "remoteweb" or "custom".
      * 
      * @parameter expression="${gwt.test.mode}" default-value="manual"
      */
@@ -141,6 +141,22 @@ public class TestMojo
      * @parameter expression="${gwt.test.remoteweb}"
      */
     private String remoteweb;
+    
+    /**
+     * Configure run style class for custom mode. The value must describe a fully qualified class name.
+     * 
+     * @see http://code.google.com/p/google-web-toolkit/source/browse/trunk/user/src/com/google/gwt/junit/JUnitShell.java?r=8421#306
+     * @parameter expression="${gwt.test.customclass}"
+     */
+    private String customClass;
+    
+    /**
+     * Configure an argument for the custom run style if needed.
+     * 
+     * @see http://code.google.com/p/google-web-toolkit/source/browse/trunk/user/src/com/google/gwt/junit/JUnitShell.java?r=8421#306
+     * @parameter expression="${gwt.test.customarg}"
+     */
+    private String customArgument;
 
     /**
      * Time out (in seconds) for test execution in dedicated JVM
@@ -322,6 +338,10 @@ public class TestMojo
         else if ( mode.equalsIgnoreCase( "remoteweb" ) )
         {
             sb.append( " -runStyle RemoteWeb:" + remoteweb );
+        }
+        else if ( mode.equalsIgnoreCase( "custom" ) )
+        {
+        	sb.append( " -runStyle " + customClass + ":" + customArgument );
         }
         if ( quirksMode )
         {
