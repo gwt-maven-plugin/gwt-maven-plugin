@@ -112,12 +112,12 @@ public class GenerateAsyncMojo
      */
     private String encoding;
 
-    
     @Override
-    protected boolean isGenerator() {
+    protected boolean isGenerator()
+    {
         return true;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -129,9 +129,9 @@ public class GenerateAsyncMojo
 
         if ( "pom".equals( getProject().getPackaging() ) )
         {
-    		getLog().info( "GWT generateAsync is skipped" );
-    		return;
-    	}
+            getLog().info( "GWT generateAsync is skipped" );
+            return;
+        }
 
         if ( encoding == null )
         {
@@ -247,11 +247,17 @@ public class GenerateAsyncMojo
         JavaMethod[] methods = clazz.getMethods( true );
         for ( JavaMethod method : methods )
         {
+            boolean deprecated = isDeprecated( method );
+
             writer.println( "" );
             writer.println( "    /**" );
             writer.println( "     * GWT-RPC service  asynchronous (client-side) interface" );
             writer.println( "     * @see " + clazz.getFullyQualifiedName() );
+            if ( deprecated )
+                writer.println( "     * @deprecated" );
             writer.println( "     */" );
+            if ( deprecated )
+                writer.println( "    @Deprecated" );
             if ( returnRequest )
             {
                 writer.print( "    com.google.gwt.http.client.Request " + method.getName() + "( " );
@@ -272,7 +278,7 @@ public class GenerateAsyncMojo
                 writer.print( method.getParameterTypes( true )[j].getGenericValue() );
                 if ( param.getType().getDimensions() != method.getParameterTypes( true )[j].getDimensions() )
                 {
-                    for ( int dimensions = 0 ; dimensions < param.getType().getDimensions(); dimensions++ )
+                    for ( int dimensions = 0; dimensions < param.getType().getDimensions(); dimensions++ )
                     {
                         writer.print( "[]" );
                     }
@@ -339,8 +345,10 @@ public class GenerateAsyncMojo
         writer.println( "            if ( instance == null )" );
         writer.println( "            {" );
         writer.println( "                instance = (" + className + "Async) GWT.create( " + className + ".class );" );
-        if (uri != null) {
-            // null is used as a marker for the presence of a @RemoteServiceRelativePath annotation, which is handled by the GWT generator
+        if ( uri != null )
+        {
+            // null is used as a marker for the presence of a @RemoteServiceRelativePath annotation, which is handled by
+            // the GWT generator
             writer.println( "                ServiceDefTarget target = (ServiceDefTarget) instance;" );
             writer.println( "                target.setServiceEntryPoint( GWT.getModuleBaseURL() + \"" + uri + "\" );" );
         }
@@ -363,7 +371,7 @@ public class GenerateAsyncMojo
         return javaClass.isInterface() && javaClass.isPublic() && javaClass.isA( REMOTE_SERVICE_INTERFACE );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private JavaDocBuilder createJavaDocBuilder()
         throws MojoExecutionException
     {
@@ -372,7 +380,7 @@ public class GenerateAsyncMojo
             JavaDocBuilder builder = new JavaDocBuilder();
             builder.setEncoding( encoding );
             builder.getClassLibrary().addClassLoader( getProjectClassLoader() );
-            for ( String sourceRoot : ( List < String > ) getProject().getCompileSourceRoots() )
+            for ( String sourceRoot : (List<String>) getProject().getCompileSourceRoots() )
             {
                 builder.getClassLibrary().addSourceFolder( new File( sourceRoot ) );
             }
@@ -392,6 +400,27 @@ public class GenerateAsyncMojo
     {
         String className = sourceFile.substring( 0, sourceFile.length() - 5 ); // strip ".java"
         return className.replace( File.separatorChar, '.' );
+    }
+
+    /**
+     * Determine if a client service method is deprecated.
+     * 
+     * @see MGWT-352
+     */
+    private boolean isDeprecated( JavaMethod method )
+    {
+        if ( method == null )
+            return false;
+
+        for ( Annotation annotation : method.getAnnotations() )
+        {
+            if ( "java.lang.Deprecated".equals( annotation.getType().getFullyQualifiedName() ) )
+            {
+                return true;
+            }
+        }
+
+        return method.getTagByName( "deprecated" ) != null;
     }
 
     /**
