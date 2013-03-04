@@ -107,7 +107,9 @@ public class TestMojo
     private boolean productionMode;
 
     /**
-     * Configure test mode. Can be set to "manual", "htmlunit", "selenium" or "remoteweb".
+     * Configure test mode. Can be set to "manual", "htmlunit", "selenium" or "remoteweb". If set
+     * to any other value, that value will be passed as the <code>-runStyle</code> argument,
+     * allowing you to use an arbitrary RunStyle when running tests.
      * 
      * @parameter expression="${gwt.test.mode}" default-value="manual"
      */
@@ -322,6 +324,10 @@ public class TestMojo
         else if ( mode.equalsIgnoreCase( "remoteweb" ) )
         {
             sb.append( " -runStyle RemoteWeb:" + remoteweb );
+        }
+        else if ( !mode.trim().isEmpty() )
+        {
+            sb.append( " -runStyle " + mode );
         }
         if ( quirksMode )
         {
