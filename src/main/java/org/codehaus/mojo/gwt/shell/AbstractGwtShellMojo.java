@@ -177,6 +177,10 @@ public abstract class AbstractGwtShellMojo
 
     protected String getExtraJvmArgs()
     {
+      String systemPropertyOverride = System.getProperty("gwt.extraJvmArgs");
+      if (systemPropertyOverride != null && systemPropertyOverride.length() > 0) {
+        return systemPropertyOverride;
+      }
         return extraJvmArgs;
     }
 
