@@ -20,8 +20,9 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -30,7 +31,9 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.cli.StreamConsumer;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * Creates CSS interfaces for css files.
@@ -58,6 +61,14 @@ public class CSSMojo
      * @parameter
      */
     private String cssFile;
+
+    /**
+     * @parameter expression="${project.build.sourceEncoding}"
+     */
+    private String encoding;
+
+    /** @component */
+    private BuildContext buildContext;
 
     @Override
     protected boolean isGenerator() {
@@ -94,6 +105,14 @@ public class CSSMojo
                     final File candidate = new File( resource.getDirectory(), file );
                     if ( candidate.exists() )
                     {
+                        if ( buildContext.isUptodate( javaOutput, candidate ) )
+                        {
+                            getLog().debug( javaOutput.getAbsolutePath() + " is up to date. Generation skipped" );
+                            // up to date, but still need to report generated-sources directory as sourceRoot
+                            generated = true;
+                            break;
+                        }
+
                         getLog().info( "Generating " + javaOutput + " with typeName " + typeName );
                         ensureTargetPackageExists( getGenerateDirectory(), typeName );
 
@@ -109,10 +128,14 @@ public class CSSMojo
                             .arg( candidate.getAbsolutePath() )
                             .withinClasspath( getGwtDevJar() )
                             .withinClasspath( getGwtUserJar() )
-                            .execute();                            
-                            final FileWriter outputWriter = new FileWriter( javaOutput );
-                            outputWriter.write( content.toString() );
-                            outputWriter.close();
+                            .execute();
+                            final OutputStreamWriter outputWriter =
+                                new OutputStreamWriter( buildContext.newFileOutputStream( javaOutput ) , encoding );
+                            try {
+                                outputWriter.write( content.toString() );
+                            } finally {
+                                IOUtil.close( outputWriter );
+                            }
                         }
                         catch ( IOException e )
                         {
@@ -139,14 +162,17 @@ public class CSSMojo
     }
 
     private void setup()
-
-        throws MojoExecutionException
     {
+        if ( encoding == null )
+        {
+            getLog().warn( "Encoding is not set, your build will be platform dependent" );
+            encoding = Charset.defaultCharset().name();
+        }
+
         if ( cssFiles == null && cssFile != null )
         {
             cssFiles = new String[] { cssFile };
         }
-
     }
 
     private void ensureTargetPackageExists( File generateDirectory, String targetName )

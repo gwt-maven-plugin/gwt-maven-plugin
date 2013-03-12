@@ -34,7 +34,8 @@ import java.util.Map;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.Scanner;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.Annotation;
@@ -112,6 +113,9 @@ public class GenerateAsyncMojo
      */
     private String encoding;
 
+    /** @component */
+    private BuildContext buildContext;
+
     @Override
     protected boolean isGenerator()
     {
@@ -173,8 +177,7 @@ public class GenerateAsyncMojo
     private boolean scanAndGenerateAsync( File sourceRoot, JavaDocBuilder builder )
         throws Exception
     {
-        DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( sourceRoot );
+        Scanner scanner = buildContext.newScanner( sourceRoot );
         scanner.setIncludes( new String[] { servicePattern } );
         scanner.scan();
         String[] sources = scanner.getIncludedFiles();
@@ -187,7 +190,7 @@ public class GenerateAsyncMojo
         {
             File sourceFile = new File( sourceRoot, source );
             File targetFile = getTargetFile( source );
-            if ( isUpToDate( sourceFile, targetFile ) )
+            if ( !force && buildContext.isUptodate( targetFile, sourceFile ) )
             {
                 getLog().debug( targetFile.getAbsolutePath() + " is up to date. Generation skipped" );
                 // up to date, but still need to report generated-sources directory as sourceRoot
@@ -206,11 +209,6 @@ public class GenerateAsyncMojo
             }
         }
         return fileGenerated;
-    }
-
-    private boolean isUpToDate( File sourceFile, File targetFile )
-    {
-        return !force && targetFile.exists() && targetFile.lastModified() > sourceFile.lastModified();
     }
 
     private File getTargetFile( String source )
