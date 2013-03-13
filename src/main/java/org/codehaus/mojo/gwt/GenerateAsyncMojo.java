@@ -27,12 +27,12 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -129,8 +129,6 @@ public class GenerateAsyncMojo
     public void execute()
         throws MojoExecutionException
     {
-        getLog().debug( "GenerateAsyncMojo#execute()" );
-
         if ( "pom".equals( getProject().getPackaging() ) )
         {
             getLog().info( "GWT generateAsync is skipped" );
@@ -373,25 +371,14 @@ public class GenerateAsyncMojo
     private JavaDocBuilder createJavaDocBuilder()
         throws MojoExecutionException
     {
-        try
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.setEncoding( encoding );
+        builder.getClassLibrary().addClassLoader( getProjectClassLoader() );
+        for ( String sourceRoot : (List<String>) getProject().getCompileSourceRoots() )
         {
-            JavaDocBuilder builder = new JavaDocBuilder();
-            builder.setEncoding( encoding );
-            builder.getClassLibrary().addClassLoader( getProjectClassLoader() );
-            for ( String sourceRoot : (List<String>) getProject().getCompileSourceRoots() )
-            {
-                builder.getClassLibrary().addSourceFolder( new File( sourceRoot ) );
-            }
-            return builder;
+            builder.getClassLibrary().addSourceFolder( new File( sourceRoot ) );
         }
-        catch ( MalformedURLException e )
-        {
-            throw new MojoExecutionException( "Failed to resolve project classpath", e );
-        }
-        catch ( DependencyResolutionRequiredException e )
-        {
-            throw new MojoExecutionException( "Failed to resolve project classpath", e );
-        }
+        return builder;
     }
 
     private String getTopLevelClassName( String sourceFile )
@@ -421,32 +408,23 @@ public class GenerateAsyncMojo
         return method.getTagByName( "deprecated" ) != null;
     }
 
-    /**
-     * @return the project classloader
-     * @throws DependencyResolutionRequiredException failed to resolve project dependencies
-     * @throws MalformedURLException configuration issue ?
-     */
-    protected ClassLoader getProjectClassLoader()
-        throws DependencyResolutionRequiredException, MalformedURLException
+    private ClassLoader getProjectClassLoader() throws MojoExecutionException
     {
-        getLog().debug( "AbstractMojo#getProjectClassLoader()" );
-
-        List<?> compile = getProject().getCompileClasspathElements();
-        URL[] urls = new URL[compile.size()];
-        int i = 0;
-        for ( Object object : compile )
+        Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
+        URL[] urls = new URL[classpath.size()];
+        try
         {
-            if ( object instanceof Artifact )
+            int i = 0;
+            for ( File classpathFile : classpath )
             {
-                urls[i] = ( (Artifact) object ).getFile().toURI().toURL();
+                urls[i] = classpathFile.toURI().toURL();
+                i++;
             }
-            else
-            {
-                urls[i] = new File( (String) object ).toURI().toURL();
-            }
-            i++;
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
         }
         return new URLClassLoader( urls, ClassLoader.getSystemClassLoader() );
     }
-
 }
