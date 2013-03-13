@@ -92,14 +92,6 @@ public class CSSMojo
                     substring( 0, file.lastIndexOf( '.' ) ).replace( File.separatorChar, '.' );
                 final File javaOutput =
                     new File( getGenerateDirectory(), typeName.replace( '.', File.separatorChar ) + ".java" );
-                final StringBuilder content = new StringBuilder();
-                out = new StreamConsumer()
-                {
-                    public void consumeLine( String line )
-                    {
-                        content.append( line ).append( SystemUtils.LINE_SEPARATOR );
-                    }
-                };
                 for ( Resource resource : (List<Resource>) getProject().getResources() )
                 {
                     final File candidate = new File( resource.getDirectory(), file );
@@ -119,16 +111,28 @@ public class CSSMojo
                         
                         try
                         {
+                            final StringBuilder content = new StringBuilder();
+                            out = new StreamConsumer()
+                            {
+                                public void consumeLine( String line )
+                                {
+                                    content.append( line ).append( SystemUtils.LINE_SEPARATOR );
+                                }
+                            };
                             new JavaCommand( "com.google.gwt.resources.css.InterfaceGenerator" )
-                            .withinScope( Artifact.SCOPE_COMPILE )
-                            .arg( "-standalone" )
-                            .arg( "-typeName" )
-                            .arg( typeName )
-                            .arg( "-css" )
-                            .arg( candidate.getAbsolutePath() )
-                            .withinClasspath( getGwtDevJar() )
-                            .withinClasspath( getGwtUserJar() )
-                            .execute();
+                                .withinScope( Artifact.SCOPE_COMPILE )
+                                .arg( "-standalone" )
+                                .arg( "-typeName" )
+                                .arg( typeName )
+                                .arg( "-css" )
+                                .arg( candidate.getAbsolutePath() )
+                                .withinClasspath( getGwtDevJar() )
+                                .withinClasspath( getGwtUserJar() )
+                                .execute();
+                            if ( content.length() == 0 )
+                            {
+                                throw new MojoExecutionException( "cannot generate java source from file " + file + "." );
+                            }
                             final OutputStreamWriter outputWriter =
                                 new OutputStreamWriter( buildContext.newFileOutputStream( javaOutput ) , encoding );
                             try {
@@ -144,11 +148,6 @@ public class CSSMojo
                         generated = true;
                         break;
                     }
-                }
-                
-                if ( content.length() == 0 )
-                {
-                    throw new MojoExecutionException( "cannot generate java source from file " + file + "." );
                 }
             }
         }
