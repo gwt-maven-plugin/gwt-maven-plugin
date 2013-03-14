@@ -19,8 +19,10 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -224,7 +226,8 @@ public class GenerateAsyncMojo
     private void generateAsync( JavaClass clazz, File targetFile )
         throws IOException
     {
-        PrintWriter writer = new PrintWriter( targetFile, encoding );
+        PrintWriter writer = new PrintWriter( new BufferedWriter(
+            new OutputStreamWriter( buildContext.newFileOutputStream( targetFile ), encoding ) ) );
 
         String className = clazz.getName();
         if ( clazz.getPackage() != null )
