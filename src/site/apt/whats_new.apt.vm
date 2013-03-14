@@ -30,9 +30,13 @@
 What's new in gwt-maven-plugin ${project.version}
 
  * Updated to GWT 2.5.1
+
  * <<<generateAsync>>> propagates <<<@Deprecated>>> annotations to the generated async interface's methods [{{{https://jira.codehaus.org/browse/MGWT-352}MGWT-352}}]
+
  * Support for arbitrary <<<runStyle>>> in <<<gwt:test>>> [{{{https://jira.codehaus.org/browser/MGWT-351}MGWT-351}}]
+
  * <<<gwt:generateAsync>>> and <<<gwt:css>>> are M2Eclipse-ready [{{{https://jira.codehaus.org/browse/MGWT-326}MGWT-326}}]
+
  * <<<gwt:generateAsync>>> no longer skip generics when a compiled version of the class is already in the <<<outputDirectory>>> [{{{https://jira.codehaus.org/browse/MGWT-315}MGWT-315}}]
 
  []
