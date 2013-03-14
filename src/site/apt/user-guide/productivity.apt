@@ -4,7 +4,7 @@
  Jesper Terkelsen
  Olivier Lamy
  ------
- 2010-11-26
+ 2013-03-14
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -61,8 +61,8 @@ Productivity tip for multi-project setup
 
 * Solution
 
-  The solution to those two issues is to create a profile in your pom (or settings.xml)
-  which is only activated when you run the <<<gwt:run>>> target :
+  The solution to those two issues is to create a profile in your pom
+  which you'd only activate when you run the <<<gwt:run>>> target:
 
 +---
 <profile>
