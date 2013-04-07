@@ -237,8 +237,13 @@ public class GenerateAsyncMojo
         }
         writer.println( "import com.google.gwt.core.client.GWT;" );
         writer.println( "import com.google.gwt.user.client.rpc.AsyncCallback;" );
-        writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
-
+        
+	// prevent unused import warnings
+	if ( uri != null )
+        {
+	    writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );	
+	}
+	
         writer.println();
         writer.println( "public interface " + className + "Async" );
         writer.println( "{" );
@@ -357,7 +362,7 @@ public class GenerateAsyncMojo
         writer.println( "" );
         writer.println( "        private Util()" );
         writer.println( "        {" );
-        writer.println( "            // Utility class should not be instanciated" );
+        writer.println( "            // Utility class should not be instantiated" );
         writer.println( "        }" );
         writer.println( "    }" );
 
