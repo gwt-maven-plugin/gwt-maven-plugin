@@ -239,6 +239,7 @@ public class GenerateAsyncMojo
         writer.println( "import com.google.gwt.user.client.rpc.AsyncCallback;" );
         
 	// prevent unused import warnings
+	String uri = MessageFormat.format( rpcPattern, className );
 	if ( uri != null )
         {
 	    writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );	
@@ -322,7 +323,7 @@ public class GenerateAsyncMojo
 
         writer.println();
 
-        String uri = MessageFormat.format( rpcPattern, className );
+
         if ( clazz.getAnnotations() != null )
         {
             for ( Annotation annotation : clazz.getAnnotations() )
