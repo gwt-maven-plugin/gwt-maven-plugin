@@ -301,6 +301,7 @@ public class TestMojo
     {
         StringBuilder sb = new StringBuilder();
         sb.append( "-out " ).append( out );
+        sb.append( " -logLevel " ).append( getLogLevel() );
         if ( webMode )
         {
             sb.append( " -web" );
