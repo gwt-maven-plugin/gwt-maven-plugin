@@ -259,12 +259,14 @@ public class EclipseMojo
                 page += "?" + additionalPageParameters;
             }
 
+            context.put( "noserver", !noserver ? "true" : "false" );
+            context.put( "port", "" + port );
             context.put( "modulePath", readModule( module ).getPath() );
             context.put( "page", page );
             int basedir = getProject().getBasedir().getAbsolutePath().length();
             context.put( "out", getOutputDirectory().getAbsolutePath().substring( basedir + 1 ) );
             context.put( "war", hostedWebapp.getAbsolutePath().substring( basedir + 1 ) );
-            String args = noserver ? "-noserver -port " + port : "";
+            String args = noserver ? "-noserver" : " -port " + port;
             if ( blacklist != null )
             {
                 args += " -blacklist " + blacklist;
