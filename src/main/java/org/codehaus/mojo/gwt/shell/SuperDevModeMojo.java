@@ -77,7 +77,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         }
 
         cmd.withinScope( Artifact.SCOPE_COMPILE );
-        addCompileSourceArtifacts( cmd );
         addPersistentUnitCache(cmd);
 
         if ( !gwtSdkFirstInClasspath )

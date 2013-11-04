@@ -278,8 +278,6 @@ public class TestMojo
                        .withinClasspath( getGwtDevJar() );
                 }
 
-                addCompileSourceArtifacts( cmd );
-
                 cmd.arg( test );
                 cmd.systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() );
                 cmd.systemProperty( "gwt.args", getGwtArgs() );

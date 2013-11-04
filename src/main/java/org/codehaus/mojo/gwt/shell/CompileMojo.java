@@ -341,7 +341,6 @@ public class CompileMojo
             cmd.arg( "-compileReport" );
         }
 
-        addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
         addArgumentGen( cmd );
         addPersistentUnitCache(cmd);
