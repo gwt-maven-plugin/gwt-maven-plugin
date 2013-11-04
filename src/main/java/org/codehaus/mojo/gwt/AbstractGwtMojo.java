@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +52,7 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Abstract Support class for all GWT-related operations.
@@ -172,6 +175,23 @@ public abstract class AbstractGwtMojo
      */
     protected boolean gwtSdkFirstInClasspath;
 
+    /**
+     * 
+     * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
+     * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
+     * GWT. The plugin will download the source.jar if necessary.
+     * 
+     * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
+     * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
+     * desirable).
+     * 
+     * 
+     * @parameter
+     */
+    private String[] compileSourcesArtifacts;
+
+    protected List<File> compileSourcesArtifactsResolved = new ArrayList<File>();
+    
     public File getOutputDirectory()
     {
         return inplace ? warSourceDirectory : webappDirectory;
@@ -231,7 +251,8 @@ public abstract class AbstractGwtMojo
         try
         {
             Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
-
+            updateCompileSourceArtifacts();
+            files.addAll(compileSourcesArtifactsResolved);
             if ( getLog().isDebugEnabled() )
             {
                 getLog().debug( "GWT SDK execution classpath :" );
@@ -472,5 +493,52 @@ public abstract class AbstractGwtMojo
         return artifacts;
     }
 
+    /**
+     * Add sources.jar artifacts for project dependencies listed as compileSourcesArtifacts. This is a GWT hack to avoid
+     * packaging java source files into JAR when sharing code between server and client. Typically, some domain model
+     * classes or business rules may be packaged as a separate Maven module. With GWT packaging this requires to
+     * distribute such classes with code, that may not be desirable.
+     * <p>
+     * The hack can also be used to include utility code from external libraries that may not have been designed for
+     * GWT.
+     */
+    protected void updateCompileSourceArtifacts() throws MojoExecutionException {
+        if (this.compileSourcesArtifacts == null || compileSourcesArtifactsResolved.size() > 0)
+        {
+            return;
+        }
+        for (String include : this.compileSourcesArtifacts)
+        {
+            List<String> parts = new ArrayList<String>();
+            parts.addAll(Arrays.asList(include.split(":")));
+            if (parts.size() == 2)
+            {
+                // type is optional as it will mostly be "jar"
+                parts.add("jar");
+            }
+            String dependencyId = StringUtils.join(parts.iterator(), ":");
+            boolean found = false;
+
+            for (Artifact artifact : getProjectArtifacts())
+            {
+                getLog().debug("compare " + dependencyId + " with " + artifact.getDependencyConflictId());
+                if (artifact.getDependencyConflictId().equals(dependencyId))
+                {
+                    getLog().debug("Add " + dependencyId + " sources.jar artifact to compile classpath");
+                    Artifact sources =
+                            resolve(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                                    "jar", "sources");
+                    compileSourcesArtifactsResolved.add(sources.getFile());
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                getLog().warn(
+                        "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId);
+            }
+        }
+     	
+    }
 
 }
