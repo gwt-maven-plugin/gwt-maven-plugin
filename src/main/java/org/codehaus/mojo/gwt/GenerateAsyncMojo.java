@@ -137,6 +137,15 @@ public class GenerateAsyncMojo
             return;
         }
 
+        // add the generated source into compile source
+        // do this step first to ensure the source folder will be added to the Eclipse classpath
+        // Solution inspired by CXF codegen plugin 
+        if (getProject() != null && getGenerateDirectory() != null) {
+            getLog().info( "Anticipate addition of generated directory for automatic integration in eclipse" );
+            getProject().addCompileSourceRoot(getGenerateDirectory().getAbsolutePath());
+        }
+
+
         if ( encoding == null )
         {
             getLog().warn( "Encoding is not set, your build will be platform dependent" );
