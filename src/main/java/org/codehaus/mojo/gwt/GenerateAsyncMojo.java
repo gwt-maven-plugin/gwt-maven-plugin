@@ -171,7 +171,7 @@ public class GenerateAsyncMojo
                 }
             }
         }
-    }
+        }
 
     /**
      * @param sourceRoot the base directory to scan for RPC services
