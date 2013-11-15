@@ -94,12 +94,10 @@ public class CompileMojo
     private boolean enableAssertions;
 
     /**
-     * Logs output in a graphical tree view.
-     * <p>
-     * Can be set from command line using '-Dgwt.treeLogger=true'.
-     * </p>
+     * Ignored.
      *
      * @parameter default-value="false" expression="${gwt.treeLogger}"
+     * @deprecated
      */
     private boolean treeLogger;
 
@@ -305,7 +303,6 @@ public class CompileMojo
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
             // optional advanced arguments
             .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
-            .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
             .arg( disableClassMetadata, "-XdisableClassMetadata" )
             .arg( disableCastChecking, "-XdisableCastChecking" )
             .arg( disableRunAsync, "-XdisableRunAsync" )
@@ -315,6 +312,7 @@ public class CompileMojo
             .arg( compilerMetrics, "-XcompilerMetrics" )
             .arg( disableAggressiveOptimization, "-XdisableAggressiveOptimization" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) );
+            .arg( validateOnly, "-validateOnly" )
 
 
         if ( optimizationLevel >= 0 )

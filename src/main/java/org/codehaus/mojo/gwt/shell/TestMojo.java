@@ -117,10 +117,10 @@ public class TestMojo
 
     /**
      * Configure options to run tests with HTMLUnit. The value must descrivbe the browser emulation
-     * to be used, FF2, FF3, IE6, IE7, or IE8 (possible multiple values separated by comas).
+     * to be used, FF17, IE8, IE9 or Chrome (possible multiple values separated by comas).
      * 
      * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTestingHtmlUnit.html
-     * @parameter expression="${gwt.test.htmlunit}" default-value="FF3"
+     * @parameter expression="${gwt.test.htmlunit}" default-value="FF17"
      */
     private String htmlunit;
 
@@ -300,7 +300,7 @@ public class TestMojo
     protected String getGwtArgs()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( "-out " ).append( out );
+        sb.append( "-war " ).append( out );
         sb.append( " -logLevel " ).append( getLogLevel() );
         if ( webMode )
         {
