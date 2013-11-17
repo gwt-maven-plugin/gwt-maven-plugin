@@ -1,4 +1,6 @@
-package fr.salvadordiaz.gwt.client;
+package fr.salvadordiaz.gwt;
+
+import fr.salvadordiaz.gwt.client.FailTestGwt;
 
 import com.google.gwt.junit.tools.GWTTestSuite;
 
