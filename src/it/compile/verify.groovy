@@ -29,6 +29,7 @@ assert new File(basedir, 'target/workDir/org.codehaus.mojo.gwt.test.Hello').exis
 assert new File(basedir, 'target/deploy').exists();
 assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 assert new File(basedir, 'target/persistentunitcache').exists();
+// assert new File(basedir, 'target/savedSources').exists();
 
 assert !new File(basedir, 'target/.generated').exists();
 
@@ -43,5 +44,12 @@ assert content.contains( '-XclosureCompiler' );
 assert content.contains( '-XnoaggressiveOptimizations' );
 assert content.contains( '-XcompilerMetrics' );
 assert content.contains( '-XfragmentCount 2' );
+assert content.contains( '-XnoclusterFunctions' );
+assert content.contains( '-XenforceStrictResources' );
+assert content.contains( '-XnoinlineLiteralParameters' );
+assert content.contains( '-XnooptimizeDataflow' );
+assert content.contains( '-XnoordinalizeEnums' );
+assert content.contains( '-XnoremoveDuplicateFunctions' );
+assert content.contains( '-sourceLevel 6' );
   
 return true;

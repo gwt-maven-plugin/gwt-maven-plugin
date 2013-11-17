@@ -264,6 +264,87 @@ public class CompileMojo
      */
     private int fragmentCount;
 
+    /**
+     * EXPERIMENTAL: Cluster similar functions in the output to improve compression.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.clusterFunctions}"
+     * @since 2.6.0-rc1
+     */
+    private boolean clusterFunctions;
+
+    /**
+     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public" for
+     * modules that don't define any dependencies.
+     *
+     * @parameter default-value="false" expression="${gwt.compiler.enforceStrictResources}"
+     * @since 2.6.0-rc1
+     */
+    private boolean enforceStrictResources;
+
+    /**
+     * EXPERIMENTAL: Inline literal parameters to shrink function declarations and
+     * provide more deadcode elimination possibilities.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.inlineLiteralParameters}"
+     * @since 2.6.0-rc1
+     */
+    private boolean inlineLiteralParameters;
+
+    /**
+     * EXPERIMENTAL: Analyze and optimize dataflow.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.optimizeDataflow}"
+     * since 2.6.0-rc1
+     */
+    private boolean optimizeDataflow;
+
+    /**
+     * EXPERIMENTAL: Ordinalize enums to reduce some large strings.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.ordinalizeEnums}"
+     * @since 2.6.0-rc1
+     */
+    private boolean ordinalizeEnums;
+
+    /**
+     * EXPERIMENTAL: Removing duplicate functions.
+     * <p>
+     * Will interfere with stacktrace deobfuscation and so is only honored when compiler.stackMode is set to strip.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.removeDuplicateFunctions}"
+     * @since 2.6.0-rc1
+     */
+    private boolean removeDuplicateFunctions;
+
+    /**
+     * Enables saving source code needed by debuggers.
+     *
+     * @parameter default-value="false" expression="${gwt.saveSource}"
+     * @since 2.6.0-rc1
+     */
+    private boolean saveSource;
+
+    /**
+     * Overrides where source files useful to debuggers will be written.
+     * <p>
+     * Default: saved with extras.
+     *
+     * @parameter
+     * @since 2.6.0-rc2
+     */
+// Erroneously missing in 2.6.0-rc1
+//    private File saveSourceOutput;
+
+    /**
+     * Specifies Java source level.
+     * <p>
+     * The default value depends on the JVM used to launch Maven.
+     *
+     * @parameter expression="${maven.compiler.source}"
+     * @since 2.6.0-rc1
+     */
+    private String sourceLevel = System.getProperty("java.specification.version");
+
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
@@ -318,15 +399,27 @@ public class CompileMojo
             .experimentalFlag( "compilerMetrics", compilerMetrics )
             .experimentalFlag( "aggressiveOptimizations", !disableAggressiveOptimization )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
+            .experimentalFlag( "clusterFunctions", clusterFunctions )
+            .experimentalFlag( "enforceStrictResources", enforceStrictResources )
+            .experimentalFlag( "inlineLiteralParameters", inlineLiteralParameters )
+            .experimentalFlag( "optimizeDataflow", optimizeDataflow )
+            .experimentalFlag( "ordinalizeEnums", ordinalizeEnums )
+            .experimentalFlag( "removeDuplicateFunctions", removeDuplicateFunctions )
+            .flag( "saveSource", saveSource )
+            .arg( "-sourceLevel", sourceLevel )
         ;
 
+//        if ( saveSourceOutput != null )
+//        {
+//            cmd.arg( "-saveSourceOutput", saveSourceOutput.getAbsolutePath() );
+//        }
 
         if ( optimizationLevel >= 0 )
         {
             cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
         }
 
-        if ( extraParam || compileReport )
+        if ( extraParam || compileReport || saveSource ) // Should be: ( saveSource && saveSourceOutput == null )
         {
             getLog().debug( "create extra directory " );
             if ( !extra.exists() )

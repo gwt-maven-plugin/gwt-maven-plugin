@@ -31,7 +31,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.surefire.report.ReporterManager;
-import org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo.JavaCommand;
 import org.codehaus.mojo.gwt.test.MavenTestRunner;
 import org.codehaus.mojo.gwt.test.TestTemplate;
 import org.codehaus.plexus.util.StringUtils;
@@ -95,6 +94,7 @@ public class TestMojo
      * run tests using web mode rather than developer (a.k.a. hosted) mode
      * 
      * @parameter default-value=false expression="${gwt.test.web}"
+     * @deprecated Use productionMode instead.
      */
     private boolean webMode;
 
@@ -207,6 +207,185 @@ public class TestMojo
      */
     private String batch;
 
+    /**
+     * Causes the log window and browser windows to be displayed; useful for debugging.
+     * 
+     * @parameter default-value="false" expression="${gwt.test.showUi}"
+     * @since 2.6.0-rc1
+     */
+    private boolean showUi;
+
+    /**
+     * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
+     *
+     * @parameter
+     * @since 2.6.0-rc1
+     */
+    private File workDir;
+
+    /**
+     * Logs to a file in the given directory
+     * 
+     * @parameter
+     * @since 2.6.0-rc1
+     */
+    private File logDir;
+
+    /**
+     * Specifies Java source level.
+     * <p>
+     * The default value depends on the JVM used to launch Maven.
+     *
+     * @parameter expression="${maven.compiler.source}"
+     * @since 2.6.0-rc1
+     */
+    private String sourceLevel = System.getProperty("java.specification.version");
+
+    /**
+     * Whether or not to enable assertions in generated scripts (-checkAssertions).
+     *
+     * @parameter alias="enableAssertions" default-value="false"
+     * @since 2.6.0-rc1
+     */
+    private boolean checkAssertions;
+
+    /**
+     * EXPERIMENTAL: Disables some java.lang.Class methods (e.g. getName()).
+     * <p>
+     * Can be set from command line using '-Dgwt.disableClassMetadata=true'.
+     * </p>
+     *
+     * @parameter default-value="false" expression="${gwt.disableClassMetadata}"
+     * @since 2.6.0-rc1
+     */
+    private boolean disableClassMetadata;
+
+    /**
+     * EXPERIMENTAL: Disables run-time checking of cast operations.
+     * <p>
+     * Can be set from command line using '-Dgwt.disableCastChecking=true'.
+     * </p>
+     *
+     * @parameter default-value="false" expression="${gwt.disableCastChecking}"
+     * @since 2.6.0-rc1
+     */
+    private boolean disableCastChecking;
+
+    /**
+     * EXPERIMENTAL: Disables code-splitting.
+     * <p>
+     * Can be set from command line using '-Dgwt.disableRunAsync=true'.
+     * </p>
+     *
+     * @parameter default-value="false" expression="${gwt.disableRunAsync}"
+     * @since 2.6.0-rc1
+     */
+    private boolean disableRunAsync;
+
+    /**
+     * Enable faster, but less-optimized, compilations.
+     * <p>
+     * Can be set from command line using '-Dgwt.draftCompile=true'.
+     * </p>
+     * <p>
+     * This is equivalent to '-Dgwt.compiler.optimizationLevel=0 -Dgwt.compiler.disableAggressiveOptimization=true'.
+     * </p>
+     *
+     * @parameter default-value="false" expression="${gwt.draftCompile}"
+     * @since 2.6.0-rc1
+     */
+    private boolean draftCompile;
+
+    /**
+     * EXPERIMENTAL: Cluster similar functions in the output to improve compression.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.clusterFunctions}"
+     * @since 2.6.0-rc1
+     */
+    private boolean clusterFunctions;
+
+    /**
+     * EXPERIMENTAL: Inline literal parameters to shrink function declarations and
+     * provide more deadcode elimination possibilities.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.inlineLiteralParameters}"
+     * @since 2.6.0-rc1
+     */
+    private boolean inlineLiteralParameters;
+
+    /**
+     * EXPERIMENTAL: Analyze and optimize dataflow.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.optimizeDataflow}"
+     * since 2.6.0-rc1
+     */
+    private boolean optimizeDataflow;
+
+    /**
+     * EXPERIMENTAL: Ordinalize enums to reduce some large strings.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.ordinalizeEnums}"
+     * @since 2.6.0-rc1
+     */
+    private boolean ordinalizeEnums;
+
+    /**
+     * EXPERIMENTAL: Removing duplicate functions.
+     * <p>
+     * Will interfere with stacktrace deobfuscation and so is only honored when compiler.stackMode is set to strip.
+     *
+     * @parameter default-value="true" expression="${gwt.compiler.removeDuplicateFunctions}"
+     * @since 2.6.0-rc1
+     */
+    private boolean removeDuplicateFunctions;
+
+    /**
+     * Sets the optimization level used by the compiler.  0=none 9=maximum.
+     * <p>
+     * -1 uses the default level of the compiler.
+     * </p>
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.optimizationLevel=n'.
+     * </p>
+     * @parameter default-value="-1" expression="${gwt.compiler.optimizationLevel}"
+     * @since 2.6.0-rc1
+     */    
+    private int optimizationLevel;
+
+    /**
+     * Set the test method timeout, in minutes
+     * 
+     * @parameter default-value="5" expression="${gwt.testMethodTimeout}"
+     * @since 2.6.0-rc1
+     */
+    private int testMethodTimeout;
+
+    /**
+     * Set the test begin timeout (time for clients to contact server), in minutes
+     * 
+     * @parameter defualt-value="1" expression="${gwt.testBeginTimeout}
+     * @since 2.6.0-rc1
+     */
+    private int testBeginTimeout;
+
+    /**
+     * Precompile modules as tests are running (speeds up remote tests but requires more memory)
+     * <p>
+     * The value is one of <tt>none</tt>, <tt>simple</tt>, <tt>all</tt>, or <tt>parallel</tt>.
+     * 
+     * @parameter default-value="none" expression=${gwt.test.precompile}"
+     * @since 2.6.0-rc1
+     */
+    private String precompile;
+
+    /**
+     * EXPERIMENTAL: Sets the maximum number of attempts for running each test method
+     * 
+     * @parameter default-value="1" expression="${gwt.test.tries}"
+     * @since 2.6.0-rc1
+     */
+    private int tries;
+
     /** failures counter */
     private int failures;
 
@@ -303,13 +482,40 @@ public class TestMojo
         sb.append( "-war " ).append( out );
         sb.append( " -logLevel " ).append( getLogLevel() );
         sb.append( ( webMode || productionMode ) ? " -nodevMode" : " -devMode" );
+        sb.append( checkAssertions ? " -checkAssertions" : " -nocheckAssertions" );
+        sb.append( clusterFunctions ? " -XclusterFunctions" : " -XnoclusterFunctions" );
+        sb.append( disableCastChecking ? " -XnocheckCasts" : " -XcheckCasts" );
+        sb.append( disableClassMetadata ? " -XnoclassMetadata" : " -XclassMetadata" );
+        sb.append( disableRunAsync ? " -XnocodeSplitting" : " -XcodeSplitting" );
+        sb.append( draftCompile ? " -draftCompile" : " -nodraftCompile" );
+        sb.append( inlineLiteralParameters ? " -XinlineLiteralParameters" : " -XnoinlineLiteralParameters" );
+        sb.append( optimizeDataflow ? " -XoptimizeDataflow" : " -XnooptimizeDataflow" );
+        sb.append( ordinalizeEnums ? " -XordinalizeEnums" : " -XnoordinalizeEnums" );
+        sb.append( quirksMode ? " -norunStandardsMode" : " -runStandardsMode" );
+        sb.append( removeDuplicateFunctions ? " -XremoveDuplicateFunctions" : " -XnoremoveDuplicateFunctions" );
+        sb.append( showUi ? " -showUi" : " -noshowUi" );
+        sb.append( " -sourceLevel " ).append( sourceLevel );
+        sb.append( " -testBeginTimeout " ).append( testBeginTimeout );
+        sb.append( " -testMethodTimeout ").append( testMethodTimeout );
+        sb.append( " -Xtries " ).append( tries );
+
+        if ( optimizationLevel >= 0 )
         {
-            sb.append( " -web" );
+            sb.append( " -optimize " ).append( optimizationLevel );
         }
-        if ( productionMode )
+        if ( precompile != null && !precompile.trim().isEmpty() && !precompile.equals( "none" ) )
         {
-            sb.append( " -prod" );
+            sb.append( " -precompile " ).append( precompile );
         }
+        if ( logDir != null )
+        {
+            sb.append( " -logdir " ).append( logDir.getAbsolutePath() );
+        }
+        if ( workDir != null )
+        {
+            sb.append( " -workDir " ).append( workDir.getAbsolutePath() );
+        }
+
         if ( mode.equalsIgnoreCase( "manual" ) )
         {
             sb.append( " -runStyle Manual:1 " );
@@ -330,7 +536,6 @@ public class TestMojo
         {
             sb.append( " -runStyle " + mode );
         }
-        sb.append( quirksMode ? " -norunStandardsMode" : " -runStandardsMode" );
         if ( userAgents != null && !userAgents.trim().isEmpty() )
         {
             sb.append( " -userAgents " ).append( userAgents );

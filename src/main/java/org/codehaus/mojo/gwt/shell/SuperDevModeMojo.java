@@ -63,6 +63,33 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      */
     private File codeServerWorkDir;
 
+    /**
+     * Precompile modules.
+     * 
+     * @parameter default-value="true" expression="${gwt.codeServer.precompile}"
+     * @since 2.6.0-rc1
+     */
+    private boolean precompile;
+
+    /**
+     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public"
+     * for modules that don't define any dependencies.
+     * 
+     * @parameter default-value="false" expression="${gwt.compiler.enforceStrictResources}"
+     * @since 2.6.0-rc1
+     */
+    private boolean enforceStrictResources;
+
+    /**
+     * Specifies Java source level.
+     * <p>
+     * The default value depends on the JVM used to launch Maven.
+     *
+     * @parameter expression="${maven.compiler.source}"
+     * @since 2.6.0-rc1
+     */
+    private String sourceLevel = System.getProperty("java.specification.version");
+
     @Override
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
@@ -86,6 +113,10 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
                 .withinClasspath( getGwtDevJar() )
                 .withinClasspath( getGwtCodeServerJar() );
         }
+
+        cmd.flag( "precompile", precompile );
+        cmd.experimentalFlag( "enforceStrictResources", enforceStrictResources );
+        cmd.arg( "-sourceLevel", sourceLevel );
 
         if ( bindAddress != null && bindAddress.length() > 0 )
         {

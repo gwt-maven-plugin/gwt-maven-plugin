@@ -57,6 +57,15 @@
           <disableAggressiveOptimization>true</disableAggressiveOptimization>
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
+          <clusterFunctions>false</clusterFunctions>
+          <enforceStrictResources>true</enforceStrictResources>
+          <inlineLiteralParameters>false</inlineLiteralParameters>
+          <optimizeDataflow>false</optimizeDataflow>
+          <ordinalizeEnums>false</ordinalizeEnums>
+          <removeDuplicateFunctions>false</removeDuplicateFunctions>
+          <saveSource>true</saveSource>
+          <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
+          <sourceLevel>6</sourceLevel>
         </configuration>
         <executions>
           <execution>
