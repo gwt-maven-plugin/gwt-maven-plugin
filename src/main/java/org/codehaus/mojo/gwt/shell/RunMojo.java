@@ -109,13 +109,6 @@ public class RunMojo
     private int codeServerPort;
 
     /**
-     * Specify the location on the filesystem for the generated embedded Tomcat directory.
-     *
-     * @parameter default-value="${project.build.directory}/tomcat"
-     */
-    private File tomcat;
-
-    /**
      * Location of the compiled classes.
      *
      * @parameter default-value="${project.build.outputDirectory}"
@@ -123,15 +116,6 @@ public class RunMojo
      * @readOnly
      */
     private File buildOutputDirectory;
-
-
-    /**
-     * Source Tomcat context.xml for GWT shell - copied to /gwt/localhost/ROOT.xml (used as the context.xml for the
-     * SHELL - requires Tomcat 5.0.x format - hence no default).
-     *
-     * @parameter
-     */
-    private File contextXml;
 
     /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
@@ -150,24 +134,6 @@ public class RunMojo
     private String server;
 
     /**
-     * Set GWT shell protocol/host whitelist.
-     * <p>
-     * Can be set from command line using '-Dgwt.whitelist=...'
-     *
-     * @parameter expression="${gwt.whitelist}"
-     */
-    private String whitelist;
-
-    /**
-     * Set GWT shell protocol/host blacklist.
-     * <p>
-     * Can be set from command line using '-Dgwt.blacklist=...'
-     *
-     * @parameter expression="${gwt.blacklist}"
-     */
-    private String blacklist;
-
-    /**
      * List of System properties to pass when running the hosted mode.
      *
      * @parameter
@@ -183,7 +149,7 @@ public class RunMojo
      * @parameter default-value="false" expression="${gwt.copyWebapp}"
      * @since 2.1.0-1
      */
-    private boolean copyWebapp;    
+    private boolean copyWebapp;
 
     /**
      * set the appengine sdk to use
@@ -223,7 +189,7 @@ public class RunMojo
      * @since 2.1.0-1
      */    
     private String appEngineGroupId;
-    
+
     /**
      * <p>
      * groupId to download appengine sdk from maven repo
@@ -231,18 +197,15 @@ public class RunMojo
      * @parameter default-value="appengine-java-sdk" expression="${gwt.appEngineArtifactId}"
      * @since 2.1.0-1
      */    
-    private String appEngineArtifactId;    
-    
-    
+    private String appEngineArtifactId;
+
     /**
      * To look up Archiver/UnArchiver implementations
      * @since 2.1.0-1
      * @component
      */
     protected ArchiverManager archiverManager;
-    
-    
-    
+
      /**
      * Set GWT shell bindAddress.
      * <p>
@@ -250,7 +213,41 @@ public class RunMojo
      * @since 2.1.0-1
      * @parameter expression="${gwt.bindAddress}"
      */
-    private String bindAddress;    
+    private String bindAddress;
+
+    /**
+     * EXPERIMENTAL: Cache results of generators with stable output.
+     * 
+     * @parameter default-value="true" expression="${gwt.cacheGeneratorResults}"
+     * @since 2.6.0-rc1
+     */
+    private boolean cacheGeneratorResults;
+
+    /**
+     * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
+     *
+     * @parameter
+     * @since 2.6.0-rc1
+     */
+    private File workDir;
+
+    /**
+     * Logs to a file in the given directory, as well as graphically
+     * 
+     * @parameter
+     * @since 2.6.0-rc1
+     */
+    private File logDir;
+
+    /**
+     * Specifies Java source level.
+     * <p>
+     * The default value depends on the JVM used to launch Maven.
+     *
+     * @parameter expression="${maven.compiler.source}"
+     * @since 2.6.0-rc1
+     */
+    private String sourceLevel = System.getProperty("java.specification.version");
 
     public String getRunTarget()
     {
@@ -356,20 +353,21 @@ public class RunMojo
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
-            .flag( "startServer", !noServer );
+            .flag( "startServer", !noServer )
+            .experimentalFlag( "cacheGeneratorResults", cacheGeneratorResults );
+
+        if ( workDir != null )
+        {
+            cmd.arg( "-workDir", workDir.getAbsolutePath() );
+        }
+        if ( logDir != null )
+        {
+            cmd.arg( "-logdir", logDir.getAbsolutePath() );
+        }
 
         if ( server != null )
         {
             cmd.arg( "-server", server );
-        }
-
-        if ( whitelist != null && whitelist.length() > 0 )
-        {
-            cmd.arg( "-whitelist", whitelist );
-        }
-        if ( blacklist != null && blacklist.length() > 0 )
-        {
-            cmd.arg( "-blacklist", blacklist );
         }
 
         if ( systemProperties != null && !systemProperties.isEmpty() )
@@ -610,19 +608,9 @@ public class RunMojo
         }
     }
 
-    public File getContextXml()
-    {
-        return this.contextXml;
-    }
-
     public int getPort()
     {
         return this.port;
-    }
-
-    public File getTomcat()
-    {
-        return this.tomcat;
     }
 
     /**

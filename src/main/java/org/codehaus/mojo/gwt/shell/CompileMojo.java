@@ -94,14 +94,6 @@ public class CompileMojo
     private boolean checkAssertions;
 
     /**
-     * Ignored.
-     *
-     * @parameter default-value="false" expression="${gwt.treeLogger}"
-     * @deprecated
-     */
-    private boolean treeLogger;
-
-    /**
      * EXPERIMENTAL: Disables some java.lang.Class methods (e.g. getName()).
      * <p>
      * Can be set from command line using '-Dgwt.disableClassMetadata=true'.
