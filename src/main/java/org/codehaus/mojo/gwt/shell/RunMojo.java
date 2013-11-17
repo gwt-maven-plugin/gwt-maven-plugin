@@ -356,7 +356,7 @@ public class RunMojo
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
-            .arg( noServer, "-noserver" );
+            .flag( "startServer", !noServer );
 
         if ( server != null )
         {

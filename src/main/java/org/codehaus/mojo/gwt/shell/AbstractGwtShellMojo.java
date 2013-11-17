@@ -415,6 +415,18 @@ public abstract class AbstractGwtShellMojo
             return this;
         }
 
+        public JavaCommand flag( String name, boolean value )
+        {
+            args.add( "-" + (value ? "" : "no") + name );
+            return this;
+        }
+
+        public JavaCommand experimentalFlag( String name, boolean value )
+        {
+            args.add( "-X" + (value ? "" : "no") + name );
+            return this;
+        }
+
         public JavaCommand systemProperty( String name, String value )
         {
             systemProperties.setProperty( name, value );

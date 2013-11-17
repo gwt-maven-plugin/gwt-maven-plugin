@@ -87,11 +87,11 @@ public class CompileMojo
     private int localWorkers;
 
     /**
-     * Whether or not to enable assertions in generated scripts (-ea).
+     * Whether or not to enable assertions in generated scripts (-checkAssertions).
      *
-     * @parameter default-value="false"
+     * @parameter alias="enableAssertions" default-value="false"
      */
-    private boolean enableAssertions;
+    private boolean checkAssertions;
 
     /**
      * Ignored.
@@ -162,7 +162,7 @@ public class CompileMojo
     private File extra;
 
     /**
-     * The temp directory is used for temporary compiled files (defaults is system temp directory).
+     * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
      *
      * @parameter
      */
@@ -179,7 +179,7 @@ public class CompileMojo
     private boolean extraParam;
     
     /**
-     * add -compileReport parameter to the compiler command line
+     * Compile a report that tells the "Story of Your Compile".
      * <p>
      * Can be set from command line using '-Dgwt.compiler.compileReport=true'.
      * </p>
@@ -189,8 +189,10 @@ public class CompileMojo
     private boolean compileReport;
     
     /**
-     * add -optimize parameter to the compiler command line the value must be between 0 and 9
-     * by default -1 so no arg to the compiler
+     * Sets the optimization level used by the compiler.  0=none 9=maximum.
+     * <p>
+     * -1 uses the default level of the compiler.
+     * </p>
      * <p>
      * Can be set from command line using '-Dgwt.compiler.optimizationLevel=n'.
      * </p>
@@ -200,36 +202,36 @@ public class CompileMojo
     private int optimizationLevel;    
     
     /**
-     * add -XsoycDetailed parameter to the compiler command line
+     * EXPERIMENTAL: Emit extra, detailed compile-report information in the "Story Of Your Compile" at the expense of compile time.
      * <p>
      * Can be set from command line using '-Dgwt.compiler.soycDetailed=true'.
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.soycDetailed}"
+     * @parameter alias="soycDetailed" default-value="false" expression="${gwt.compiler.soycDetailed}"
      * @since 2.1.0-1
      */    
-    private boolean soycDetailed;    
+    private boolean detailedSoyc;
     
     
     /**
-     * add -strict parameter to the compiler command line
+     * Fail compilation if any input file contains an error.
      * 
      * <p>
      * Can be set from command line using '-Dgwt.compiler.strict=true'.
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.strict}"
+     * @parameter alias="strict" default-value="false" expression="${gwt.compiler.strict}"
      * @since 2.1.0-1
      */    
-    private boolean strict;     
+    private boolean failOnError;
     
     /**
-     * EXPERIMENTAL: add -XenableClosureCompiler parameter to the compiler command line
+     * EXPERIMENTAL: Compile output Javascript with the Closure compiler for even further optimizations.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.enableClosureCompiler=true'
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.enableClosureCompiler}"
+     * @parameter alias="enableClosureCompiler" default-value="false" expression="${gwt.compiler.enableClosureCompiler}"
      * @since 2.5.0-rc1
      */
-    private boolean enableClosureCompiler;
+    private boolean closureCompiler;
 
     /**
      * EXPERIMENTAL: add -XdisableAggressiveOptimization parameter to the compiler command line
@@ -238,11 +240,12 @@ public class CompileMojo
      * </p>
      * @parameter default-value="false" expression="${gwt.compiler.disableAggressiveOptimization}"
      * @since 2.5.0-rc1
+     * @deprecated since 2.6.0-rc1
      */
     private boolean disableAggressiveOptimization;
 
     /**
-     * EXPERIMENTAL: add -XcompilerMetrics parameter to the compiler command line
+     * EXPERIMENTAL: Gather compiler metrics.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.compilerMetrics=true'
      * </p>
@@ -252,7 +255,7 @@ public class CompileMojo
     private boolean compilerMetrics;
 
     /**
-     * EXPERIMENTAL: add -XfragmentCount parameter to the compiler command line
+     * EXPERIMENTAL: Limits of number of fragments using a code splitter that merges split points.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.fragmentCount=n'
      * </p>
@@ -302,17 +305,20 @@ public class CompileMojo
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
             // optional advanced arguments
-            .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
-            .arg( disableClassMetadata, "-XdisableClassMetadata" )
-            .arg( disableCastChecking, "-XdisableCastChecking" )
-            .arg( disableRunAsync, "-XdisableRunAsync" )
-            .arg( strict, "-strict" )
-            .arg( soycDetailed, "-XsoycDetailed" )
-            .arg( enableClosureCompiler, "-XenableClosureCompiler" )
-            .arg( compilerMetrics, "-XcompilerMetrics" )
-            .arg( disableAggressiveOptimization, "-XdisableAggressiveOptimization" )
-            .arg( "-XfragmentCount", String.valueOf( fragmentCount ) );
-            .arg( validateOnly, "-validateOnly" )
+            .flag( "checkAssertions", checkAssertions )
+            .flag( "draftCompile", draftCompile )
+            .flag( "validateOnly", validateOnly )
+            .experimentalFlag( "classMetadata", !disableClassMetadata )
+            .experimentalFlag( "checkCasts", !disableCastChecking )
+            .experimentalFlag( "codeSplitting", disableRunAsync )
+            .flag( "failOnError", failOnError )
+            .experimentalFlag( "detailedSoyc", detailedSoyc )
+            .experimentalFlag( "closureCompiler", closureCompiler )
+            .flag( "compileReport", compileReport )
+            .experimentalFlag( "compilerMetrics", compilerMetrics )
+            .experimentalFlag( "aggressiveOptimizations", !disableAggressiveOptimization )
+            .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
+        ;
 
 
         if ( optimizationLevel >= 0 )
@@ -332,11 +338,6 @@ public class CompileMojo
         else
         {
             getLog().debug( "NOT create extra directory " );
-        }
-
-        if ( compileReport )
-        {
-            cmd.arg( "-compileReport" );
         }
 
         addCompileSourceArtifacts( cmd );

@@ -25,7 +25,7 @@ assert new File(basedir, 'build.log').exists();
 
 content = new File(basedir, 'build.log').text;
 assert content.contains( '-draftCompile' );
-assert content.contains( '-strict' );
+assert content.contains( '-failOnError' );
 assert content.contains( '-optimize 1' );
   
 return true;

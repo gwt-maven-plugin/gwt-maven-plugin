@@ -302,7 +302,7 @@ public class TestMojo
         StringBuilder sb = new StringBuilder();
         sb.append( "-war " ).append( out );
         sb.append( " -logLevel " ).append( getLogLevel() );
-        if ( webMode )
+        sb.append( ( webMode || productionMode ) ? " -nodevMode" : " -devMode" );
         {
             sb.append( " -web" );
         }
@@ -330,10 +330,7 @@ public class TestMojo
         {
             sb.append( " -runStyle " + mode );
         }
-        if ( quirksMode )
-        {
-            sb.append( " -quirksMode" );
-        }
+        sb.append( quirksMode ? " -norunStandardsMode" : " -runStandardsMode" );
         if ( userAgents != null && !userAgents.trim().isEmpty() )
         {
             sb.append( " -userAgents " ).append( userAgents );
