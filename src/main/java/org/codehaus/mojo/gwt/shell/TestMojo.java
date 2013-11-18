@@ -371,9 +371,9 @@ public class TestMojo
     /**
      * Precompile modules as tests are running (speeds up remote tests but requires more memory)
      * <p>
-     * The value is one of <tt>none</tt>, <tt>simple</tt>, <tt>all</tt>, or <tt>parallel</tt>.
+     * The value is one of <tt>simple</tt>, <tt>all</tt>, or <tt>parallel</tt>.
      * 
-     * @parameter default-value="none" expression=${gwt.test.precompile}"
+     * @parameter default-value="simple" expression=${gwt.test.precompile}"
      * @since 2.6.0-rc1
      */
     private String precompile;
@@ -503,7 +503,7 @@ public class TestMojo
         {
             sb.append( " -optimize " ).append( optimizationLevel );
         }
-        if ( precompile != null && !precompile.trim().isEmpty() && !precompile.equals( "none" ) )
+        if ( precompile != null && !precompile.trim().isEmpty() )
         {
             sb.append( " -precompile " ).append( precompile );
         }
