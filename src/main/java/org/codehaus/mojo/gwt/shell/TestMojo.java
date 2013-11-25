@@ -363,7 +363,7 @@ public class TestMojo
     /**
      * Set the test begin timeout (time for clients to contact server), in minutes
      * 
-     * @parameter defualt-value="1" expression="${gwt.testBeginTimeout}
+     * @parameter default-value="1" expression="${gwt.testBeginTimeout}
      * @since 2.6.0-rc1
      */
     private int testBeginTimeout;
