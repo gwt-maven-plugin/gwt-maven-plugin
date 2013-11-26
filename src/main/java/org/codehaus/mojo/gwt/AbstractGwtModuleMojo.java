@@ -20,29 +20,13 @@ package org.codehaus.mojo.gwt;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 /**
  * Add support for GWT Modules.
@@ -56,11 +40,6 @@ public abstract class AbstractGwtModuleMojo
     extends AbstractGwtMojo
     implements GwtModuleReader
 {
-    /**
-     * @deprecated use {@link DefaultGwtModuleReader#GWT_MODULE_EXTENSION}
-     */
-    public static final String GWT_MODULE_EXTENSION = DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
-
     /**
      * The project GWT modules. If not set, the plugin will scan the project for <code>.gwt.xml</code> files.
      *
@@ -76,19 +55,18 @@ public abstract class AbstractGwtModuleMojo
      */
     private String module;
 
+    @Override
     public List<String> getGwtModules()
     {
-        String[] modules = getModules();
-        return ArrayUtils.isEmpty( modules )? new ArrayList<String>(0) : Arrays.asList( modules );
+        return convertToList( getModules());
     }
-    
+
     /**
      * Return the configured modules or scan the project source/resources folder to find them
      *
      * @return the modules
      */
     @SuppressWarnings( "unchecked" )
-    // FIXME move to DefaultGwtModuleReader !
     public String[] getModules()
     {
         // module has higher priority if set by expression
@@ -98,155 +76,34 @@ public abstract class AbstractGwtModuleMojo
         }
         if ( modules == null )
         {
-            //Use a Set to avoid duplicate when user set src/main/java as <resource>
-            Set<String> mods = new HashSet<String>();
-
-            Collection<String> sourcePaths = (Collection<String>) getProject().getCompileSourceRoots();
-            for ( String sourcePath : sourcePaths )
-            {
-                File sourceDirectory = new File( sourcePath );
-                if ( sourceDirectory.exists() )
-                {
-                    DirectoryScanner scanner = new DirectoryScanner();
-                    scanner.setBasedir( sourceDirectory.getAbsolutePath() );
-                    scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
-                    scanner.scan();
-
-                    mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
-                }
-            }
-
-            Collection<Resource> resources = (Collection<Resource>) getProject().getResources();
-            for ( Resource resource : resources )
-            {
-                File resourceDirectoryFile = new File( resource.getDirectory() );
-                if ( !resourceDirectoryFile.exists() )
-                {
-                    continue;
-                }
-                DirectoryScanner scanner = new DirectoryScanner();
-                scanner.setBasedir( resource.getDirectory() );
-                scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
-                scanner.scan();
-                mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
-            }
-
-            if ( mods.isEmpty() )
-            {
-                getLog().warn( "GWT plugin is configured to detect modules, but none were found." );
-            }
-
-            modules = new String[mods.size()];
-            int i = 0;
-            for ( String fileName : mods )
-            {
-                String path = fileName.substring( 0, fileName.length() - GWT_MODULE_EXTENSION.length() );
-                modules[i++] = path.replace( File.separatorChar, '.' );
-            }
-            if ( modules.length > 0 )
-            {
-                getLog().info( "auto discovered modules " + Arrays.asList( modules ) );
-            }
-
+            modules = convertToArray( new DefaultGwtModuleReader(getProject(), getLog(), classpathBuilder).getGwtModules());
         }
         return modules;
     }
 
+
+    @Override
     public GwtModule readModule( String name )
         throws GwtModuleReaderException
     {
-        String modulePath = name.replace( '.', '/' ) + GWT_MODULE_EXTENSION;
-        Collection<String> sourceRoots = getProject().getCompileSourceRoots();
-        for ( String sourceRoot : sourceRoots )
-        {
-            File root = new File( sourceRoot );
-            File xml = new File( root, modulePath );
-            if ( xml.exists() )
-            {
-                getLog().debug( "GWT module " + name + " found in " + root );
-                return readModule( name, xml );
-            }
-        }
-        Collection<Resource> resources = (Collection<Resource>) getProject().getResources();
-        for ( Resource resource : resources )
-        {
-            File root = new File( resource.getDirectory() );
-            File xml = new File( root, modulePath );
-            if ( xml.exists() )
-            {
-                getLog().debug( "GWT module " + name + " found in " + root );
-                return readModule( name, xml );
-            }
-        }
-
-        try
-        {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
-            URL[] urls = new URL[classpath.size()];
-            int i = 0;
-            for ( File file : classpath )
-            {
-                urls[i++] = file.toURI().toURL();
-            }
-            InputStream stream = new URLClassLoader( urls ).getResourceAsStream( modulePath );
-            if ( stream != null )
-            {
-                return readModule( name, stream );
-            }
-        }
-        catch ( MalformedURLException e )
-        {
-            // ignored;
-        } catch (MojoExecutionException e)
-        {
-            throw new GwtModuleReaderException(e.getMessage(), e);
-        }
-
-        throw new GwtModuleReaderException( "GWT Module " + name + " not found in project sources or resources." );
-    }
-
-    private GwtModule readModule( String name, File file )
-        throws GwtModuleReaderException
-
-    {
-        try
-        {
-            GwtModule module = readModule( name, new FileInputStream( file ) );
-            module.setSourceFile(file);
-            return module;
-        }
-        catch ( FileNotFoundException e )
-        {
-            throw new GwtModuleReaderException( "Failed to read module file " + file );
-        }
-    }
-
-    /**
-     * @param module2
-     * @return
-     */
-    private GwtModule readModule( String name, InputStream xml )
-        throws GwtModuleReaderException
-    {
-        try
-        {
-            Xpp3Dom dom = Xpp3DomBuilder.build( ReaderFactory.newXmlReader( xml ) );
-            return new GwtModule( name, dom, this );
-        }
-        catch ( Exception e )
-        {
-            String error = "Failed to read module XML file " + xml;
-            getLog().error( error );
-            throw new GwtModuleReaderException( error, e );
-        }
+        return new DefaultGwtModuleReader(getProject(), getLog(), classpathBuilder).readModule(name);
     }
 
     /**
      * @param path file to add to the project compile directories
      */
+    @Override
     protected void addCompileSourceRoot( File path )
     {
         getProject().addCompileSourceRoot( path.getAbsolutePath() );
     }
 
+    private static <T> List<T> convertToList( T[] array )
+    {
+        return ArrayUtils.isEmpty( array )? Collections.<T>emptyList() : Arrays.asList( array );
+    }
+    private static String[] convertToArray( List<String> list )
+    {
+        return list.toArray( new String[list.size()] );
+    }
 }
