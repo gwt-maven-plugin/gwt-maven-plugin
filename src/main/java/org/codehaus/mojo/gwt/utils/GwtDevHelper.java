@@ -112,7 +112,7 @@ public class GwtDevHelper
                 ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( artifact.getVersion() );
                 if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
                 {
-                    log.warn( "You're project declares dependency on gwt-user " + artifact.getVersion()
+                    log.warn( "Your project declares dependency on gwt-user " + artifact.getVersion()
                         + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
                 }
                 break;

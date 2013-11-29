@@ -383,7 +383,7 @@ public abstract class AbstractGwtMojo
                 ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( artifact.getVersion() );
                 if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
                 {
-                    getLog().warn( "You're project declares dependency on gwt-user " + artifact.getVersion()
+                    getLog().warn( "Your project declares dependency on gwt-user " + artifact.getVersion()
                                        + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
                 }
                 break;
