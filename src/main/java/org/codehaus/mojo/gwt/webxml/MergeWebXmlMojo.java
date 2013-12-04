@@ -50,6 +50,7 @@ import org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo;
  * @goal mergewebxml
  * @phase process-resources
  * @requiresDependencyResolution compile
+ * @threadSafe
  * @description Merges GWT servlet elements into deployment descriptor (and non GWT servlets into shell).
  * @author cooper
  * @version $Id$

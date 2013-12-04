@@ -42,6 +42,7 @@ import org.codehaus.plexus.util.FileUtils;
  * see http://code.google.com/webtoolkit/doc/latest/DevGuideCompileReport.html#Usage
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  * @goal compile-report
+ * @threadSafe
  * @since 2.1.0-1
  */
 public class CompileReport

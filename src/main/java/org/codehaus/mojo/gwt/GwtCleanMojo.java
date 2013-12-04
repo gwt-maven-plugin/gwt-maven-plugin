@@ -31,6 +31,7 @@ import org.codehaus.plexus.util.FileUtils;
  * Cleanup the webapp directory for GWT module compilation output
  * 
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
+ * @threadSafe
  * @goal clean
  */
 public class GwtCleanMojo

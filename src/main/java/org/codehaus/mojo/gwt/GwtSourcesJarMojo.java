@@ -38,6 +38,7 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
  * @author <a href="mailto:vlads@pyx4j.com">Vlad Skarzhevskyy</a>
  * @goal source-jar
  * @phase package
+ * @threadSafe
  */
 public class GwtSourcesJarMojo
     extends GwtResourcesBaseMojo

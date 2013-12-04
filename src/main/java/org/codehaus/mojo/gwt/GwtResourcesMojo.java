@@ -35,6 +35,7 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @goal resources
  * @phase process-resources
+ * @threadSafe
  */
 public class GwtResourcesMojo
     extends GwtResourcesBaseMojo

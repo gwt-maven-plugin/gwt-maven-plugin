@@ -41,6 +41,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * the classnames used in the file.
  * @goal css
  * @phase generate-sources
+ * @threadSafe
  * @author Stale Undheim <undheim@corporater.com>
  * @author olamy
  * @since 2.1.0-1

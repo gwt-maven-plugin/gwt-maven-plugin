@@ -52,6 +52,7 @@ import com.thoughtworks.qdox.model.Type;
  * @goal generateAsync
  * @phase generate-sources
  * @requiresDependencyResolution compile
+ * @threadSafe
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @version $Id$
  */

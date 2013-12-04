@@ -50,6 +50,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @phase prepare-package
  * @goal compile
  * @requiresDependencyResolution compile
+ * @threadSafe
  * @version $Id$
  * @author cooper
  * @author ccollins

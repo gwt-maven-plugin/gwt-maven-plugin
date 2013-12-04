@@ -43,6 +43,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTesting.html
  * @requiresDependencyResolution test
+ * @threadSafe
  * @version $Id: TestMojo.java 9466 2009-04-16 12:03:15Z ndeloof $
  */
 public class TestMojo
