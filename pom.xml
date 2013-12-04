@@ -120,7 +120,7 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
-    <gwt.version>2.6.0-rc1</gwt.version>
+    <gwt.version>2.6.0-rc2</gwt.version>
     <!--  apt filterting doesn't support dot -->
     <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>2.0.9</mavenVersion>

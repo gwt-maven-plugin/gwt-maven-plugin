@@ -324,8 +324,7 @@ public class CompileMojo
      * @parameter
      * @since 2.6.0-rc2
      */
-// Erroneously missing in 2.6.0-rc1
-//    private File saveSourceOutput;
+    private File saveSourceOutput;
 
     /**
      * Specifies Java source level.
@@ -401,17 +400,17 @@ public class CompileMojo
             .arg( "-sourceLevel", sourceLevel )
         ;
 
-//        if ( saveSourceOutput != null )
-//        {
-//            cmd.arg( "-saveSourceOutput", saveSourceOutput.getAbsolutePath() );
-//        }
+        if ( saveSourceOutput != null )
+        {
+            cmd.arg( "-saveSourceOutput", saveSourceOutput.getAbsolutePath() );
+        }
 
         if ( optimizationLevel >= 0 )
         {
             cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
         }
 
-        if ( extraParam || compileReport || saveSource ) // Should be: ( saveSource && saveSourceOutput == null )
+        if ( extraParam || compileReport || ( saveSource && saveSourceOutput == null ) )
         {
             getLog().debug( "create extra directory " );
             if ( !extra.exists() )
