@@ -35,7 +35,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.GwtModule;
-import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
@@ -378,26 +377,26 @@ public class CompileMojo
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
             // optional advanced arguments
-            .flag( "checkAssertions", checkAssertions )
-            .flag( "draftCompile", draftCompile )
-            .flag( "validateOnly", validateOnly )
-            .experimentalFlag( "classMetadata", !disableClassMetadata )
-            .experimentalFlag( "checkCasts", !disableCastChecking )
-            .experimentalFlag( "codeSplitting", disableRunAsync )
-            .flag( "failOnError", failOnError )
-            .experimentalFlag( "detailedSoyc", detailedSoyc )
-            .experimentalFlag( "closureCompiler", closureCompiler )
-            .flag( "compileReport", compileReport )
-            .experimentalFlag( "compilerMetrics", compilerMetrics )
-            .experimentalFlag( "aggressiveOptimizations", !disableAggressiveOptimization )
+            .arg( checkAssertions, "-checkAssertions" )
+            .arg( draftCompile, "-draftCompile" )
+            .arg( validateOnly, "-validateOnly" )
+            .arg( disableClassMetadata, "-XnoclassMetadata" )
+            .arg( disableCastChecking, "-XnocheckCasts" )
+            .arg( disableRunAsync, "-XnocodeSplitting" )
+            .arg( failOnError, "-failOnError" )
+            .arg( detailedSoyc, "-XdetailedSoyc" )
+            .arg( closureCompiler, "-XclosureCompiler" )
+            .arg( compileReport, "-compileReport" )
+            .arg( compilerMetrics, "-XcompilerMetrics" )
+            .arg( disableAggressiveOptimization, "-XnoaggressiveOptimizations" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
-            .experimentalFlag( "clusterFunctions", clusterFunctions )
-            .experimentalFlag( "enforceStrictResources", enforceStrictResources )
-            .experimentalFlag( "inlineLiteralParameters", inlineLiteralParameters )
-            .experimentalFlag( "optimizeDataflow", optimizeDataflow )
-            .experimentalFlag( "ordinalizeEnums", ordinalizeEnums )
-            .experimentalFlag( "removeDuplicateFunctions", removeDuplicateFunctions )
-            .flag( "saveSource", saveSource )
+            .arg( !clusterFunctions, "-XnoclusterFunctions" )
+            .arg( enforceStrictResources, "-XenforceStrictResources" )
+            .arg( !inlineLiteralParameters, "-XnoinlineLiteralParameters" )
+            .arg( !optimizeDataflow, "-XnooptimizeDataflow" )
+            .arg( !ordinalizeEnums, "-XnoordinalizeEnums" )
+            .arg( !removeDuplicateFunctions, "-XnoremoveDuplicateFunctions" )
+            .arg( saveSource, "-saveSource" )
             .arg( "-sourceLevel", sourceLevel )
         ;
 

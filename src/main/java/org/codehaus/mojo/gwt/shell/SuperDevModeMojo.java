@@ -114,8 +114,8 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
                 .withinClasspath( getGwtCodeServerJar() );
         }
 
-        cmd.flag( "precompile", precompile );
-        cmd.experimentalFlag( "enforceStrictResources", enforceStrictResources );
+        cmd.arg( !precompile, "-noprecompile" );
+        cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
 
         if ( bindAddress != null && bindAddress.length() > 0 )

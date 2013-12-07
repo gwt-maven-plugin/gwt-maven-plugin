@@ -353,8 +353,8 @@ public class RunMojo
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
-            .flag( "startServer", !noServer )
-            .experimentalFlag( "cacheGeneratorResults", cacheGeneratorResults );
+            .arg( noServer, "-nostartServer" )
+            .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" );
 
         if ( workDir != null )
         {
