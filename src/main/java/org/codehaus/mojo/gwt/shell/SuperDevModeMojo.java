@@ -82,13 +82,11 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
     /**
      * Specifies Java source level.
-     * <p>
-     * The default value depends on the JVM used to launch Maven.
      *
-     * @parameter expression="${maven.compiler.source}"
+     * @parameter expression="${maven.compiler.source}" default-value="auto"
      * @since 2.6.0-rc1
      */
-    private String sourceLevel = System.getProperty("java.specification.version");
+    private String sourceLevel;
 
     @Override
     public void doExecute()

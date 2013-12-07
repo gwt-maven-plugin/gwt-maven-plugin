@@ -5,7 +5,7 @@
  Olivier Lamy
  Thomas Broyer
  ------
- 2013-03-14
+ 2013-12-07
  
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -29,9 +29,11 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Updated to GWT 2.6.0-rc1
+ * Updated to GWT 2.6.0-rc3
 
- * Honor <<<logLevel>>> in <<<gwt:test>>>
+ * Add support for <<<saveSourceOutput>>> in <<<gwt:compile>>> (2.6.0-rc2) 
+
+ * Use <<<auto>>> as the default value for <<<sourceLevel>>>
 
  []
 

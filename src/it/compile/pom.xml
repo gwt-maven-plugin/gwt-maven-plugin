@@ -65,7 +65,6 @@
           <removeDuplicateFunctions>false</removeDuplicateFunctions>
           <saveSource>true</saveSource>
           <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
-          <sourceLevel>6</sourceLevel>
         </configuration>
         <executions>
           <execution>

@@ -50,6 +50,6 @@ assert content.contains( '-XnoinlineLiteralParameters' );
 assert content.contains( '-XnooptimizeDataflow' );
 assert content.contains( '-XnoordinalizeEnums' );
 assert content.contains( '-XnoremoveDuplicateFunctions' );
-assert content.contains( '-sourceLevel 6' );
+assert content.contains( '-sourceLevel auto' );
   
 return true;
