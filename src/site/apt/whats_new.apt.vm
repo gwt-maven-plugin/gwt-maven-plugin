@@ -31,7 +31,9 @@ What's new in gwt-maven-plugin ${project.version}
 
  * Updated to GWT 2.6.0-rc3
 
- * Add support for <<<saveSourceOutput>>> in <<<gwt:compile>>> (2.6.0-rc2) 
+ * Most goals are marked <<<@threadSafe>>> (2.6.0-rc2)
+
+ * Add support for <<<saveSourceOutput>>> in <<<gwt:compile>>> (2.6.0-rc2)
 
  * Use <<<auto>>> as the default value for <<<sourceLevel>>>
 
