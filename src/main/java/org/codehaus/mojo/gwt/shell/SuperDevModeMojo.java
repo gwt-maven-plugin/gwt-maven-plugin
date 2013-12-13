@@ -20,6 +20,8 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
+import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -114,7 +116,20 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         cmd.arg( !precompile, "-noprecompile" );
         cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
-        cmd.arg( "-sourceLevel", sourceLevel );
+
+        try
+        {
+            Artifact codeServerArtifact = getCodeServerArtifact();
+            VersionRange vr = VersionRange.createFromVersionSpec( "[2.6.0,)" );
+            if ( vr.containsVersion( codeServerArtifact.getVersionRange().getRecommendedVersion() ) )
+            {
+                cmd.arg( "-sourceLevel", sourceLevel );
+            }
+        }
+        catch ( InvalidVersionSpecificationException e )
+        {
+            throw new MojoFailureException( "Cannot detect codeserver version ", e );
+        }
 
         if ( bindAddress != null && bindAddress.length() > 0 )
         {
@@ -136,5 +151,19 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         cmd.execute();
     }
-}
 
+    /**
+     * @return
+     * @throws MojoFailureException 
+     */
+    private Artifact getCodeServerArtifact()
+        throws MojoFailureException 
+    {
+        Artifact codeServerArtifact = getArtifact( "com.google.gwt", "gwt-codeserver" );
+        if ( null == codeServerArtifact )
+        {
+            throw new MojoFailureException( "Required plugin com.google.gwt:gwt-codeserver not found " );
+        }
+        return codeServerArtifact;
+    }
+}
