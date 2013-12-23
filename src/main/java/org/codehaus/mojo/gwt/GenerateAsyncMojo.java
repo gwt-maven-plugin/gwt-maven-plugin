@@ -230,6 +230,7 @@ public class GenerateAsyncMojo
         PrintWriter writer = new PrintWriter( new BufferedWriter(
             new OutputStreamWriter( buildContext.newFileOutputStream( targetFile ), encoding ) ) );
 
+
         String className = clazz.getName();
         if ( clazz.getPackage() != null )
         {
@@ -238,7 +239,12 @@ public class GenerateAsyncMojo
         }
         writer.println( "import com.google.gwt.core.client.GWT;" );
         writer.println( "import com.google.gwt.user.client.rpc.AsyncCallback;" );
-        writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+
+        String uri = MessageFormat.format( rpcPattern, className );
+        if (uri != null)
+        {
+            writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+        }
 
         writer.println();
         writer.println( "public interface " + className + "Async" );
@@ -318,7 +324,6 @@ public class GenerateAsyncMojo
 
         writer.println();
 
-        String uri = MessageFormat.format( rpcPattern, className );
         if ( clazz.getAnnotations() != null )
         {
             for ( Annotation annotation : clazz.getAnnotations() )
