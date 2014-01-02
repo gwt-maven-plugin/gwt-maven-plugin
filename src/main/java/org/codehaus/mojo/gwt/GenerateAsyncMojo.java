@@ -230,6 +230,8 @@ public class GenerateAsyncMojo
         PrintWriter writer = new PrintWriter( new BufferedWriter(
             new OutputStreamWriter( buildContext.newFileOutputStream( targetFile ), encoding ) ) );
 
+        boolean hasRemoteServiceRelativePath = hasRemoteServiceRelativePath(clazz);
+
         String className = clazz.getName();
         if ( clazz.getPackage() != null )
         {
@@ -238,7 +240,11 @@ public class GenerateAsyncMojo
         }
         writer.println( "import com.google.gwt.core.client.GWT;" );
         writer.println( "import com.google.gwt.user.client.rpc.AsyncCallback;" );
-        writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+
+        if (!hasRemoteServiceRelativePath)
+        {
+            writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+        }
 
         writer.println();
         writer.println( "public interface " + className + "Async" );
@@ -317,22 +323,6 @@ public class GenerateAsyncMojo
         }
 
         writer.println();
-
-        String uri = MessageFormat.format( rpcPattern, className );
-        if ( clazz.getAnnotations() != null )
-        {
-            for ( Annotation annotation : clazz.getAnnotations() )
-            {
-                getLog().debug( "annotation found on service interface " + annotation );
-                if ( annotation.getType().getValue().equals( "com.google.gwt.user.client.rpc.RemoteServiceRelativePath" ) )
-                {
-                    uri = null;
-                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface" );
-                    break;
-                }
-            }
-        }
-
         writer.println( "    /**" );
         writer.println( "     * Utility class to get the RPC Async interface from client-side code" );
         writer.println( "     */" );
@@ -345,10 +335,9 @@ public class GenerateAsyncMojo
         writer.println( "            if ( instance == null )" );
         writer.println( "            {" );
         writer.println( "                instance = (" + className + "Async) GWT.create( " + className + ".class );" );
-        if ( uri != null )
+        if ( !hasRemoteServiceRelativePath )
         {
-            // null is used as a marker for the presence of a @RemoteServiceRelativePath annotation, which is handled by
-            // the GWT generator
+            String uri = MessageFormat.format( rpcPattern, className );
             writer.println( "                ServiceDefTarget target = (ServiceDefTarget) instance;" );
             writer.println( "                target.setServiceEntryPoint( GWT.getModuleBaseURL() + \"" + uri + "\" );" );
         }
@@ -410,6 +399,24 @@ public class GenerateAsyncMojo
         }
 
         return method.getTagByName( "deprecated" ) != null;
+    }
+
+    private boolean hasRemoteServiceRelativePath(final JavaClass clazz)
+    {
+        if ( clazz != null && clazz.getAnnotations() != null )
+        {
+            for ( Annotation annotation : clazz.getAnnotations() )
+            {
+                getLog().debug( "annotation found on service interface " + annotation );
+                if ( annotation.getType().getValue().equals( "com.google.gwt.user.client.rpc.RemoteServiceRelativePath" ) )
+                {
+                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface" );
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private ClassLoader getProjectClassLoader() throws MojoExecutionException
