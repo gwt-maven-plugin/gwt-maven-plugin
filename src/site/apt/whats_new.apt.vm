@@ -29,7 +29,7 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Updated to GWT 2.6.0-rc3
+ * Updated to GWT 2.6.0
 
  * Most goals are marked <<<@threadSafe>>> (2.6.0-rc2)
 
