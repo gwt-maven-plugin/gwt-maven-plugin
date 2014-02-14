@@ -22,6 +22,8 @@ package org.codehaus.mojo.gwt.shell;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.mojo.gwt.MavenProjectContext;
 
 import java.io.File;
 
@@ -88,6 +90,12 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      */
     private String sourceLevel;
 
+    /**
+     * The MavenProject executed by the "process-classes" phase.
+     * @parameter expression="${executedProject}"
+     */
+    private MavenProject executedProject;
+    
     @Override
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
@@ -135,6 +143,17 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         }
 
         cmd.execute();
+    }
+    
+    public void setExecutedProject( MavenProject executedProject )
+    {
+        this.executedProject = executedProject;
+    }
+    
+    @Override
+    public MavenProject getProject()
+    {
+        return executedProject;
     }
 }
 
