@@ -347,7 +347,7 @@ public class GenerateAsyncMojo
         writer.println( "" );
         writer.println( "        private Util()" );
         writer.println( "        {" );
-        writer.println( "            // Utility class should not be instanciated" );
+        writer.println( "            // Utility class should not be instantiated" );
         writer.println( "        }" );
         writer.println( "    }" );
 
