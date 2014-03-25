@@ -28,12 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
@@ -162,7 +157,7 @@ public abstract class AbstractGwtMojo
      * @parameter default-value="false" expression="${gwt.inplace}"
      */
     private boolean inplace;
-    
+
     /**
      * The forked command line will use gwt sdk jars first in classpath.
      * see issue http://code.google.com/p/google-web-toolkit/issues/detail?id=5290
@@ -171,6 +166,13 @@ public abstract class AbstractGwtMojo
      * @since 2.1.0-1
      */
     protected boolean gwtSdkFirstInClasspath;
+
+    /**
+     * Additional classpath entries to prepend to the classpath.
+     *
+     * @parameter
+     */
+    private File[] additionalSources;
 
     public File getOutputDirectory()
     {
@@ -230,7 +232,20 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
+            Collection<File> baseEntries = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
+
+            Collection<File> files;
+            if ( additionalSources != null && additionalSources.length > 0 )
+            {
+                // Prepend additional classpath entries to the final classpath.
+                files = new ArrayList<File>();
+                files.addAll( Arrays.asList( additionalSources ) );
+                files.addAll( baseEntries );
+            }
+            else
+            {
+                files = baseEntries;
+            }
 
             if ( getLog().isDebugEnabled() )
             {
