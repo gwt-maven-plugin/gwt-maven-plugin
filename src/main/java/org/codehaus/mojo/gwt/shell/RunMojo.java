@@ -19,8 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
