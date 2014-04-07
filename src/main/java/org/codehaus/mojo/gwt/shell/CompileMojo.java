@@ -453,7 +453,7 @@ public class CompileMojo
         {
             return localWorkers;
         }
-        // workaround to GWT issue 4031 whith IBM JDK
+        // workaround to GWT issue 4031 with IBM JDK
         // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
         if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()))
         {
