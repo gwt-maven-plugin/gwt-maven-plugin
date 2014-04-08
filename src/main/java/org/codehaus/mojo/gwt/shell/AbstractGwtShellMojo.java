@@ -144,7 +144,7 @@ public abstract class AbstractGwtShellMojo
      * @since 2.5.0-rc1
      */
     private File persistentunitcachedir;
-
+ 
     // methods
 
     /**
@@ -255,9 +255,11 @@ public abstract class AbstractGwtShellMojo
         {
             return;
         }
+
+        List<Artifact> compileSourceArtifacts = new ArrayList<Artifact>();
         
-        for ( String include : compileSourcesArtifacts )
-        {
+        for ( String include : compileSourcesArtifacts ) {
+        	
             List<String> parts = new ArrayList<String>();
             parts.addAll( Arrays.asList(include.split(":")) );
             if ( parts.size() == 2 )
@@ -277,15 +279,22 @@ public abstract class AbstractGwtShellMojo
                     Artifact sources =
                             resolve( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
                                     "jar", "sources" );
+
+                    compileSourceArtifacts.add(sources);
+                    
                     cmd.withinClasspath( sources.getFile() );
                     found = true;
                     break;
                 }
             }
+            
             if ( !found )
                 getLog().warn(
                         "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
         }
+
+        setResolvedCompileSourceArtifacts(compileSourceArtifacts);
+        
     }
 
     protected void addArgumentDeploy(JavaCommand cmd) {
@@ -318,7 +327,7 @@ public abstract class AbstractGwtShellMojo
         }
     }
 
-    /**
+	/**
      * A plexus-util StreamConsumer to redirect messages to plugin log
      */
     protected StreamConsumer out = new StreamConsumer()

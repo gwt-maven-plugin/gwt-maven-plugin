@@ -41,7 +41,6 @@ import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
@@ -76,7 +75,7 @@ public abstract class AbstractGwtModuleMojo
      * @parameter expression="${gwt.module}"
      */
     private String module;
-
+    
     /**
      *
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
@@ -194,7 +193,7 @@ public abstract class AbstractGwtModuleMojo
                 return readModule( name, xml );
             }
         }
-
+        
         try
         {
             Collection<File> classpath = getClasspath(Artifact.SCOPE_COMPILE );
@@ -218,51 +217,8 @@ public abstract class AbstractGwtModuleMojo
             throw new GwtModuleReaderException(e.getMessage(), e);
         }
 
+
         throw new GwtModuleReaderException( "GWT Module " + name + " not found in project sources or resources." );
-    }
-
-    @Override
-    public Collection<File> getClasspath(String scope) throws MojoExecutionException {
-    	
-    	Collection<File> files = super.getClasspath(scope);
-    	
-    	if (compileSourcesArtifacts == null) {
-            return files;
-        }
-        
-        for (String include : compileSourcesArtifacts) {
-        	
-            List<String> parts = new ArrayList<String>();
-            
-            parts.addAll( Arrays.asList(include.split(":")) );
-            
-            if (parts.size() == 2) {
-                // type is optional as it will mostly be "jar"
-                parts.add("jar");
-            }
-            
-            String dependencyId = StringUtils.join(parts.iterator(), ":");
-            
-            boolean found = false;
-
-            for (Artifact artifact : getProjectArtifacts()) {
-                getLog().debug("compare " + dependencyId + " with " + artifact.getDependencyConflictId());
-                
-                if (artifact.getDependencyConflictId().equals(dependencyId)) {
-                    getLog().debug( "Add " + dependencyId + " sources.jar artifact to compile classpath" );
-                    Artifact sources = resolve(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), "jar", "sources");
-                    files.add(sources.getFile());
-                    found = true;
-                    break;
-                }
-            }
-            
-            if ( !found ) {
-                getLog().warn("Declared compileSourcesArtifact was not found in project dependencies " + dependencyId);
-            }
-        }
-    	    	
-    	return files;
     }
     
     private GwtModule readModule( String name, File file )

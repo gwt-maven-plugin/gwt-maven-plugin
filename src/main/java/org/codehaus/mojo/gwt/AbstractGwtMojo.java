@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -98,6 +99,11 @@ public abstract class AbstractGwtMojo
      * @component
      */
     protected ClasspathBuilder classpathBuilder;
+
+    /**
+     * Resolved source artifacts
+     */
+    protected Iterable<Artifact> resolvedCompileSourceArtifacts;
 
     // --- Some MavenSession related structures --------------------------------
 
@@ -232,6 +238,10 @@ public abstract class AbstractGwtMojo
         {
             Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
 
+        	for (Artifact artifact : getResolvedCompileSourceArtifacts()) {
+        		files.add(artifact.getFile());
+        	}
+        	
             if ( getLog().isDebugEnabled() )
             {
                 getLog().debug( "GWT SDK execution classpath :" );
@@ -240,6 +250,7 @@ public abstract class AbstractGwtMojo
                     getLog().debug( "   " + f.getAbsolutePath() );
                 }
             }
+            
             return files;
         }
         catch ( ClasspathBuilderException e )
@@ -248,6 +259,18 @@ public abstract class AbstractGwtMojo
         }
     }
 
+    protected Iterable<Artifact> getResolvedCompileSourceArtifacts() {
+    	
+    	if (resolvedCompileSourceArtifacts == null) {
+    		return Collections.emptySet();
+    	}
+    	
+		return resolvedCompileSourceArtifacts;
+	}
+
+    protected void setResolvedCompileSourceArtifacts(Iterable<Artifact> artifacts) {
+		this.resolvedCompileSourceArtifacts = artifacts;
+	}
 
     /**
      * Whether to use processed resources and compiled classes ({@code false}), or raw resources ({@code true }).
