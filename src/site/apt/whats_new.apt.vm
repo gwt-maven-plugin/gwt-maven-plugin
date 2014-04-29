@@ -29,13 +29,9 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Updated to GWT 2.6.0
+ * Updated to GWT 2.6.1-rc1
 
- * Most goals are marked <<<@threadSafe>>> (2.6.0-rc2)
-
- * Add support for <<<saveSourceOutput>>> in <<<gwt:compile>>> (2.6.0-rc2)
-
- * Use <<<auto>>> as the default value for <<<sourceLevel>>>
+ * Fixed <<<mvn gwt:run-codeserver>>> so it properly uses the classes it just compiles (i.e. you no longer need to use <<<mvn process-classes gwt:run-codeserver>>>)
 
  []
 
