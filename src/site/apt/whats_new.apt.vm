@@ -29,9 +29,9 @@
 
 What's new in gwt-maven-plugin ${project.version}
 
- * Updated to GWT 2.6.1-rc1
+ * Updated to GWT 2.6.1-rc2
 
- * Fixed <<<mvn gwt:run-codeserver>>> so it properly uses the classes it just compiles (i.e. you no longer need to use <<<mvn process-classes gwt:run-codeserver>>>)
+ * Fixed <<<mvn gwt:run-codeserver>>> so it properly uses the classes it just compiles (i.e. you no longer need to use <<<mvn process-classes gwt:run-codeserver>>>) (2.6.1-rc1)
 
  []
 
