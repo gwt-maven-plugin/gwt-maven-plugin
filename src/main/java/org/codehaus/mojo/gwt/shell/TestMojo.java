@@ -480,8 +480,8 @@ public class TestMojo
     protected String getGwtArgs()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( "-war " ).append( out );
-        sb.append( " -logLevel " ).append( getLogLevel() );
+        sb.append( "-war " ).append( quote( out ) );
+        sb.append( " -logLevel " ).append( quote( getLogLevel() ) );
         sb.append( ( webMode || productionMode ) ? " -nodevMode" : " -devMode" );
         sb.append( checkAssertions ? " -checkAssertions" : " -nocheckAssertions" );
         sb.append( clusterFunctions ? " -XclusterFunctions" : " -XnoclusterFunctions" );
@@ -495,7 +495,7 @@ public class TestMojo
         sb.append( quirksMode ? " -norunStandardsMode" : " -runStandardsMode" );
         sb.append( removeDuplicateFunctions ? " -XremoveDuplicateFunctions" : " -XnoremoveDuplicateFunctions" );
         sb.append( showUi ? " -showUi" : " -noshowUi" );
-        sb.append( " -sourceLevel " ).append( sourceLevel );
+        sb.append( " -sourceLevel " ).append( quote( sourceLevel ) );
         sb.append( " -testBeginTimeout " ).append( testBeginTimeout );
         sb.append( " -testMethodTimeout ").append( testMethodTimeout );
         sb.append( " -Xtries " ).append( tries );
@@ -506,48 +506,52 @@ public class TestMojo
         }
         if ( precompile != null && !precompile.trim().isEmpty() )
         {
-            sb.append( " -precompile " ).append( precompile );
+            sb.append( " -precompile " ).append( quote( precompile ) );
         }
         if ( logDir != null )
         {
-            sb.append( " -logdir " ).append( logDir.getAbsolutePath() );
+            sb.append( " -logdir " ).append( quote( logDir.getAbsolutePath() ) );
         }
         if ( workDir != null )
         {
-            sb.append( " -workDir " ).append( workDir.getAbsolutePath() );
+            sb.append( " -workDir " ).append( quote( workDir.getAbsolutePath() ) );
         }
 
         if ( mode.equalsIgnoreCase( "manual" ) )
         {
-            sb.append( " -runStyle Manual:1 " );
+            sb.append( " -runStyle Manual:1" );
         }
         else if ( mode.equalsIgnoreCase( "htmlunit" ) )
         {
-            sb.append( " -runStyle HtmlUnit:" + htmlunit );
+            sb.append( " -runStyle ").append( quote( "HtmlUnit:" + htmlunit ) );
         }
         else if ( mode.equalsIgnoreCase( "selenium" ) )
         {
-            sb.append( " -runStyle Selenium:" + selenium );
+            sb.append( " -runStyle ").append( quote( "Selenium:" + selenium ) );
         }
         else if ( mode.equalsIgnoreCase( "remoteweb" ) )
         {
-            sb.append( " -runStyle RemoteWeb:" + remoteweb );
+            sb.append( " -runStyle ").append( quote( "RemoteWeb:" + remoteweb ) );
         }
         else if ( !mode.trim().isEmpty() )
         {
-            sb.append( " -runStyle " + mode );
+            sb.append( " -runStyle ").append( quote( mode ) );
         }
         if ( userAgents != null && !userAgents.trim().isEmpty() )
         {
-            sb.append( " -userAgents " ).append( userAgents );
+            sb.append( " -userAgents " ).append( quote( userAgents ) );
         }
         if ( batch != null && !batch.trim().isEmpty() )
         {
-            sb.append( " -batch " ).append( batch );
+            sb.append( " -batch " ).append( quote( batch ) );
         }
         // TODO Is addArgumentDeploy(cmd) also needed to get readable test stacktraces with an alternative deploy dir?
 
         return sb.toString();
+    }
+
+    private String quote(String arg) {
+        return StringUtils.quoteAndEscape( arg, '"', new char[] { '"', ' ', '\t', '\r', '\n' } );
     }
 
     @Override
