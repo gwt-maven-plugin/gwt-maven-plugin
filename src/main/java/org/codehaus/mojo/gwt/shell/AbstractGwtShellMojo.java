@@ -20,6 +20,8 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +34,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
@@ -43,7 +46,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 /**
  * Support running GWT SDK Tools as forked JVM with classpath set according to project source/resource directories and
  * dependencies.
- * 
+ *
  * @author ccollins
  * @author cooper
  * @author willpugh
@@ -232,8 +235,8 @@ public abstract class AbstractGwtShellMojo
         File jvmFile = new File( jvm );
         if ( !jvmFile.exists() )
         {
-            throw new MojoExecutionException( "the configured jvm " + jvm
-                + " doesn't exists please check your environnement" );
+            throw new MojoExecutionException(
+                "the configured jvm " + jvm + " doesn't exists please check your environnement" );
         }
         if ( jvmFile.isDirectory() )
         {
@@ -262,8 +265,8 @@ public abstract class AbstractGwtShellMojo
      * The hack can also be used to include utility code from external librariries that may not have been designed for
      * GWT.
      */
-    protected void addCompileSourceArtifacts(JavaCommand cmd)
-            throws MojoExecutionException
+    protected void addCompileSourceArtifacts( JavaCommand cmd )
+        throws MojoExecutionException
     {
         if ( compileSourcesArtifacts == null )
         {
@@ -272,7 +275,7 @@ public abstract class AbstractGwtShellMojo
         for ( String include : compileSourcesArtifacts )
         {
             List<String> parts = new ArrayList<String>();
-            parts.addAll( Arrays.asList(include.split(":")) );
+            parts.addAll( Arrays.asList( include.split( ":" ) ) );
             if ( parts.size() == 2 )
             {
                 // type is optional as it will mostly be "jar"
@@ -288,8 +291,8 @@ public abstract class AbstractGwtShellMojo
                 {
                     getLog().debug( "Add " + dependencyId + " sources.jar artifact to compile classpath" );
                     Artifact sources =
-                            resolve( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                                    "jar", "sources" );
+                        resolve( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), "jar",
+                                 "sources" );
                     cmd.withinClasspath( sources.getFile() );
                     found = true;
                     break;
@@ -297,11 +300,12 @@ public abstract class AbstractGwtShellMojo
             }
             if ( !found )
                 getLog().warn(
-                        "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
+                    "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
         }
     }
 
-    protected void addArgumentDeploy(JavaCommand cmd) {
+    protected void addArgumentDeploy( JavaCommand cmd )
+    {
         if ( deploy != null )
         {
             cmd.arg( "-deploy" ).arg( String.valueOf( deploy ) );
@@ -320,7 +324,8 @@ public abstract class AbstractGwtShellMojo
         }
     }
 
-    protected void addPersistentUnitCache(JavaCommand cmd) {
+    protected void addPersistentUnitCache( JavaCommand cmd )
+    {
         if ( persistentunitcache != null )
         {
             cmd.systemProperty( "gwt.persistentunitcache", String.valueOf( persistentunitcache.booleanValue() ) );
@@ -355,7 +360,7 @@ public abstract class AbstractGwtShellMojo
 
     /**
      * @deprecated use the new {@link JavaCommand}
-     * Create a command to execute using builder pattern
+     *             Create a command to execute using builder pattern
      *
      * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
      */
@@ -370,6 +375,9 @@ public abstract class AbstractGwtShellMojo
         private Properties systemProperties = new Properties();
 
         private Properties env = new Properties();
+
+        //Reasonable maximum length based on http://support.microsoft.com/kb/830473 to accommodate additional parameters
+        private static final int MAX_INLINE_CLASSPATH_LENGTH = 4096;
 
         public JavaCommand( String className )
         {
@@ -430,24 +438,22 @@ public abstract class AbstractGwtShellMojo
         public void execute()
             throws MojoExecutionException
         {
-            List<String> command = new ArrayList<String>();
-            command.addAll( getJvmArgs() );
-            command.add( "-classpath" );
-            List<String> path = new ArrayList<String>( classpath.size() );
-            for ( File file : classpath )
+            List<String> command = null;
+            if ( Os.isFamily( Os.FAMILY_WINDOWS ) && getClassPathLength() > MAX_INLINE_CLASSPATH_LENGTH )
             {
-                path.add( file.getAbsolutePath() );
+                getLog().debug(
+                    "Microsoft Windows and long classpath detected. Using org.codehaus.mojo.gwt.shell.WindowsCommandLineLauncher" );
+                command = prepareCommandForWindows();
             }
-            command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
-            if ( systemProperties != null )
+            else
             {
-                for ( Map.Entry entry : systemProperties.entrySet() )
-                {
-                    command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
-                }
+                command = prepareCommand();
             }
-            command.add( className );
-            command.addAll( args );
+
+            if ( command == null )
+            {
+                throw new MojoExecutionException( "Failed to build command" );
+            }
 
             try
             {
@@ -465,7 +471,8 @@ public abstract class AbstractGwtShellMojo
                 {
                     for ( Map.Entry entry : env.entrySet() )
                     {
-                        getLog().debug( "add env " + (String) entry.getKey() + " with value " + (String) entry.getValue() );
+                        getLog().debug(
+                            "add env " + (String) entry.getKey() + " with value " + (String) entry.getValue() );
                         cmd.addEnvironment( (String) entry.getKey(), (String) entry.getValue() );
                     }
                 }
@@ -482,8 +489,8 @@ public abstract class AbstractGwtShellMojo
 
                 if ( status != 0 )
                 {
-                    throw new ForkedProcessExecutionException( "Command [[\n" + cmd.toString()
-                        + "\n]] failed with status " + status );
+                    throw new ForkedProcessExecutionException(
+                        "Command [[\n" + cmd.toString() + "\n]] failed with status " + status );
                 }
             }
             catch ( CommandLineTimeOutException e )
@@ -499,6 +506,96 @@ public abstract class AbstractGwtShellMojo
             {
                 throw new MojoExecutionException( "Failed to execute command line :\n" + command, e );
             }
+
+        }
+
+        private List<String> prepareCommandForWindows()
+            throws MojoExecutionException
+        {
+            //Write classpath to temporary file
+            final File classPathFile = FileUtils.createTempFile( "gwt-maven-plugin", "classpath", null );
+            classPathFile.deleteOnExit();
+
+            PrintWriter writer = null;
+            try
+            {
+                writer = new PrintWriter( classPathFile );
+                for ( File file : classpath )
+                {
+                    writer.println( file.getAbsolutePath() );
+                }
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Failed to write classpath to temporary file", e );
+            }
+            finally
+            {
+                if ( writer != null )
+                {
+                    writer.close();
+                }
+            }
+
+            //Redirect Shell execution via proxy that can handle classpath defined in an external file
+            List<String> command = new ArrayList<String>();
+            command.addAll( getJvmArgs() );
+            command.add( "-classpath" );
+
+            //Setup the minimial System ClassLoader classpath
+            final List<String> minimalClassPath = new ArrayList<String>( 1 );
+            Artifact plugin = artifactFactory.createArtifact( "org.codehaus.mojo", "gwt-maven-plugin", version,
+                                                              Artifact.SCOPE_COMPILE, "maven-plugin" );
+            minimalClassPath.add( localRepository.getBasedir() + "/" + localRepository.pathOf( plugin ) );
+            command.add( StringUtils.join( minimalClassPath.iterator(), File.pathSeparator ) );
+
+            if ( systemProperties != null )
+            {
+                for ( Map.Entry entry : systemProperties.entrySet() )
+                {
+                    command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+                }
+            }
+
+            command.add( WindowsCommandLineLauncher.class.getName() );
+            command.add( classPathFile.getAbsolutePath() );
+            command.add( className );
+            command.addAll( args );
+            return command;
+        }
+
+        private List<String> prepareCommand()
+        {
+            List<String> command = new ArrayList<String>();
+            command.addAll( getJvmArgs() );
+            command.add( "-classpath" );
+
+            List<String> path = new ArrayList<String>( classpath.size() );
+            for ( File file : classpath )
+            {
+                path.add( file.getAbsolutePath() );
+            }
+            command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
+            if ( systemProperties != null )
+            {
+                for ( Map.Entry entry : systemProperties.entrySet() )
+                {
+                    command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+                }
+            }
+            command.add( className );
+            command.addAll( args );
+            return command;
+        }
+
+        private int getClassPathLength()
+        {
+            List<String> path = new ArrayList<String>( classpath.size() );
+            for ( File file : classpath )
+            {
+                path.add( file.getAbsolutePath() );
+            }
+            return StringUtils.join( path.iterator(), File.pathSeparator ).length();
         }
 
         public void withinClasspathFirst( File oophmJar )

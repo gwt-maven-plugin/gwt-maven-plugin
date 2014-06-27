@@ -72,7 +72,7 @@ public abstract class AbstractGwtMojo
      * @required
      * @readonly
      */
-    private String version;
+    protected String version;
 
     /**
      * @parameter expression="${plugin.artifacts}"
@@ -162,7 +162,7 @@ public abstract class AbstractGwtMojo
      * @parameter default-value="false" expression="${gwt.inplace}"
      */
     private boolean inplace;
-    
+
     /**
      * The forked command line will use gwt sdk jars first in classpath.
      * see issue http://code.google.com/p/google-web-toolkit/issues/detail?id=5290
@@ -180,8 +180,8 @@ public abstract class AbstractGwtMojo
     /**
      * Add classpath elements to a classpath URL set
      *
-     * @param elements the initial URL set
-     * @param urls the urls to add
+     * @param elements      the initial URL set
+     * @param urls          the urls to add
      * @param startPosition the position to insert URLS
      * @return full classpath URL set
      * @throws MojoExecutionException some error occured
@@ -208,8 +208,7 @@ public abstract class AbstractGwtMojo
             }
             catch ( MalformedURLException e )
             {
-                throw new MojoExecutionException(
-                                                  "Failed to convert original classpath element " + object + " to URL.",
+                throw new MojoExecutionException( "Failed to convert original classpath element " + object + " to URL.",
                                                   e );
             }
             startPosition++;
@@ -230,7 +229,8 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
+            Collection<File> files =
+                classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
 
             if ( getLog().isDebugEnabled() )
             {
@@ -252,11 +252,12 @@ public abstract class AbstractGwtMojo
     /**
      * Whether to use processed resources and compiled classes ({@code false}), or raw resources ({@code true }).
      */
-    protected boolean isGenerator() {
+    protected boolean isGenerator()
+    {
         return false;
     }
 
-	// FIXME move to GwtDevHelper stuff to avoid duplicates
+    // FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
         throws MojoExecutionException
     {
@@ -278,7 +279,7 @@ public abstract class AbstractGwtMojo
     }
 
     protected File[] getGwtUserJar()
-            throws MojoExecutionException
+        throws MojoExecutionException
     {
         checkGwtUserVersion();
         Artifact gwtUserArtifact = getArtifact( "com.google.gwt", "gwt-user" );
@@ -287,21 +288,21 @@ public abstract class AbstractGwtMojo
         ArtifactResolutionResult result = null;
         try
         {
-            result = resolver.resolveTransitively( artifacts, gwtUserArtifact,
-                    remoteRepositories, localRepository, artifactMetadataSource );
+            result = resolver.resolveTransitively( artifacts, gwtUserArtifact, remoteRepositories, localRepository,
+                                                   artifactMetadataSource );
         }
-        catch (ArtifactResolutionException e)
+        catch ( ArtifactResolutionException e )
         {
-            throw new MojoExecutionException( "Failed to resolve artifact", e);
+            throw new MojoExecutionException( "Failed to resolve artifact", e );
         }
-        catch (ArtifactNotFoundException e)
+        catch ( ArtifactNotFoundException e )
         {
-            throw new MojoExecutionException( "Failed to resolve artifact", e);
+            throw new MojoExecutionException( "Failed to resolve artifact", e );
         }
 
         Collection<Artifact> resolved = result.getArtifacts();
         int i = 0;
-        File[] files = new File[ resolved.size() + 1 ];
+        File[] files = new File[resolved.size() + 1];
         files[i++] = gwtUserArtifact.getFile();
         for ( Artifact artifact : resolved )
         {
@@ -341,11 +342,11 @@ public abstract class AbstractGwtMojo
         for ( Iterator iterator = getProject().getArtifacts().iterator(); iterator.hasNext(); )
         {
             Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                && "gwt-dev".equals( artifact.getArtifactId() )
-                && !SCOPE_TEST.equals(  artifact.getScope() ) )
+            if ( GWT_GROUP_ID.equals( artifact.getGroupId() ) && "gwt-dev".equals( artifact.getArtifactId() )
+                && !SCOPE_TEST.equals( artifact.getScope() ) )
             {
-                getLog().warn( "Don't declare gwt-dev as a project dependency. This may introduce complex dependency conflicts" );
+                getLog().warn(
+                    "Don't declare gwt-dev as a project dependency. This may introduce complex dependency conflicts" );
             }
         }
     }
@@ -353,17 +354,18 @@ public abstract class AbstractGwtMojo
     /**
      * Check gwt-user dependency matches plugin version
      */
-    private void checkGwtUserVersion() throws MojoExecutionException
+    private void checkGwtUserVersion()
+        throws MojoExecutionException
     {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream( "org/codehaus/mojo/gwt/mojoGwtVersion.properties" );
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
+            "org/codehaus/mojo/gwt/mojoGwtVersion.properties" );
         Properties properties = new Properties();
         try
         {
             properties.load( inputStream );
 
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             throw new MojoExecutionException( "Failed to load plugin properties", e );
         }
@@ -374,8 +376,7 @@ public abstract class AbstractGwtMojo
         for ( Iterator iterator = getProject().getCompileArtifacts().iterator(); iterator.hasNext(); )
         {
             Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                 && "gwt-user".equals( artifact.getArtifactId() ) )
+            if ( GWT_GROUP_ID.equals( artifact.getGroupId() ) && "gwt-user".equals( artifact.getArtifactId() ) )
             {
                 String mojoGwtVersion = properties.getProperty( "gwt.version" );
                 //ComparableVersion with an up2date maven version
@@ -396,10 +397,11 @@ public abstract class AbstractGwtMojo
     {
         // return project.getArtifactMap().get( groupId + ":" + artifactId );
 
-        Artifact artifact = artifactFactory.createArtifactWithClassifier( groupId, artifactId, version, type, classifier );
+        Artifact artifact =
+            artifactFactory.createArtifactWithClassifier( groupId, artifactId, version, type, classifier );
         try
         {
-            resolver.resolve(artifact, remoteRepositories, localRepository);
+            resolver.resolve( artifact, remoteRepositories, localRepository );
         }
         catch ( ArtifactNotFoundException e )
         {
@@ -449,21 +451,20 @@ public abstract class AbstractGwtMojo
         return generateDirectory;
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public Set<Artifact> getProjectArtifacts()
     {
         return project.getArtifacts();
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public Set<Artifact> getProjectRuntimeArtifacts()
     {
         Set<Artifact> artifacts = new HashSet<Artifact>();
-        for (Artifact projectArtifact : (Collection<Artifact>) project.getArtifacts() )
+        for ( Artifact projectArtifact : (Collection<Artifact>) project.getArtifacts() )
         {
             String scope = projectArtifact.getScope();
-            if ( SCOPE_RUNTIME.equals( scope )
-              || SCOPE_COMPILE.equals( scope ) )
+            if ( SCOPE_RUNTIME.equals( scope ) || SCOPE_COMPILE.equals( scope ) )
             {
                 artifacts.add( projectArtifact );
             }
