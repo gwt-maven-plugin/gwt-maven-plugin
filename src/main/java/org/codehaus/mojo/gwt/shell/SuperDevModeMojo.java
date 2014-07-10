@@ -134,6 +134,7 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         }
         if ( codeServerWorkDir != null )
         {
+            codeServerWorkDir.mkdirs();
             cmd.arg( "-workDir", codeServerWorkDir.getAbsolutePath() );
         }
 
