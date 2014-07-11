@@ -72,7 +72,7 @@ public abstract class AbstractGwtMojo
      * @required
      * @readonly
      */
-    private String version;
+    protected String version;
 
     /**
      * @parameter expression="${plugin.artifacts}"
