@@ -555,7 +555,7 @@ public class TestMojo
     }
 
     @Override
-    protected void postProcessClassPath( Collection<File> classpath )
+    protected void postProcessClassPath( List<File> classpath )
         throws MojoExecutionException
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );

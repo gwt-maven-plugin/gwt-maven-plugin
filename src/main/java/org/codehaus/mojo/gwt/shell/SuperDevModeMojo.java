@@ -26,6 +26,8 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.MavenProjectContext;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * EXPERIMENTAL: Runs GWT modules with Super Dev Mode.
@@ -91,6 +93,13 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private String sourceLevel;
 
     /**
+     * Additional classpath entries to prepend to the classpath.
+     *
+     * @parameter
+     */
+    private File[] additionalSources;
+
+    /**
      * The MavenProject executed by the "process-classes" phase.
      * @parameter expression="${executedProject}"
      */
@@ -145,7 +154,16 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         cmd.execute();
     }
-    
+
+    @Override
+    protected void postProcessClassPath( List<File> classPath )
+    {
+        // Prepend additional classpath entries to the final classpath.
+        if ( additionalSources != null && additionalSources.length > 0 ) {
+            classPath.addAll( 0, Arrays.asList( additionalSources ) );
+        }
+    }
+
     public void setExecutedProject( MavenProject executedProject )
     {
         this.executedProject = executedProject;

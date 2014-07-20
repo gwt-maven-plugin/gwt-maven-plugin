@@ -23,11 +23,7 @@ import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
@@ -249,6 +245,13 @@ public class RunMojo
      */
     private String sourceLevel = System.getProperty("java.specification.version");
 
+    /**
+     * Additional classpath entries to prepend to the classpath.
+     *
+     * @parameter
+     */
+    private File[] additionalSources;
+
     public String getRunTarget()
     {
         return this.runTarget;
@@ -410,8 +413,14 @@ public class RunMojo
     }
 
     @Override
-    protected void postProcessClassPath( Collection<File> classPath )
+    protected void postProcessClassPath( List<File> classPath )
     {
+        // Prepend additional classpath entries to the final classpath.
+        if ( additionalSources != null && additionalSources.length > 0 )
+        {
+            classPath.addAll( 0, Arrays.asList( additionalSources ) );
+        }
+
         boolean isAppEngine = "com.google.appengine.tools.development.gwt.AppEngineLauncher".equals( server );
         List<Pattern> patternsToExclude = new ArrayList<Pattern>();
         if ( runClasspathExcludes != null && !runClasspathExcludes.isEmpty() )
