@@ -181,14 +181,6 @@ public class TestMojo
     private File reportsDirectory;
     
     /**
-     * Run each test using an HTML document in quirks mode (rather than standards mode)
-     * 
-     * @parameter default-value="false"
-     * @since 2.5.0-rc1
-     */
-    private boolean quirksMode;
-    
-    /**
      * Specify the user agents to reduce the number of permutations in '-prod' mode;
      * e.g. ie6,ie8,safari,gecko1_8,opera
      * 
@@ -492,7 +484,6 @@ public class TestMojo
         sb.append( inlineLiteralParameters ? " -XinlineLiteralParameters" : " -XnoinlineLiteralParameters" );
         sb.append( optimizeDataflow ? " -XoptimizeDataflow" : " -XnooptimizeDataflow" );
         sb.append( ordinalizeEnums ? " -XordinalizeEnums" : " -XnoordinalizeEnums" );
-        sb.append( quirksMode ? " -norunStandardsMode" : " -runStandardsMode" );
         sb.append( removeDuplicateFunctions ? " -XremoveDuplicateFunctions" : " -XnoremoveDuplicateFunctions" );
         sb.append( showUi ? " -showUi" : " -noshowUi" );
         sb.append( " -sourceLevel " ).append( quote( sourceLevel ) );
