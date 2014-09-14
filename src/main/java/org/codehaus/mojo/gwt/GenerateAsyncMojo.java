@@ -138,6 +138,13 @@ public class GenerateAsyncMojo
             return;
         }
 
+        // add the generated source into compile source
+        // do this step first to ensure the source folder will be added to the Eclipse classpath
+        // Solution inspired by CXF codegen plugin 
+        getLog().info( "Anticipate addition of generated directory for automatic integration in eclipse" );
+        addCompileSourceRoot( getGenerateDirectory() );
+
+
         if ( encoding == null )
         {
             getLog().warn( "Encoding is not set, your build will be platform dependent" );
@@ -163,12 +170,7 @@ public class GenerateAsyncMojo
                 }
             }
         }
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
         }
-    }
 
     /**
      * @param sourceRoot the base directory to scan for RPC services
