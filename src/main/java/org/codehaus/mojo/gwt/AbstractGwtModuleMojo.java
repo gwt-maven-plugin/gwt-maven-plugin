@@ -75,6 +75,21 @@ public abstract class AbstractGwtModuleMojo
      * @parameter expression="${gwt.module}"
      */
     private String module;
+    
+    /**
+     *
+     * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
+     * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
+     * GWT. The plugin will download the source.jar if necessary.
+     *
+     * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
+     * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
+     * desirable).
+     *
+     *
+     * @parameter
+     */
+   protected String[] compileSourcesArtifacts;
 
     public List<String> getGwtModules()
     {
@@ -178,10 +193,10 @@ public abstract class AbstractGwtModuleMojo
                 return readModule( name, xml );
             }
         }
-
+        
         try
         {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
+            Collection<File> classpath = getClasspath(Artifact.SCOPE_COMPILE );
             URL[] urls = new URL[classpath.size()];
             int i = 0;
             for ( File file : classpath )
@@ -202,9 +217,10 @@ public abstract class AbstractGwtModuleMojo
             throw new GwtModuleReaderException(e.getMessage(), e);
         }
 
+
         throw new GwtModuleReaderException( "GWT Module " + name + " not found in project sources or resources." );
     }
-
+    
     private GwtModule readModule( String name, File file )
         throws GwtModuleReaderException
 

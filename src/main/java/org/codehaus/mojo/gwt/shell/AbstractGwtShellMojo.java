@@ -124,20 +124,6 @@ public abstract class AbstractGwtShellMojo
      * @parameter
      */
     private int timeOut;
-    /**
-     *
-     * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
-     * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
-     * GWT. The plugin will download the source.jar if necessary.
-     *
-     * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
-     * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
-     * desirable).
-     *
-     *
-     * @parameter
-     */
-    private String[] compileSourcesArtifacts;
 
     /**
      * Whether to use the persistent unit cache or not.
@@ -158,7 +144,7 @@ public abstract class AbstractGwtShellMojo
      * @since 2.5.0-rc1
      */
     private File persistentunitcachedir;
-
+ 
     // methods
 
     /**
@@ -269,8 +255,11 @@ public abstract class AbstractGwtShellMojo
         {
             return;
         }
-        for ( String include : compileSourcesArtifacts )
-        {
+
+        List<Artifact> compileSourceArtifacts = new ArrayList<Artifact>();
+        
+        for ( String include : compileSourcesArtifacts ) {
+        	
             List<String> parts = new ArrayList<String>();
             parts.addAll( Arrays.asList(include.split(":")) );
             if ( parts.size() == 2 )
@@ -290,15 +279,22 @@ public abstract class AbstractGwtShellMojo
                     Artifact sources =
                             resolve( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
                                     "jar", "sources" );
+
+                    compileSourceArtifacts.add(sources);
+                    
                     cmd.withinClasspath( sources.getFile() );
                     found = true;
                     break;
                 }
             }
+            
             if ( !found )
                 getLog().warn(
                         "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
         }
+
+        setResolvedCompileSourceArtifacts(compileSourceArtifacts);
+        
     }
 
     protected void addArgumentDeploy(JavaCommand cmd) {
@@ -331,7 +327,7 @@ public abstract class AbstractGwtShellMojo
         }
     }
 
-    /**
+	/**
      * A plexus-util StreamConsumer to redirect messages to plugin log
      */
     protected StreamConsumer out = new StreamConsumer()
