@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -411,6 +410,19 @@ public class CompileMojo
         compile( getModules() );
     }
 
+    @Override
+    protected String getExtraJvmArgs()
+    {
+        String jvmArgs = super.getExtraJvmArgs();
+        // workaround to GWT issue 4031 with IBM JDK
+        // @see https://code.google.com/p/google-web-toolkit/issues/detail?id=4031#c16
+        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()) && !StringUtils.isEmpty( jvmArgs ))
+        {
+            return jvmArgs + " -Dgwt.jjs.javaArgs=" + StringUtils.quoteAndEscape( jvmArgs, '"', new char[] { '"', ' ', '\t', '\r', '\n' } );
+        }
+        return jvmArgs;
+    }
+
     private void compile( String[] modules )
         throws MojoExecutionException
     {
@@ -531,18 +543,6 @@ public class CompileMojo
         if ( localWorkers > 0 )
         {
             return localWorkers;
-        }
-        // workaround to GWT issue 4031 whith IBM JDK
-        // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
-        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()))
-        {
-            StringBuilder sb = new StringBuilder( "Build is using IBM JDK, and no explicit JVM property has been set." );
-            sb.append( SystemUtils.LINE_SEPARATOR );
-            sb.append("localWorkers set to 1 as a workaround");
-            sb.append( SystemUtils.LINE_SEPARATOR );
-            sb.append( "see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031" );
-            getLog().info( sb.toString() );
-            return 1;
         }
         return Runtime.getRuntime().availableProcessors();
     }
