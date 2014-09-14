@@ -52,6 +52,7 @@
           <extraParam>false</extraParam>
           <compileReport>true</compileReport>
           <soycDetailed>true</soycDetailed>
+          <enableJsonSoyc>true</enableJsonSoyc>
         </configuration>
         <executions>
           <execution>

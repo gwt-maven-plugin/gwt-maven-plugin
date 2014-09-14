@@ -30,6 +30,7 @@ assert new File(basedir, 'target/deploy').exists();
 assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 assert new File(basedir, 'target/persistentunitcache').exists();
 // assert new File(basedir, 'target/savedSources').exists();
+assert new File(basedir, 'target/missingDeps').exists();
 
 assert !new File(basedir, 'target/.generated').exists();
 
@@ -51,5 +52,9 @@ assert content.contains( '-XnooptimizeDataflow' );
 assert content.contains( '-XnoordinalizeEnums' );
 assert content.contains( '-XnoremoveDuplicateFunctions' );
 assert content.contains( '-sourceLevel auto' );
+assert content.contains( '-incrementalCompileWarnings' );
+assert content.contains( '-XjsInteropMode NONE' );
+assert content.contains( '-Xnamespace NONE' );
+assert content.contains( '-overlappingSourceWarnings' );
   
 return true;

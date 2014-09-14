@@ -19,8 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,13 +41,13 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Goal which run a GWT module in the GWT Hosted mode.
+ * Goal which run a GWT module in the GWT (Classic or Super) Dev Mode.
  *
  * @goal run
  * @execute phase=process-classes goal:war:exploded
  * @requiresDirectInvocation
  * @requiresDependencyResolution test
- * @description Runs the the project in the GWT Hosted mode for development.
+ * @description Runs the the project in the GWT (Classic or Super) Dev Mode for development.
  * @author ccollins
  * @author cooper
  * @version $Id$
@@ -249,6 +247,14 @@ public class RunMojo
      */
     private String sourceLevel = System.getProperty("java.specification.version");
 
+    /**
+     * Runs Super Dev Mode instead of classic Development Mode.
+     * 
+     * @parameter default-value="true" expression="${gwt.superDevMode}"
+     * @since 2.7.0-rc1
+     */
+    private boolean superDevMode;
+
     public String getRunTarget()
     {
         return this.runTarget;
@@ -354,7 +360,8 @@ public class RunMojo
             .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
             .arg( noServer, "-nostartServer" )
-            .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" );
+            .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
+            .arg( !superDevMode, "-nosuperDevMode" );
 
         if ( workDir != null )
         {

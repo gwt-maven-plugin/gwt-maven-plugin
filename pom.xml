@@ -120,7 +120,7 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
-    <gwt.version>2.6.1</gwt.version>
+    <gwt.version>2.7.0-SNAPSHOT</gwt.version>
     <!--  apt filterting doesn't support dot -->
     <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>2.0.9</mavenVersion>
@@ -597,6 +597,19 @@
   <reporting>
     <excludeDefaults>false</excludeDefaults>
   </reporting>
+
+  <repositories>
+    <repository>
+      <id>google-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   
   <pluginRepositories>
     <pluginRepository>

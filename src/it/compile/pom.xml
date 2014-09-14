@@ -65,6 +65,10 @@
           <removeDuplicateFunctions>false</removeDuplicateFunctions>
           <saveSource>true</saveSource>
           <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
+          <incrementalCompileWarnings>true</incrementalCompileWarnings>
+          <missingDepsFile>${project.build.directory}/missingDeps</missingDepsFile>
+          <namespace>NONE</namespace>
+          <overlappingSourceWarnings>true</overlappingSourceWarnings>
         </configuration>
         <executions>
           <execution>

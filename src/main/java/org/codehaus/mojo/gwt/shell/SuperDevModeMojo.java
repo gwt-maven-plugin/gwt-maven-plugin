@@ -23,18 +23,17 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.mojo.gwt.MavenProjectContext;
 
 import java.io.File;
 
 /**
- * EXPERIMENTAL: Runs GWT modules with Super Dev Mode.
+ * Runs GWT modules with Super Dev Mode.
  *
  * @goal run-codeserver
  * @execute phase=process-classes
  * @requiresDirectInvocation
  * @requiresDependencyResolution compile
- * @description EXPERIMENTAL: Runs the project in GWT SuperDevMode for development.
+ * @description Runs the project in GWT SuperDevMode for development.
  * @author t.broyer
  * @since 2.5.0-rc1
  */
@@ -91,11 +90,37 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private String sourceLevel;
 
     /**
+     * Stop compiling if a module has a Java file with a compile error, even if unused.
+     * <p>
+     * Can be set from command line using '-Dgwt.compiler.strict=true'.
+     * 
+     * @parameter alias="strict" default-value="false" expression="${gwt.compiler.strict}"
+     * @since 2.7.0-rc1
+     */
+    private boolean failOnError;
+
+    /**
+     * EXPERIMENTAL: Compiles faster by creating/reusing a JS file per class.
+     * 
+     * @parameter default-value="false" expression="${gwt.compiler.compilePerFile}"
+     * @since 2.7.0-rc1
+     */
+    private boolean compilePerFile;
+
+    /**
+     * Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * 
+     * @parameter default-value="NONE
+     * @since 2.7.0-rc1
+     */
+    private String jsInteropMode;
+
+    /**
      * The MavenProject executed by the "process-classes" phase.
      * @parameter expression="${executedProject}"
      */
     private MavenProject executedProject;
-    
+
     @Override
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
@@ -123,10 +148,16 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         cmd.arg( !precompile, "-noprecompile" );
         cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
+        cmd.arg( failOnError, "-failOnError" );
+        cmd.arg( compilePerFile, "-XcompilePerFile" );
 
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 )
+        {
+            cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
         if ( bindAddress != null && bindAddress.length() > 0 )
         {
-            cmd.arg( "-bindAddress" ).arg( bindAddress );
+            cmd.arg( "-bindAddress", bindAddress );
         }
         if ( codeServerPort != null )
         {

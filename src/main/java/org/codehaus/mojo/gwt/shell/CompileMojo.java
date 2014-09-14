@@ -23,8 +23,6 @@ package org.codehaus.mojo.gwt.shell;
  *
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,9 +40,9 @@ import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Invokes the GWTCompiler for the project source.
+ * Invokes the GWT Compiler for the project source.
  * See compiler options :
- * http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
+ * http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
  *
  * @phase prepare-package
  * @goal compile
@@ -334,6 +332,68 @@ public class CompileMojo
      */
     private String sourceLevel;
 
+    /**
+     * Whether to show warnings during monolithic compiles for issues that will break
+     * in incremental compiles (strict compile errors, strict source directory inclusion,
+     * missing dependencies).
+     * 
+     * @parameter default-value="false"
+     * @since 2.7.0-rc1
+     */
+    private boolean incrementalCompileWarnings;
+
+    /**
+     * Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * 
+     * @parameter default-value="NONE
+     * @since 2.7.0-rc1
+     */
+    private String jsInteropMode;
+
+    /**
+     * Specifies a file into which detailed missing dependency information will be written.
+     * 
+     * @parameter
+     * @since 2.7.0-rc1
+     */
+    private File missingDepsFile;
+
+    /**
+     * Puts most JavaScript globals into namespaces.
+     * <p>
+     * Value is one of PACKAGE or NONE.
+     * <p>
+     * Default: PACKAGE for -draftCompile, otherwise NONE
+     * 
+     * @parameter
+     * @since 2.7.0-rc1
+     */
+    private String namespace;
+
+    /**
+     * Whether to show warnings during monolithic compiles for overlapping source inclusion.
+     * 
+     * @parameter default-value="false"
+     * @since 2.7.0-rc1
+     */
+    private boolean overlappingSourceWarnings;
+
+    /**
+     * EXPERIMENTAL: Emit detailed compile-report information in the "Story Of Your Compile"  in the new json format.
+     * 
+     * @parameter default-value="false"
+     * @since 2.7.0-rc1
+     */
+    private boolean enableJsonSoyc;
+
+    /**
+     * EXPERIMENTAL: Compile, link and recompile on a per-file basis.
+     * 
+     * @parameter default-value="false" expression="${gwt.compiler.compilePerFile}"
+     * @since 2.7.0-rc1
+     */
+    private boolean compilePerFile;
+
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
@@ -396,7 +456,26 @@ public class CompileMojo
             .arg( !removeDuplicateFunctions, "-XnoremoveDuplicateFunctions" )
             .arg( saveSource, "-saveSource" )
             .arg( "-sourceLevel", sourceLevel )
+            .arg( incrementalCompileWarnings, "-incrementalCompileWarnings" )
+            .arg( overlappingSourceWarnings, "-overlappingSourceWarnings")
+            .arg( enableJsonSoyc, "-XenableJsonSoyc" )
+            .arg( compilePerFile, "-XcompilePerFile" )
         ;
+
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 )
+        {
+            cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
+
+        if ( missingDepsFile != null )
+        {
+            cmd.arg( "-missingDepsFile", missingDepsFile.getAbsolutePath() );
+        }
+
+        if ( namespace != null && namespace.length() > 0 )
+        {
+            cmd.arg( "-Xnamespace", namespace );
+        }
 
         if ( saveSourceOutput != null )
         {
