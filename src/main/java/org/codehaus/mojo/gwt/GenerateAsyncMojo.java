@@ -138,6 +138,8 @@ public class GenerateAsyncMojo
             return;
         }
 
+        setupGenerateDirectory();
+
         if ( encoding == null )
         {
             getLog().warn( "Encoding is not set, your build will be platform dependent" );
@@ -147,12 +149,11 @@ public class GenerateAsyncMojo
         JavaDocBuilder builder = createJavaDocBuilder();
 
         List<String> sourceRoots = getProject().getCompileSourceRoots();
-        boolean generated = false;
         for ( String sourceRoot : sourceRoots )
         {
             try
             {
-                generated |= scanAndGenerateAsync( new File( sourceRoot ), builder );
+                scanAndGenerateAsync( new File( sourceRoot ), builder );
             }
             catch ( Throwable e )
             {
@@ -162,11 +163,6 @@ public class GenerateAsyncMojo
                     throw new MojoExecutionException( "Failed to generate Async interface", e );
                 }
             }
-        }
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
         }
     }
 

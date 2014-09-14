@@ -655,48 +655,6 @@ public class TestMojo
     }
 
     /**
-     * @param path file to add to the project compile directories
-     */
-    protected void addCompileSourceRoot( File path )
-    {
-        getProject().addCompileSourceRoot( path.getAbsolutePath() );
-    }
-
-    /**
-     * Add project classpath element to a classpath URL set
-     * 
-     * @param originalUrls the initial URL set
-     * @return full classpath URL set
-     * @throws MojoExecutionException some error occured
-     */
-    protected URL[] addProjectClasspathElements( URL[] originalUrls )
-        throws MojoExecutionException
-    {
-        Collection<?> sources = getProject().getCompileSourceRoots();
-        Collection<?> resources = getProject().getResources();
-        Collection<?> dependencies = getProject().getArtifacts();
-        URL[] urls = new URL[originalUrls.length + sources.size() + resources.size() + dependencies.size() + 2];
-
-        int i = originalUrls.length;
-        getLog().debug( "add compile source roots to GWTCompiler classpath " + sources.size() );
-        i = addClasspathElements( sources, urls, i );
-        getLog().debug( "add resources to GWTCompiler classpath " + resources.size() );
-        i = addClasspathElements( resources, urls, i );
-        getLog().debug( "add project dependencies to GWTCompiler  classpath " + dependencies.size() );
-        i = addClasspathElements( dependencies, urls, i );
-        try
-        {
-            urls[i++] = getGenerateDirectory().toURI().toURL();
-            urls[i] = new File( getProject().getBuild().getOutputDirectory() ).toURI().toURL();
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new MojoExecutionException( "Failed to convert project.build.outputDirectory to URL", e );
-        }
-        return urls;
-    }
-
-    /**
      * Need this to run both pre- and post- PLX-220 fix.
      * 
      * @return a ClassLoader including plugin dependencies and project source foler

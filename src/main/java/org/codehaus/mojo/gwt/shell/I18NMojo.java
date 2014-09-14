@@ -96,7 +96,6 @@ public class I18NMojo
         throws MojoExecutionException, MojoFailureException
     {
         setup();
-        boolean generated = false;
 
         // constants with lookup
         if ( i18nConstantsWithLookupBundles != null )
@@ -108,7 +107,6 @@ public class I18NMojo
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
                     .arg( target ).execute();
-                generated = true;
             }
         }
 
@@ -121,7 +119,6 @@ public class I18NMojo
                 new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
-                generated = true;
             }
         }
 
@@ -135,14 +132,7 @@ public class I18NMojo
                     .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
                     .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
                     .execute();
-                generated = true;
             }
-        }
-
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
         }
     }
 
@@ -171,6 +161,8 @@ public class I18NMojo
                 "neither i18nConstantsBundles, i18nMessagesBundles nor i18nConstantsWithLookupBundles present. \n"
                 + "Cannot execute i18n goal" );
         }
+
+        setupGenerateDirectory();
     }
 
 

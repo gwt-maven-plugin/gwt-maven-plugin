@@ -68,13 +68,6 @@ public abstract class AbstractGwtMojo
     // --- Some Maven tools ----------------------------------------------------
 
     /**
-     * @parameter expression="${plugin.version}"
-     * @required
-     * @readonly
-     */
-    private String version;
-
-    /**
      * @parameter expression="${plugin.artifacts}"
      * @required
      * @readonly
@@ -437,6 +430,17 @@ public abstract class AbstractGwtMojo
     public List<ArtifactRepository> getRemoteRepositories()
     {
         return this.remoteRepositories;
+    }
+
+    protected File setupGenerateDirectory() {
+        if ( !generateDirectory.exists() )
+        {
+            getLog().debug( "Creating target directory " + generateDirectory.getAbsolutePath() );
+            generateDirectory.mkdirs();
+        }
+        getLog().debug( "Add compile source root " + generateDirectory.getAbsolutePath() );
+        addCompileSourceRoot( generateDirectory );
+        return generateDirectory;
     }
 
     public File getGenerateDirectory()

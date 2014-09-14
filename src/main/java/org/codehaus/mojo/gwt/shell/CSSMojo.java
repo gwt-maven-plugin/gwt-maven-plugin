@@ -80,7 +80,6 @@ public class CSSMojo
         throws MojoExecutionException, MojoFailureException
     {
         setup();
-        boolean generated = false;
 
         // java -cp gwt-dev.jar:gwt-user.jar
         // com.google.gwt.resources.css.InterfaceGenerator -standalone -typeName some.package.MyCssResource -css
@@ -101,8 +100,6 @@ public class CSSMojo
                         if ( buildContext.isUptodate( javaOutput, candidate ) )
                         {
                             getLog().debug( javaOutput.getAbsolutePath() + " is up to date. Generation skipped" );
-                            // up to date, but still need to report generated-sources directory as sourceRoot
-                            generated = true;
                             break;
                         }
 
@@ -146,23 +143,17 @@ public class CSSMojo
                         {
                             throw new MojoExecutionException( "Failed to write to file: " + javaOutput );
                         }
-                        generated = true;
                         break;
                     }
                 }
             }
         }
-
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
-        }
-
     }
 
     private void setup()
     {
+        setupGenerateDirectory();
+
         if ( encoding == null )
         {
             getLog().warn( "Encoding is not set, your build will be platform dependent" );
