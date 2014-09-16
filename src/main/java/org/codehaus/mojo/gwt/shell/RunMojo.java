@@ -361,7 +361,7 @@ public class RunMojo
             .arg( "-startupUrl", getStartupUrl() )
             .arg( noServer, "-nostartServer" )
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
-            .arg( !superDevMode, "-nosuperDevMode" );
+            .arg( superDevMode, "-superDevMode" );
 
         if ( workDir != null )
         {
