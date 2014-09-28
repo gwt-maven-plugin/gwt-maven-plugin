@@ -50,6 +50,7 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Abstract Support class for all GWT-related operations.
@@ -141,6 +142,15 @@ public abstract class AbstractGwtMojo
     private File webappDirectory;
 
     /**
+     * Prefix to prepend to module names inside {@code webappDirectory} or in URLs in DevMode.
+     * <p>
+     * Could also be seen as a suffix to {@code webappDirectory}.
+     * 
+     * @parameter expression="${gwt.modulePathPrefix}"
+     */
+    protected String modulePathPrefix;
+
+    /**
      * Location of the web application static resources (same as maven-war-plugin parameter)
      *
      * @parameter default-value="${basedir}/src/main/webapp"
@@ -167,7 +177,12 @@ public abstract class AbstractGwtMojo
 
     public File getOutputDirectory()
     {
-        return inplace ? warSourceDirectory : webappDirectory;
+        File out = inplace ? warSourceDirectory : webappDirectory;
+        if ( !StringUtils.isBlank( modulePathPrefix ) ) 
+        {
+            out = new File(out, modulePathPrefix);
+        }
+        return out;
     }
 
     /**

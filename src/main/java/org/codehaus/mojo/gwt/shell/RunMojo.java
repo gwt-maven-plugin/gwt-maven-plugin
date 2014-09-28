@@ -421,6 +421,11 @@ public class RunMojo
             cmd.arg( "-bindAddress" ).arg( bindAddress );
         }
 
+        if ( modulePathPrefix != null && !modulePathPrefix.isEmpty() )
+        {
+            cmd.arg( "-modulePathPrefix" ).arg( modulePathPrefix );
+        }
+
         if ( !noServer )
         {
             setupExplodedWar();
