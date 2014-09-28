@@ -64,6 +64,15 @@ public class RunMojo
     private File hostedWebapp;
 
     /**
+     * Prefix to prepend to module names in URLs in DevMode.
+     * <p>
+     * Could also be seen as a suffix to {@code hostedWebapp}.
+     * 
+     * @parameter expression="${gwt.modulePathPrefix}"
+     */
+    private String modulePathPrefix;
+
+    /**
      * The MavenProject executed by the "compile" phase
      * @parameter expression="${executedProject}"
      */
@@ -419,6 +428,11 @@ public class RunMojo
         if ( bindAddress != null && bindAddress.length() > 0 )
         {
             cmd.arg( "-bindAddress" ).arg( bindAddress );
+        }
+
+        if ( modulePathPrefix != null && !modulePathPrefix.isEmpty() )
+        {
+            cmd.arg( "-modulePathPrefix" ).arg( modulePathPrefix );
         }
 
         if ( !noServer )
