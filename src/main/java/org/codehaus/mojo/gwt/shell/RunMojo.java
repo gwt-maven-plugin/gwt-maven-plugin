@@ -255,6 +255,22 @@ public class RunMojo
      */
     private boolean superDevMode;
 
+    /**
+     * Compiles faster by reusing data from the previous compile.
+     * 
+     * @parameter alias="compilePerFile" default-value="true" expression="${gwt.compiler.incremental}"
+     * @since 2.7.0-rc1
+     */
+    private boolean incremental;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * 
+     * @parameter default-value="NONE
+     * @since 2.7.0-rc1
+     */
+    private String jsInteropMode;
+
     public String getRunTarget()
     {
         return this.runTarget;
@@ -361,7 +377,13 @@ public class RunMojo
             .arg( "-startupUrl", getStartupUrl() )
             .arg( noServer, "-nostartServer" )
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
-            .arg( superDevMode, "-superDevMode" );
+            .arg( superDevMode, "-superDevMode" )
+            .arg( !incremental, "-noincremental" );
+
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 )
+        {
+            cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
 
         if ( workDir != null )
         {
