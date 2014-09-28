@@ -392,15 +392,15 @@ public class TestMojo
     private String namespace;
 
     /**
-     * EXPERIMENTAL: Compiles faster by creating/reusing a JS file per class.
+     * Compiles faster by reusing data from the previous compile.
      * 
-     * @parameter default-value="false" expression="${gwt.compiler.compilePerFile}"
+     * @parameter alias="compilePerFile" default-value="false" expression="${gwt.compiler.incremental}"
      * @since 2.7.0-rc1
      */
-    private boolean compilePerFile;
+    private boolean incremental;
 
     /**
-     * Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @parameter default-value="NONE
      * @since 2.7.0-rc1
@@ -518,7 +518,7 @@ public class TestMojo
         sb.append( " -testBeginTimeout " ).append( testBeginTimeout );
         sb.append( " -testMethodTimeout ").append( testMethodTimeout );
         sb.append( " -Xtries " ).append( tries );
-        sb.append( compilePerFile ? " -XcompilePerFile" : " -XnocompilePerFile" );
+        sb.append( incremental ? " -incremental" : " -noincremental" );
 
         if ( optimizationLevel >= 0 )
         {

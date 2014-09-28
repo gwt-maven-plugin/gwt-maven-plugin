@@ -342,7 +342,7 @@ public class CompileMojo
     private boolean incrementalCompileWarnings;
 
     /**
-     * Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @parameter default-value="NONE
      * @since 2.7.0-rc1
@@ -386,12 +386,12 @@ public class CompileMojo
     private boolean enableJsonSoyc;
 
     /**
-     * EXPERIMENTAL: Compile, link and recompile on a per-file basis.
+     * Compiles faster by reusing data from the previous compile.
      * 
-     * @parameter default-value="false" expression="${gwt.compiler.compilePerFile}"
+     * @parameter alias="compilePerFile" default-value="false" expression="${gwt.compiler.incremental}"
      * @since 2.7.0-rc1
      */
-    private boolean compilePerFile;
+    private boolean incremental;
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -471,7 +471,7 @@ public class CompileMojo
             .arg( incrementalCompileWarnings, "-incrementalCompileWarnings" )
             .arg( overlappingSourceWarnings, "-overlappingSourceWarnings")
             .arg( enableJsonSoyc, "-XenableJsonSoyc" )
-            .arg( compilePerFile, "-XcompilePerFile" )
+            .arg( incremental, "-incremental" )
         ;
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 )
