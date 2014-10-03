@@ -383,7 +383,7 @@ public class RunMojo
             .arg( "-startupUrl", getStartupUrl() )
             .arg( noServer, "-nostartServer" )
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
-            .arg( !superDevMode, "-nosuperDevMode" )
+            .arg( superDevMode ? "-superDevMode" : "-nosuperDevMode" )
             .arg( !incremental, "-noincremental" );
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 )
