@@ -357,6 +357,9 @@ public class RunMojo
         if ( gwtSdkFirstInClasspath )
         {
             cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            if ( superDevMode ) {
+                cmd.withinClasspath( getGwtCodeServerJar() );
+            }
         }
 
         cmd.withinScope( Artifact.SCOPE_RUNTIME );
@@ -368,6 +371,9 @@ public class RunMojo
         if ( !gwtSdkFirstInClasspath )
         {
             cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            if ( superDevMode ) {
+                cmd.withinClasspath( getGwtCodeServerJar() );
+            }
         }
 
         cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
