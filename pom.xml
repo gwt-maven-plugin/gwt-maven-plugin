@@ -125,7 +125,6 @@
     <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>2.0.9</mavenVersion>
     <mojo.java.target>1.6</mojo.java.target>
-    <sitePluginVersion>2.1.1</sitePluginVersion>
     <doxia-sitetoolsVersion>1.1.4</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
@@ -468,20 +467,6 @@
         </plugins>
       </build>
     </profile>    
-    
-    <profile>
-      <id>maven-3</id>
-      <activation>
-        <file>
-          <!-- This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
-          <exists>${basedir}</exists>
-        </file>
-      </activation>
-      <properties>
-        <sitePluginVersion>3.0-beta-3</sitePluginVersion>
-      </properties>
-    </profile>    
-
   </profiles>
 
   <build>
