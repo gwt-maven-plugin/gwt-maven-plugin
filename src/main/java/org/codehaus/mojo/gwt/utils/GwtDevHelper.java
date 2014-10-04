@@ -62,22 +62,8 @@ public class GwtDevHelper
     public File getGwtDevJar()
         throws IOException
     {
-        checkGwtDevAsDependency();
         checkGwtUserVersion();
         return pluginArtifacts.get( "com.google.gwt:gwt-dev" ).getFile();
-    }
-
-    public void checkGwtDevAsDependency()
-    {
-        for ( Iterator iterator = this.mavenProject.getArtifacts().iterator(); iterator.hasNext(); )
-        {
-            Artifact artifact = (Artifact) iterator.next();
-            if ( this.gwtGroupId.equals( artifact.getGroupId() ) && "gwt-dev".equals( artifact.getArtifactId() )
-                && !SCOPE_TEST.equals( artifact.getScope() ) )
-            {
-                log.warn( "Don't declare gwt-dev as a project dependency. This may introduce complex dependency conflicts" );
-            }
-        }
     }
 
     private void checkGwtUserVersion()

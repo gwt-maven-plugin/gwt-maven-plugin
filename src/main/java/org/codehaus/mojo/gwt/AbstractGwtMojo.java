@@ -268,7 +268,6 @@ public abstract class AbstractGwtMojo
     protected File getGwtDevJar()
         throws MojoExecutionException
     {
-        checkGwtDevAsDependency();
         checkGwtUserVersion();
         return getArtifact( "com.google.gwt", "gwt-dev" ).getFile();
     }
@@ -337,25 +336,6 @@ public abstract class AbstractGwtMojo
         }
         getLog().error( "Failed to retrieve " + groupId + ":" + artifactId + ":" + classifier );
         return null;
-    }
-
-    /**
-     * TODO remove !
-     * Check that gwt-dev is not define in dependencies : this can produce version conflicts with other dependencies, as
-     * gwt-dev is a "uber-jar" with some commons-* and jetty libs inside.
-     */
-    private void checkGwtDevAsDependency()
-    {
-        for ( Iterator iterator = getProject().getArtifacts().iterator(); iterator.hasNext(); )
-        {
-            Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                && "gwt-dev".equals( artifact.getArtifactId() )
-                && !SCOPE_TEST.equals(  artifact.getScope() ) )
-            {
-                getLog().warn( "Don't declare gwt-dev as a project dependency. This may introduce complex dependency conflicts" );
-            }
-        }
     }
 
     /**
