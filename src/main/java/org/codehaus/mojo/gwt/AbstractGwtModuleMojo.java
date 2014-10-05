@@ -237,12 +237,4 @@ public abstract class AbstractGwtModuleMojo
         }
     }
 
-    /**
-     * @param path file to add to the project compile directories
-     */
-    protected void addCompileSourceRoot( File path )
-    {
-        getProject().addCompileSourceRoot( path.getAbsolutePath() );
-    }
-
 }

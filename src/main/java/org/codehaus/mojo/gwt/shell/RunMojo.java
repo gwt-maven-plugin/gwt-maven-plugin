@@ -271,43 +271,6 @@ public class RunMojo
      */
     private String jsInteropMode;
 
-    public String getRunTarget()
-    {
-        return this.runTarget;
-    }
-
-    /**
-     * @return the GWT module to run (gwt 1.6+) -- expected to be unique
-     */
-    public String getRunModule()
-        throws MojoExecutionException
-    {
-        String[] modules = getModules();
-        if ( noServer )
-        {
-            if (modules.length != 1)
-            {
-                getLog().error(
-                    "Running in 'noserver' mode you must specify the single module to run using -Dgwt.module=..." );
-                throw new MojoExecutionException( "No single module specified" );
-            }
-            return modules[0];
-        }
-        if ( modules.length == 1 )
-        {
-            // A single module is set, no ambiguity
-            return modules[0];
-        }
-        int dash = runTarget.indexOf( '/' );
-        if ( dash > 0 )
-        {
-            return runTarget.substring( 0, dash );
-        }
-        // The runTarget MUST start with the full GWT module path
-        throw new MojoExecutionException(
-            "Unable to choose a GWT module to run. Please specify your module(s) in the configuration" );
-    }
-
     /**
      * @return the startup URL to open in hosted browser (gwt 1.6+)
      */
@@ -342,11 +305,6 @@ public class RunMojo
             }
         }
         return runTarget;
-    }
-
-    protected String getFileName()
-    {
-        return "run";
     }
 
     public void doExecute( )

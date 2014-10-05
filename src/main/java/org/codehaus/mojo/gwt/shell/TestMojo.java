@@ -612,61 +612,6 @@ public class TestMojo
     }
 
     /**
-     * @return the project classloader
-     * @throws DependencyResolutionRequiredException failed to resolve project dependencies
-     * @throws MalformedURLException configuration issue ?
-     */
-    protected ClassLoader getProjectClassLoader()
-        throws DependencyResolutionRequiredException, MalformedURLException
-    {
-        getLog().debug( "TestMojo#getProjectClassLoader()" );
-
-        List<?> compile = getProject().getCompileClasspathElements();
-        URL[] urls = new URL[compile.size()];
-        int i = 0;
-        for ( Object object : compile )
-        {
-            if ( object instanceof Artifact )
-            {
-                urls[i] = ( (Artifact) object ).getFile().toURI().toURL();
-            }
-            else
-            {
-                urls[i] = new File( (String) object ).toURI().toURL();
-            }
-            i++;
-        }
-        return new URLClassLoader( urls, ClassLoader.getSystemClassLoader() );
-    }
-
-    /**
-     * Need this to run both pre- and post- PLX-220 fix.
-     * 
-     * @return a ClassLoader including plugin dependencies and project source foler
-     * @throws MojoExecutionException failed to configure ClassLoader
-     */
-    protected ClassLoader getClassLoader()
-        throws MojoExecutionException
-    {
-        try
-        {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
-            URL[] urls = new URL[classpath.size()];
-            int i = 0;
-            for ( File file : classpath )
-            {
-                urls[i++] = file.toURI().toURL();
-            }
-            ClassLoader parent = getClass().getClassLoader();
-            return new URLClassLoader( urls, parent.getParent() );
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new MojoExecutionException( "Unexpecetd internal error" );
-        }
-    }
-
-    /**
      * @param testTimeOut the testTimeOut to set
      */
     public void setTestTimeOut( int testTimeOut )
