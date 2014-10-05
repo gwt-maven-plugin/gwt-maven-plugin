@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -69,11 +70,11 @@ public abstract class AbstractGwtMojo
     // --- Some Maven tools ----------------------------------------------------
 
     /**
-     * @parameter expression="${plugin.artifacts}"
+     * @parameter expression="${plugin.artifactMap}"
      * @required
      * @readonly
      */
-    private Collection<Artifact> pluginArtifacts;
+    private Map<String, Artifact> pluginArtifactMap;
 
     /**
      * @component
@@ -84,7 +85,6 @@ public abstract class AbstractGwtMojo
      * @component
      */
     protected ArtifactFactory artifactFactory;
-
 
     /**
      * @required
@@ -269,26 +269,21 @@ public abstract class AbstractGwtMojo
         throws MojoExecutionException
     {
         checkGwtUserVersion();
-        return getArtifact( "com.google.gwt", "gwt-dev" ).getFile();
+        return pluginArtifactMap.get( "com.google.gwt:gwt-dev" ).getFile();
     }
 
     protected File getGwtCodeServerJar()
         throws MojoExecutionException
     {
         checkGwtUserVersion();
-        return getArtifact( "com.google.gwt", "gwt-codeserver" ).getFile();
-    }
-
-    protected Artifact getArtifact( String groupId, String artifactId )
-    {
-        return getArtifact( groupId, artifactId, null );
+        return pluginArtifactMap.get( "com.google.gwt:gwt-codeserver" ).getFile();
     }
 
     protected File[] getGwtUserJar()
             throws MojoExecutionException
     {
         checkGwtUserVersion();
-        Artifact gwtUserArtifact = getArtifact( "com.google.gwt", "gwt-user" );
+        Artifact gwtUserArtifact = pluginArtifactMap.get( "com.google.gwt:gwt-user" );
 
         Set<Artifact> artifacts = new HashSet<Artifact>();
         ArtifactResolutionResult result = null;
@@ -318,26 +313,6 @@ public abstract class AbstractGwtMojo
         return files;
     }
 
-    protected Artifact getArtifact( String groupId, String artifactId, String classifier )
-    {
-        for ( Artifact artifact : pluginArtifacts )
-        {
-            if ( groupId.equals( artifact.getGroupId() ) && artifactId.equals( artifact.getArtifactId() ) )
-            {
-                if ( classifier != null && classifier.equals( artifact.getClassifier() ) )
-                {
-                    return artifact;
-                }
-                if ( classifier == null && artifact.getClassifier() == null )
-                {
-                    return artifact;
-                }
-            }
-        }
-        getLog().error( "Failed to retrieve " + groupId + ":" + artifactId + ":" + classifier );
-        return null;
-    }
-
     /**
      * Check gwt-user dependency matches plugin version
      */
@@ -359,22 +334,18 @@ public abstract class AbstractGwtMojo
         {
             IOUtils.closeQuietly( inputStream );
         }
-        for ( Iterator iterator = getProject().getCompileArtifacts().iterator(); iterator.hasNext(); )
+
+        Artifact gwtUser = project.getArtifactMap().get( "com.google.gwt:gwt-user" );
+        if (gwtUser != null)
         {
-            Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                 && "gwt-user".equals( artifact.getArtifactId() ) )
+            String mojoGwtVersion = properties.getProperty( "gwt.version" );
+            //ComparableVersion with an up2date maven version
+            ArtifactVersion mojoGwtArtifactVersion = new DefaultArtifactVersion( mojoGwtVersion );
+            ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( gwtUser.getVersion() );
+            if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
             {
-                String mojoGwtVersion = properties.getProperty( "gwt.version" );
-                //ComparableVersion with an up2date maven version
-                ArtifactVersion mojoGwtArtifactVersion = new DefaultArtifactVersion( mojoGwtVersion );
-                ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( artifact.getVersion() );
-                if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
-                {
-                    getLog().warn( "Your project declares dependency on gwt-user " + artifact.getVersion()
-                                       + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
-                }
-                break;
+                getLog().warn( "Your project declares dependency on gwt-user " + gwtUser.getVersion()
+                                   + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
             }
         }
     }
