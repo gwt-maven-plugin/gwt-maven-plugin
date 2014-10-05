@@ -36,6 +36,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -43,8 +44,8 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
  * 
  * @author ccollins
  * @version $Id$
- * @plexus.component role="org.codehaus.mojo.gwt.ClasspathBuilder"
  */
+@Component(role = ClasspathBuilder.class)
 public class ClasspathBuilder
     extends AbstractLogEnabled
 {
@@ -62,7 +63,6 @@ public class ClasspathBuilder
      * @return file collection for classpath
      * @throws MojoExecutionException 
      */
-    @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
                                                 boolean isGenerator )
         throws ClasspathBuilderException
@@ -193,7 +193,6 @@ public class ClasspathBuilder
      * @param scope
      * @return
      */
-    @SuppressWarnings( "unchecked" )
     private List<Artifact> getScopeArtifacts( final MavenProject project, final String scope )
     {
         if ( SCOPE_COMPILE.equals( scope ) )
@@ -221,7 +220,6 @@ public class ClasspathBuilder
      * @param scope
      * @return
      */
-    @SuppressWarnings( "unchecked" )
     private List<String> getSourceRoots( final MavenProject project, final String scope )
     {
         if ( SCOPE_COMPILE.equals( scope ) || SCOPE_RUNTIME.equals( scope ) )
@@ -248,7 +246,6 @@ public class ClasspathBuilder
      * @param scope
      * @return
      */
-    @SuppressWarnings( "unchecked" )
     private List<Resource> getResources( final MavenProject project, final String scope )
     {
         if ( SCOPE_COMPILE.equals( scope ) || SCOPE_RUNTIME.equals( scope ) )

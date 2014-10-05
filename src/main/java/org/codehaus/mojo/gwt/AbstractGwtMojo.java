@@ -21,20 +21,6 @@ package org.codehaus.mojo.gwt;
 
 import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
-import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
@@ -50,8 +36,22 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Abstract Support class for all GWT-related operations.
@@ -69,110 +69,78 @@ public abstract class AbstractGwtMojo
 
     // --- Some Maven tools ----------------------------------------------------
 
-    /**
-     * @parameter expression="${plugin.artifactMap}"
-     * @required
-     * @readonly
-     */
+    @Parameter(property = "plugin.artifactMap", required = true, readonly = true)
     private Map<String, Artifact> pluginArtifactMap;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactResolver resolver;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactFactory artifactFactory;
 
-    /**
-     * @required
-     * @readonly
-     * @component
-     */
+    @Component
     protected ClasspathBuilder classpathBuilder;
 
     // --- Some MavenSession related structures --------------------------------
 
-    /**
-     * @parameter expression="${localRepository}"
-     * @required
-     * @readonly
-     */
+    @Parameter(property = "localRepository", required = true, readonly = true)
     protected ArtifactRepository localRepository;
 
-    /**
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @required
-     * @readonly
-     */
+    @Parameter(property = "project.remoteArtifactRespositories", required = true, readonly = true)
     protected List<ArtifactRepository> remoteRepositories;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactMetadataSource artifactMetadataSource;
 
     /**
      * The maven project descriptor
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
     // --- Plugin parameters ---------------------------------------------------
 
     /**
      * Folder where generated-source will be created (automatically added to compile classpath).
-     *
-     * @parameter default-value="${project.build.directory}/generated-sources/gwt"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/gwt", required = true)
     private File generateDirectory;
 
     /**
      * Location on filesystem where GWT will write output files (-out option to GWTCompiler).
-     *
-     * @parameter expression="${gwt.war}" default-value="${project.build.directory}/${project.build.finalName}"
-     * @alias outputDirectory
      */
+    @Parameter(property = "gwt.war", defaultValue="${project.build.directory}/${project.build.finalName}", alias = "outputDirectory")
     private File webappDirectory;
 
     /**
      * Prefix to prepend to module names inside {@code webappDirectory} or in URLs in DevMode.
      * <p>
      * Could also be seen as a suffix to {@code webappDirectory}.
-     * 
-     * @parameter expression="${gwt.modulePathPrefix}"
      */
+    @Parameter(property = "gwt.modulePathPrefix")
     protected String modulePathPrefix;
 
     /**
      * Location of the web application static resources (same as maven-war-plugin parameter)
-     *
-     * @parameter default-value="${basedir}/src/main/webapp"
      */
+    @Parameter(defaultValue="${basedir}/src/main/webapp")
     protected File warSourceDirectory;
 
     /**
      * Select the place where GWT application is built. In <code>inplace</code> mode, the warSourceDirectory is used to
      * match the same use case of the {@link war:inplace
      * http://maven.apache.org/plugins/maven-war-plugin/inplace-mojo.html} goal.
-     *
-     * @parameter default-value="false" expression="${gwt.inplace}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.inplace")
     private boolean inplace;
-    
+
     /**
      * The forked command line will use gwt sdk jars first in classpath.
      * see issue http://code.google.com/p/google-web-toolkit/issues/detail?id=5290
      *
-     * @parameter default-value="false" expression="${gwt.gwtSdkFirstInClasspath}"
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "false", property = "gwt.gwtSdkFirstInClasspath")
     protected boolean gwtSdkFirstInClasspath;
 
     public File getOutputDirectory()
@@ -419,11 +387,10 @@ public abstract class AbstractGwtMojo
         return generateDirectory;
     }
 
-    @SuppressWarnings( "unchecked" )
     public Set<Artifact> getProjectRuntimeArtifacts()
     {
         Set<Artifact> artifacts = new HashSet<Artifact>();
-        for (Artifact projectArtifact : (Collection<Artifact>) project.getArtifacts() )
+        for (Artifact projectArtifact : project.getArtifacts() )
         {
             String scope = projectArtifact.getScope();
             if ( SCOPE_RUNTIME.equals( scope )

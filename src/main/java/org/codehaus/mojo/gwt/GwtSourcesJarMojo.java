@@ -28,6 +28,11 @@ import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 
 
@@ -36,43 +41,32 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
  * to gwt:resources for better Eclipse projects synchronization.
  * 
  * @author <a href="mailto:vlads@pyx4j.com">Vlad Skarzhevskyy</a>
- * @goal source-jar
- * @phase package
- * @threadSafe
  */
+@Mojo(name = "source-jar", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class GwtSourcesJarMojo
     extends GwtResourcesBaseMojo
 {
 
     /**
      * Name of the generated JAR.
-     * 
-     * @parameter alias="jarName" expression="${jar.finalName}"
-     *            default-value="${project.build.finalName}"
-     * @required
      */
+    @Parameter(alias = "jarName", property = "jar.finalName", defaultValue = "project.build.finalName", required = true)
     private String finalName;
 
-    /**
-     * @parameter expression="${project.build.directory}"
-     * @required
-     * @readonly
-     */
+    @Parameter(property = "project.build.directory", required = true, readonly = true)
     private File outputDirectory;
 
     /**
      * The Jar archiver.
-     * 
-     * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="jar"
      */
+    @Component(role = Archiver.class, hint="jar")
     private JarArchiver jarArchiver;
 
     /**
      * The archive configuration to use. See <a
      * href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver Reference</a>.
-     * 
-     * @parameter
      */
+    @Parameter
     private final MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
 
     /**

@@ -31,6 +31,12 @@ import java.util.regex.Pattern;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.archiver.ArchiverException;
@@ -41,32 +47,28 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Goal which run a GWT module in the GWT (Classic or Super) Dev Mode.
+ * Runs the project in the GWT (Classic or Super) Dev Mode for development.
  *
- * @goal run
- * @execute phase=process-classes goal:war:exploded
- * @requiresDirectInvocation
- * @requiresDependencyResolution test
- * @description Runs the the project in the GWT (Classic or Super) Dev Mode for development.
  * @author ccollins
  * @author cooper
  * @version $Id$
  */
+@Mojo(name = "run", requiresDirectInvocation = true, requiresDependencyResolution = ResolutionScope.TEST)
+@Execute(phase = LifecyclePhase.PROCESS_CLASSES, goal = "war:exploded")
 public class RunMojo
     extends AbstractGwtWebMojo
 {
     /**
      * Location of the hosted-mode web application structure.
-     *
-     * @parameter default-value="${project.build.directory}/${project.build.finalName}"
      */
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
     // Parameter shared with EclipseMojo
     private File hostedWebapp;
 
     /**
      * The MavenProject executed by the "compile" phase
-     * @parameter expression="${executedProject}"
      */
+    @Parameter(defaultValue = "${executedProject}")
     private MavenProject executedProject;
 
     /**
@@ -79,64 +81,55 @@ public class RunMojo
      * When the GWT module host page is part of the module "public" folder, the runTarget MAY define the full GWT module
      * path (<code>com.myapp.gwt.Module/Module.html</code>) that will be automatically converted according to the
      * <code>rename-to</code> directive into <code>renamed/Module.html</code>.
-     *
-     * @parameter expression="${runTarget}"
-     * @required
      */
+    @Parameter(property = "runTarget", required = true)
     private String runTarget;
 
     /**
      * Forked process execution timeOut (in seconds). Primary used for integration-testing.
-     * @parameter
      */
+    @Parameter
     @SuppressWarnings("unused")
     private int runTimeOut;
 
     /**
      * Runs the embedded GWT server on the specified port.
-     *
-     * @parameter default-value="8888" expression="${gwt.port}"
      */
+    @Parameter(defaultValue = "8888", property = "gwt.port")
     private int port;
 
     /**
      * Runs the code server on the specified port.
-     *
-     * @parameter default-value="9997" expression="${gwt.codeServerPort}"
      */
+    @Parameter(defaultValue = "9997", property = "gwt.codeServerPort")
     private int codeServerPort;
 
     /**
      * Location of the compiled classes.
-     *
-     * @parameter default-value="${project.build.outputDirectory}"
-     * @required
-     * @readOnly
      */
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File buildOutputDirectory;
 
     /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
      * <p>
      * Can be set from command line using '-Dgwt.noserver=...'
-     *
-     * @parameter default-value="false" expression="${gwt.noserver}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.noserver")
     private boolean noServer;
 
     /**
      * Specifies a different embedded web server to run (must implement ServletContainerLauncher)
-     *
-     * @parameter expression="${gwt.server}"
      */
+    @Parameter(property = "gwt.server")
     private String server;
 
     /**
      * List of System properties to pass when running the hosted mode.
      *
-     * @parameter
      * @since 1.2
      */
+    @Parameter
     private Map<String, String> systemProperties;
     
     /**
@@ -144,9 +137,10 @@ public class RunMojo
      * <p>
      * Can be set from command line using '-Dgwt.copyWebapp=...'
      * </p>
-     * @parameter default-value="false" expression="${gwt.copyWebapp}"
+     *
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "false", property = "gwt.copyWebapp")
     private boolean copyWebapp;
 
     /**
@@ -155,53 +149,54 @@ public class RunMojo
      * Artifact will be downloaded with groupId : {@link #appEngineGroupId} 
      * and artifactId {@link #appEngineArtifactId}
      * <p>
-     * @parameter default-value="1.3.8" expression="${gwt.appEngineVersion}"
+     *
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "1.3.8", property = "gwt.appEngineVersion")
     private String appEngineVersion;
-    
+
     /**
      * <p>
      * List of {@link Pattern} jars to exclude from the classPath when running
      * dev mode
      * </p>
-     * @parameter 
+     * 
      * @since 2.1.0-1
      */
+    @Parameter
     private List<String> runClasspathExcludes;
-    
+
     /**
      * <p>
      * Location to find appengine sdk or to unzip downloaded one see {@link #appEngineVersion}
      * </p>
-     * @parameter default-value="${project.build.directory}/appengine-sdk/" expression="${gwt.appEngineHome}"
+     *
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "${project.build.directory}/appengine-sdk/", property = "gwt.appEngineHome")
     private File appEngineHome;
-    
+
     /**
-     * <p>
      * groupId to download appengine sdk from maven repo
-     * </p>
-     * @parameter default-value="com.google.appengine" expression="${gwt.appEngineGroupId}"
+     *
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "com.google.appengine", property = "gwt.appEngineGroupId")
     private String appEngineGroupId;
 
     /**
-     * <p>
      * groupId to download appengine sdk from maven repo
-     * </p>
-     * @parameter default-value="appengine-java-sdk" expression="${gwt.appEngineArtifactId}"
+     * 
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "appengine-java-sdk", property = "gwt.appEngineArtifactId")
     private String appEngineArtifactId;
 
     /**
      * To look up Archiver/UnArchiver implementations
      * @since 2.1.0-1
-     * @component
      */
+    @Component
     protected ArchiverManager archiverManager;
 
      /**
@@ -209,32 +204,32 @@ public class RunMojo
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
      * @since 2.1.0-1
-     * @parameter expression="${gwt.bindAddress}"
      */
+    @Parameter(property = "gwt.bindAddress")
     private String bindAddress;
 
     /**
      * EXPERIMENTAL: Cache results of generators with stable output.
      * 
-     * @parameter default-value="true" expression="${gwt.cacheGeneratorResults}"
      * @since 2.6.0-rc1
      */
+    @Parameter(defaultValue = "true", property = "gwt.cacheGeneratorResults")
     private boolean cacheGeneratorResults;
 
     /**
      * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
      *
-     * @parameter
      * @since 2.6.0-rc1
      */
+    @Parameter
     private File workDir;
 
     /**
      * Logs to a file in the given directory, as well as graphically
      * 
-     * @parameter
      * @since 2.6.0-rc1
      */
+    @Parameter
     private File logDir;
 
     /**
@@ -242,33 +237,33 @@ public class RunMojo
      * <p>
      * The default value depends on the JVM used to launch Maven.
      *
-     * @parameter expression="${maven.compiler.source}" default-value="auto"
      * @since 2.6.0-rc1
      */
+    @Parameter(defaultValue = "auto", property = "maven.compiler.source")
     private String sourceLevel;
 
     /**
      * Runs Super Dev Mode instead of classic Development Mode.
      * 
-     * @parameter default-value="true" expression="${gwt.superDevMode}"
      * @since 2.7.0-rc1
      */
+    @Parameter(defaultValue = "true", property = "gwt.superDevMode")
     private boolean superDevMode;
 
     /**
      * Compiles faster by reusing data from the previous compile.
      * 
-     * @parameter alias="compilePerFile" default-value="true" expression="${gwt.compiler.incremental}"
      * @since 2.7.0-rc1
      */
+    @Parameter(alias = "compilePerFile", defaultValue = "true", property = "gwt.compiler.incremental")
     private boolean incremental;
 
     /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
-     * @parameter default-value="NONE
      * @since 2.7.0-rc1
      */
+    @Parameter(defaultValue = "NONE")
     private String jsInteropMode;
 
     /**

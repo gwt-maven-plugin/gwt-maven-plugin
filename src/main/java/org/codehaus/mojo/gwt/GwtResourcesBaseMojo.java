@@ -19,17 +19,16 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
+import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
+import org.codehaus.plexus.util.DirectoryScanner;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
-import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
-import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * Collect GWT java source code and module descriptor to be added as resources. Common
@@ -63,14 +62,14 @@ abstract class GwtResourcesBaseMojo
      * Collect GWT java source code and module descriptor to be added as resources.
      */
     protected Collection<ResourceFile> getAllResourceFiles()
-        throws MojoExecutionException, MojoFailureException
+        throws MojoExecutionException
     {
         try
         {
             Set<ResourceFile> sourcesAndResources = new HashSet<ResourceFile>();
             Set<String> sourcesAndResourcesPath = new HashSet<String>();
             sourcesAndResourcesPath.addAll( getProject().getCompileSourceRoots() );
-            for ( Resource resource : (Collection<Resource>) getProject().getResources() )
+            for ( Resource resource : getProject().getResources() )
             {
                 sourcesAndResourcesPath.add( resource.getDirectory() );
             }
@@ -124,7 +123,6 @@ abstract class GwtResourcesBaseMojo
      * @param name
      */
     private Collection<ResourceFile> getAsResources( GwtModule module, String source, Set<String> paths, String include )
-        throws MojoExecutionException
     {
         String pattern = module.getPackage().replace( '.', '/' );
 

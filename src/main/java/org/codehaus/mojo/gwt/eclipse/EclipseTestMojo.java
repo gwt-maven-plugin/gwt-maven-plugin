@@ -29,6 +29,11 @@ import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.shell.TestMojo;
 import org.codehaus.mojo.gwt.test.TestTemplate;
@@ -41,33 +46,29 @@ import freemarker.template.TemplateException;
 /**
  * Goal which creates Eclipse lauch configurations for GWTTestCases.
  *
- * @goal eclipseTest
- * @execute phase=generate-test-resources
  * @version $Id$
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @deprecated use google eclipse plugin http://code.google.com/intl/fr-FR/eclipse/docs/users_guide.html
  */
+@Deprecated
+@Mojo(name = "eclipseTest")
+@Execute(phase = LifecyclePhase.GENERATE_TEST_RESOURCES)
 public class EclipseTestMojo
     extends TestMojo
 {
-    /**
-     * @component
-     */
+    @Component
     private EclipseUtil eclipseUtil;
 
     /**
      * The currently executed project (phase=generate-resources).
-     *
-     * @parameter expression="${executedProject}"
-     * @readonly
      */
+    @Parameter(defaultValue = "${executedProject}", readonly = true)
     private MavenProject executedProject;
 
     /**
      * Location of the file.
-     *
-     * @parameter default-value="${project.build.directory}/www-test"
      */
+    @Parameter(defaultValue = "${project.build.directory}/www-test")
     private File testOutputDirectory;
 
     /**

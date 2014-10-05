@@ -134,6 +134,13 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${mavenPluginPluginVersion}</version>
+      <!-- Not needed at runtime -->
+      <scope>provided</scope>
+    </dependency>
     <!--  TODO: migrate our API usage and eventually remove that dependency -->
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -463,6 +470,15 @@
             <jdk>${maven.compiler.target}</jdk>
           </requirements>
         </configuration>
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>descriptor</goal>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -36,6 +36,11 @@ import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
@@ -47,15 +52,13 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
 
 /**
- * Goal which generate Asyn interface.
+ * Goal which generate Async interface.
  * 
- * @goal generateAsync
- * @phase generate-sources
- * @requiresDependencyResolution compile
- * @threadSafe
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @version $Id$
  */
+@Mojo(name = "generateAsync", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE,
+      threadSafe = true)
 public class GenerateAsyncMojo
     extends AbstractGwtMojo
 {
@@ -76,47 +79,40 @@ public class GenerateAsyncMojo
 
     /**
      * Pattern for GWT service interface
-     * 
-     * @parameter default-value="**\/*Service.java"
      */
+    @Parameter(defaultValue = "**/*Service.java")
     private String servicePattern;
 
     /**
      * Return a com.google.gwt.http.client.Request on async interface to allow cancellation.
-     * 
-     * @parameter default-value="false"
      */
+    @Parameter(defaultValue = "false")
     private boolean returnRequest;
 
     /**
      * A (MessageFormat) Pattern to get the GWT-RPC servlet URL based on service interface name. For example to
      * "{0}.rpc" if you want to map GWT-RPC calls to "*.rpc" in web.xml, for example when using Spring dispatch servlet
      * to handle RPC requests.
-     * 
-     * @parameter default-value="{0}" expression="${gwt.rpcPattern}"
      */
+    @Parameter(defaultValue = "{0}", property = "gwt.rpcPattern")
     private String rpcPattern;
 
     /**
      * Stop the build on error
-     * 
-     * @parameter default-value="true" expression="${maven.gwt.failOnError}"
      */
+    @Parameter(defaultValue = "true", property = "maven.gwt.failOnError")
     private boolean failOnError;
 
     /**
      * Pattern for GWT service interface
-     * 
-     * @parameter default-value="false" expression="${generateAsync.force}"
      */
+    @Parameter(defaultValue = "false", property = "generateAsync.force")
     private boolean force;
 
-    /**
-     * @parameter expression="${project.build.sourceEncoding}"
-     */
+    @Parameter(property = "project.build.sourceEncoding")
     private String encoding;
 
-    /** @component */
+    @Component
     private BuildContext buildContext;
 
     @Override
@@ -125,10 +121,6 @@ public class GenerateAsyncMojo
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings( "unchecked" )
     public void execute()
         throws MojoExecutionException
     {
@@ -356,14 +348,13 @@ public class GenerateAsyncMojo
         return javaClass.isInterface() && javaClass.isPublic() && javaClass.isA( REMOTE_SERVICE_INTERFACE );
     }
 
-    @SuppressWarnings( "unchecked" )
     private JavaDocBuilder createJavaDocBuilder()
         throws MojoExecutionException
     {
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.setEncoding( encoding );
         builder.getClassLibrary().addClassLoader( getProjectClassLoader() );
-        for ( String sourceRoot : (List<String>) getProject().getCompileSourceRoots() )
+        for ( String sourceRoot : getProject().getCompileSourceRoots() )
         {
             builder.getClassLibrary().addSourceFolder( new File( sourceRoot ) );
         }

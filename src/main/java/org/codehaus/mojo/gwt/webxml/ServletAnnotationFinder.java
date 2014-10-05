@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -40,10 +41,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 /**
  * The goal is to find classed annotated with {@link RemoteServiceRelativePath}
  * to generated {@link ServletDescriptor}
+ * 
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
- * @plexus.component role="org.codehaus.mojo.gwt.webxml.ServletAnnotationFinder"
  * @since 2.1.0-1
  */
+@Component(role = ServletAnnotationFinder.class)
 public class ServletAnnotationFinder
     extends AbstractLogEnabled
 {

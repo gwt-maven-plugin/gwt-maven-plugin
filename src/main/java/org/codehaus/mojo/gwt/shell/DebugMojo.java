@@ -21,38 +21,36 @@ package org.codehaus.mojo.gwt.shell;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Extends the gwt goal and runs the project in the GWT Hosted mode with a debugger port hook (optionally suspended).
+ * Runs the project with a debugger port hook (optionally suspended).
  *
- * @goal debug
- * @description Runs the project with a debugger port hook (optionally suspended).
  * @author cooper
  * @version $Id$
  */
+@Mojo(name = "debug")
 public class DebugMojo
     extends RunMojo
 {
 
     /**
      * Port to listen for debugger connection on.
-     * 
-     * @parameter default-value="8000" expression="${gwt.debugPort}"
      */
+    @Parameter(defaultValue = "8000", property = "gwt.debugPort")
     private int debugPort;
 
     /**
      * Whether or not to suspend execution until a debugger connects.
-     *
-     * @parameter default-value="true" expression="${gwt.debugSuspend}"
      */
+    @Parameter(defaultValue = "true", property = "gwt.debugSuspend")
     private boolean debugSuspend;
 
     /**
      * Attach to the debugger application at the specified debugPort.
-     * 
-     * @parameter default-value="false" expression="${attachDebugger}"
      */
+    @Parameter(defaultValue = "false", property = "attachDebugger")
     private boolean attachDebugger;
 
     /**

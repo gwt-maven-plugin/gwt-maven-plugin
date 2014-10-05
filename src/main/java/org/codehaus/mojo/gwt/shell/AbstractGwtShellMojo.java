@@ -22,6 +22,7 @@ package org.codehaus.mojo.gwt.shell;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -47,45 +48,42 @@ public abstract class AbstractGwtShellMojo
      * Location on filesystem where GWT will write generated content for review (-gen option to GWT Compiler).
      * <p>
      * Can be set from command line using '-Dgwt.gen=...'
-     * </p>
-     * @parameter default-value="${project.build.directory}/.generated" expression="${gwt.gen}"
      */
+    @Parameter(defaultValue = "${project.build.directory}/.generated", property = "gwt.gen")
     private File gen;
 
     /**
      * Whether to add -gen parameter to the compiler command line
      * <p>
      * Can be set from command line using '-Dgwt.genParam=false'. Defaults to 'true' for backwards compatibility.
-     * </p>
-     * @parameter default-value="true" expression="${gwt.genParam}"
+     *
      * @since 2.5.0-rc1
      */
+    @Parameter(defaultValue = "true", property = "gwt.genParam")
     private boolean genParam;
 
     /**
      * GWT logging level (-logLevel ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL).
      * <p>
      * Can be set from command line using '-Dgwt.logLevel=...'
-     * </p>
-     * @parameter default-value="INFO" expression="${gwt.logLevel}"
      */
+    @Parameter(defaultValue = "INFO", property = "gwt.logLevel")
     private String logLevel;
 
     /**
      * GWT JavaScript compiler output style (-style OBF[USCATED], PRETTY, or DETAILED).
      * <p>
      * Can be set from command line using '-Dgwt.style=...'
-     * </p>
-     * @parameter default-value="OBF" expression="${gwt.style}"
      */
+    @Parameter(defaultValue = "OBF", property = "gwt.style")
     private String style;
 
     /**
      * The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the webappDirectory directory/jar, and may be the same as the extra directory/jar)
      *
-     * @parameter
      * @since 2.3.0-1
      */
+    @Parameter
     private File deploy;
 
     /**
@@ -95,26 +93,25 @@ public abstract class AbstractGwtShellMojo
      * Can be set from command line using '-Dgwt.extraJvmArgs=...', defaults to setting max Heap size to be large enough
      * for most GWT use cases.
      * </p>
-     *
-     * @parameter expression="${gwt.extraJvmArgs}" default-value="-Xmx512m"
      */
+    @Parameter(property = "gwt.extraJvmArgs", defaultValue="-Xmx512m")
     private String extraJvmArgs;
 
     /**
      * Option to specify the jvm (or path to the java executable) to use with the forking scripts. For the default, the
      * jvm will be the same as the one used to run Maven.
      *
-     * @parameter expression="${gwt.jvm}"
      * @since 1.1
      */
+    @Parameter(property = "gwt.jvm")
     private String jvm;
 
     /**
      * Forked process execution timeOut. Usefull to avoid maven to hang in continuous integration server.
-     *
-     * @parameter
      */
+    @Parameter
     private int timeOut;
+
     /**
      *
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
@@ -124,10 +121,8 @@ public abstract class AbstractGwtShellMojo
      * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
      * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
      * desirable).
-     *
-     *
-     * @parameter
      */
+    @Parameter
     private String[] compileSourcesArtifacts;
 
     /**
@@ -135,9 +130,9 @@ public abstract class AbstractGwtShellMojo
      * <p>
      * Can be set from command line using '-Dgwt.persistentunitcache=...'
      *
-     * @parameter expression="${gwt.persistentunitcache}"
      * @since 2.5.0-rc1
      */
+    @Parameter(property = "gwt.persistentunitcache")
     private Boolean persistentunitcache;
 
     /**
@@ -145,9 +140,9 @@ public abstract class AbstractGwtShellMojo
      * <p>
      * Can be set from command line using '-Dgwt.persistentunitcachedir=...'
      *
-     * @parameter expression="${gwt.persistentunitcachedir}"
      * @since 2.5.0-rc1
      */
+    @Parameter(property = "gwt.persistentunitcachedir")
     private File persistentunitcachedir;
 
     // methods

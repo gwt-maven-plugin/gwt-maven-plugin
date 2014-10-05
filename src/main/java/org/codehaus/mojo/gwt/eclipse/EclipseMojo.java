@@ -33,6 +33,12 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
@@ -46,18 +52,15 @@ import freemarker.template.TemplateException;
 /**
  * Goal which creates Eclipse lauch configurations for GWT modules.
  *
- * @goal eclipse
- * @execute phase=generate-resources
- * @requiresDependencyResolution compile
  * @version $Id$
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  */
+@Mojo(name = "eclipse", requiresDependencyResolution = ResolutionScope.COMPILE)
+@Execute(phase = LifecyclePhase.GENERATE_RESOURCES)
 public class EclipseMojo
     extends AbstractGwtModuleMojo
 {
-    /**
-     * @component
-     */
+    @Component
     private EclipseUtil eclipseUtil;
 
     /**
@@ -66,90 +69,76 @@ public class EclipseMojo
      * <p>
      * Can be set from command line using '-Dgwt.extraJvmArgs=...', defaults to setting max Heap size to be large enough
      * for most GWT use cases.
-     *
-     * @parameter expression="${gwt.extraJvmArgs}" default-value="-Xmx512m"
      */
+    @Parameter(property = "gwt.extraJvmArgs", defaultValue = "-Xmx512m")
     private String extraJvmArgs;
 
     /**
      * The currently executed project (phase=generate-resources).
-     *
-     * @parameter expression="${executedProject}"
-     * @readonly
      */
+    @Parameter(defaultValue = "${executedProject}", readonly = true)
     private MavenProject executedProject;
 
     /**
      * Location of the compiled classes.
-     *
-     * @parameter default-value="${project.build.outputDirectory}"
-     * @required
-     * @readOnly
      */
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File buildOutputDirectory;
 
     /**
      * Location of the hosted-mode web application structure.
-     * 
-     * @parameter default-value="${project.build.directory}/${project.build.finalName}"
      */
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
     private File hostedWebapp;
 
     /**
      * Additional parameters to append to the module URL. For example, gwt-log users will set "log_level=DEBUG"
-     *
-     * @parameter
      */
+    @Parameter
     private String additionalPageParameters;
 
     /**
      * Run without hosted mode server
-     *
-     * @parameter default-value="false" expression="${gwt.noserver}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.noserver")
     private boolean noserver;
 
     /**
      * Port of the HTTP server used when noserver is set
-     *
-     * @parameter default-value="8080" expression="${gwt.port}"
      */
+    @Parameter(defaultValue = "8080", property = "gwt.port")
     private int port;
 
     /**
      * Set GWT shell protocol/host whitelist.
      * <p>
      * Can be set from command line using '-Dgwt.whitelist=...'
-     * 
-     * @parameter expression="${gwt.whitelist}"
      */
+    @Parameter(property = "gwt.whitelist")
     private String whitelist;
 
     /**
      * Set GWT shell protocol/host blacklist.
      * <p>
      * Can be set from command line using '-Dgwt.blacklist=...'
-     * 
-     * @parameter expression="${gwt.blacklist}"
      */
+    @Parameter(property = "gwt.blacklist")
     private String blacklist;
 
     /**
      * Set GWT shell bindAddress.
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
-     * 
-     * @parameter expression="${gwt.bindAddress}"
      */
+    @Parameter(property = "gwt.bindAddress")
     private String bindAddress;
 
     /**
      * Setup a launch configuration for using the Google Eclipse Plugin. This is the recommended setup, as the home-made
      * launch configuration has many limitations. This parameter is only for backward compatibility, the standard lauch
      * configuration template will be removed in a future release.
-     * 
-     * @parameter default-value="true" expression="${use.google.eclipse.plugin}"
      */
+    @Parameter(defaultValue = "true", property = "use.google.eclipse.plugin")
     private boolean useGoogleEclipsePlugin;
 
     /**

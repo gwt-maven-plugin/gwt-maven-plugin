@@ -22,6 +22,11 @@ package org.codehaus.mojo.gwt.shell;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -29,14 +34,11 @@ import java.io.File;
 /**
  * Runs GWT modules with Super Dev Mode.
  *
- * @goal run-codeserver
- * @execute phase=process-classes
- * @requiresDirectInvocation
- * @requiresDependencyResolution compile
- * @description Runs the project in GWT SuperDevMode for development.
  * @author t.broyer
  * @since 2.5.0-rc1
  */
+@Mojo(name = "run-codeserver", requiresDirectInvocation = true, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Execute(phase = LifecyclePhase.PROCESS_CLASSES)
 public class SuperDevModeMojo extends AbstractGwtShellMojo
 {
 
@@ -44,49 +46,46 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      * Set SuperDevMode's bindAddress.
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
-     *
-     * @parameter expression="${gwt.bindAddress}"
      */
+    @Parameter(property = "gwt.bindAddress")
     private String bindAddress;
 
     /**
      * The port where the code server will run.
-     *
-     * @parameter expression="${gwt.codeServerPort}"
      */
+    @Parameter(property = "gwt.codeServerPort")
     private Integer codeServerPort;
 
     /**
      * The root of the directory tree where the code server will write compiler output.
      * If not supplied, a temporary directory will be used.
-     *
-     * @parameter
      */
+    @Parameter
     private File codeServerWorkDir;
 
     /**
      * Precompile modules.
      * 
-     * @parameter default-value="true" expression="${gwt.codeServer.precompile}"
      * @since 2.6.0-rc1
      */
+    @Parameter(defaultValue = "true", property = "gwt.codeServer.precompile")
     private boolean precompile;
 
     /**
      * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public"
      * for modules that don't define any dependencies.
      * 
-     * @parameter default-value="false" expression="${gwt.compiler.enforceStrictResources}"
      * @since 2.6.0-rc1
      */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
     private boolean enforceStrictResources;
 
     /**
      * Specifies Java source level.
      *
-     * @parameter expression="${maven.compiler.source}" default-value="auto"
      * @since 2.6.0-rc1
      */
+    @Parameter(defaultValue = "auto", property = "maven.compiler.source")
     private String sourceLevel;
 
     /**
@@ -94,31 +93,31 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      * <p>
      * Can be set from command line using '-Dgwt.compiler.strict=true'.
      * 
-     * @parameter alias="strict" default-value="false" expression="${gwt.compiler.strict}"
      * @since 2.7.0-rc1
      */
+    @Parameter(alias = "struct", defaultValue = "false", property = "gwt.compiler.strict")
     private boolean failOnError;
 
     /**
      * Compiles faster by reusing data from the previous compile.
      * 
-     * @parameter alias="compilePerFile" default-value="true" expression="${gwt.compiler.incremental}"
      * @since 2.7.0-rc1
      */
+    @Parameter(alias = "compilePerFile", defaultValue = "true", property = "gwt.compiler.incremental")
     private boolean incremental;
 
     /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
-     * @parameter default-value="NONE
      * @since 2.7.0-rc1
      */
+    @Parameter(defaultValue = "NONE")
     private String jsInteropMode;
 
     /**
      * The MavenProject executed by the "process-classes" phase.
-     * @parameter expression="${executedProject}"
      */
+    @Parameter(defaultValue = "${executedProject}")
     private MavenProject executedProject;
 
     @Override
@@ -184,12 +183,12 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
             throw new MojoExecutionException( e.getMessage(), e );
         }
     }
-    
+
     public void setExecutedProject( MavenProject executedProject )
     {
         this.executedProject = executedProject;
     }
-    
+
     @Override
     public MavenProject getProject()
     {
