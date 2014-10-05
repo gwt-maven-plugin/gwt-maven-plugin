@@ -70,7 +70,7 @@ public class EclipseMojo
      * Can be set from command line using '-Dgwt.extraJvmArgs=...', defaults to setting max Heap size to be large enough
      * for most GWT use cases.
      */
-    @Parameter(property = "gwt.extraJvmArgs", defaultValue = "-Xmx512m")
+    @Parameter(property = "gwt.extraJvmArgs")
     private String extraJvmArgs;
 
     /**

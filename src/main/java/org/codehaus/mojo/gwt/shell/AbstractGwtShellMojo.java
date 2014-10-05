@@ -95,7 +95,7 @@ public abstract class AbstractGwtShellMojo
      * for most GWT use cases.
      * </p>
      */
-    @Parameter(property = "gwt.extraJvmArgs", defaultValue="-Xmx512m")
+    @Parameter(property = "gwt.extraJvmArgs")
     private String extraJvmArgs;
 
     /**
@@ -164,7 +164,7 @@ public abstract class AbstractGwtShellMojo
 
     protected String getExtraJvmArgs()
     {
-        return extraJvmArgs;
+        return extraJvmArgs == null ? "" : extraJvmArgs;
     }
 
     protected String getLogLevel()
