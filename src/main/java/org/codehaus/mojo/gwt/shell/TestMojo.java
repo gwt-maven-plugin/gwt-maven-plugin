@@ -108,7 +108,7 @@ public class TestMojo
     private boolean productionMode;
 
     /**
-     * Configure test mode. Can be set to "manual", "htmlunit", "selenium" or "remoteweb". If set
+     * Configure test mode. Can be set to "manual", "htmlunit" or "selenium". If set
      * to any other value, that value will be passed as the <code>-runStyle</code> argument,
      * allowing you to use an arbitrary RunStyle when running tests.
      * 
@@ -133,17 +133,6 @@ public class TestMojo
      * @parameter expression="${gwt.test.selenium}"
      */
     private String selenium;
-
-    /**
-     * Configure options to run tests RemoteWebBrowser. The value must describe remote web URL, like
-     * "rmi://myhost/ie8"
-     * <p>
-     * You must start BrowserManagerServer before running tests with this option (gwt:browser).
-     * 
-     * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTestingRemoteTesting.html#Remote_Web
-     * @parameter expression="${gwt.test.remoteweb}"
-     */
-    private String remoteweb;
 
     /**
      * Time out (in seconds) for test execution in dedicated JVM
@@ -557,10 +546,6 @@ public class TestMojo
         else if ( mode.equalsIgnoreCase( "selenium" ) )
         {
             sb.append( " -runStyle ").append( quote( "Selenium:" + selenium ) );
-        }
-        else if ( mode.equalsIgnoreCase( "remoteweb" ) )
-        {
-            sb.append( " -runStyle ").append( quote( "RemoteWeb:" + remoteweb ) );
         }
         else if ( !mode.trim().isEmpty() )
         {

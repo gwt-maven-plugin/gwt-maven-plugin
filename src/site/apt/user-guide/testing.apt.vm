@@ -221,22 +221,3 @@ Testing GWT code with Maven
   </plugin>
 +---
 
-  Selenium may not fit your needs, then GWT comes with a custom RemoteBrowserServer. You can lauch such a server using <<<gwt:browser>>> goal,
-  by default it will run Internet Explorer on a Windows box as "ie". You can then run your testsuite on this remote browser, by setting
-  the the <<<mode>>> parameter (or <<<gwt.test.mode>>> system property) to "remoteweb". You'll have to configure the <<<remoteweb>>>
-  parameter to declare your remoteBrowserServer:
-
-+---
-  <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>gwt-maven-plugin</artifactId>
-    <version>${project.version}</version>
-    <configuration>
-      <remoteweb>rmi://myhost/ie</remoteweb>
-    </configuration>
-  </plugin>
-+---
-
-
-
-
