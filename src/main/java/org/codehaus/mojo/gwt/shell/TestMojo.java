@@ -454,17 +454,18 @@ public class TestMojo
             }
             try
             {
-                JavaCommand cmd = new JavaCommand( MavenTestRunner.class.getName() );
+                JavaCommand cmd = createJavaCommand()
+                    .setMainClass( MavenTestRunner.class.getName() );
                 if ( gwtSdkFirstInClasspath )
                 {
-                    cmd.withinClasspath( getGwtUserJar() )
-                       .withinClasspath( getGwtDevJar() );
+                    cmd.addToClasspath( getGwtUserJar() )
+                       .addToClasspath( getGwtDevJar() );
                 }
-                cmd.withinScope( Artifact.SCOPE_TEST );
+                cmd.addToClasspath( getClasspath( Artifact.SCOPE_TEST ) );
                 if ( !gwtSdkFirstInClasspath )
                 {
-                    cmd.withinClasspath( getGwtUserJar() )
-                       .withinClasspath( getGwtDevJar() );
+                    cmd.addToClasspath( getGwtUserJar() )
+                       .addToClasspath( getGwtDevJar() );
                 }
 
                 addCompileSourceArtifacts( cmd );
@@ -570,7 +571,6 @@ public class TestMojo
 
     @Override
     protected void postProcessClassPath( Collection<File> classpath )
-        throws MojoExecutionException
     {
         classpath.add( getClassPathElementFor( TestMojo.class ) );
         classpath.add( getClassPathElementFor( ReporterManager.class ) );

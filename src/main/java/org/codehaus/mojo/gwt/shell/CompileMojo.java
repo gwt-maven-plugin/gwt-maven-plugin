@@ -428,18 +428,18 @@ public class CompileMojo
     {
         boolean upToDate = true;
 
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
+        JavaCommand cmd = createJavaCommand()
+            .setMainClass( "com.google.gwt.dev.Compiler" );
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-               .withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+               .addToClasspath( getGwtDevJar() );
         }
-        cmd.withinScope( Artifact.SCOPE_COMPILE );
-
+        cmd.addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) );
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-               .withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+               .addToClasspath( getGwtDevJar() );
         }
 
         cmd.arg( "-logLevel", getLogLevel() )
@@ -534,7 +534,14 @@ public class CompileMojo
         }
         if ( !upToDate )
         {
-            cmd.execute();
+            try
+            {
+                cmd.execute();
+            }
+            catch ( JavaCommandException e )
+            {
+                throw new MojoExecutionException( e.getMessage(), e );
+            }
         }
     }
 

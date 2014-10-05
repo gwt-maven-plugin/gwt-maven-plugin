@@ -352,17 +352,18 @@ public class RunMojo
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+        JavaCommand cmd = createJavaCommand()
+            .setMainClass( "com.google.gwt.dev.DevMode" );
 
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() ).addToClasspath( getGwtDevJar() );
             if ( superDevMode ) {
-                cmd.withinClasspath( getGwtCodeServerJar() );
+                cmd.addToClasspath( getGwtCodeServerJar() );
             }
         }
 
-        cmd.withinScope( Artifact.SCOPE_RUNTIME );
+        cmd.addToClasspath( getClasspath( Artifact.SCOPE_RUNTIME ) );
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
         addArgumentGen( cmd );
@@ -370,9 +371,9 @@ public class RunMojo
 
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() ).addToClasspath( getGwtDevJar() );
             if ( superDevMode ) {
-                cmd.withinClasspath( getGwtCodeServerJar() );
+                cmd.addToClasspath( getGwtCodeServerJar() );
             }
         }
 
@@ -446,7 +447,14 @@ public class RunMojo
             cmd.arg( module );
         }
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
     @Override

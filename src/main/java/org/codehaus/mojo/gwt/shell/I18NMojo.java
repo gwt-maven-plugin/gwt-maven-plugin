@@ -97,42 +97,63 @@ public class I18NMojo
     {
         setup();
 
-        // constants with lookup
-        if ( i18nConstantsWithLookupBundles != null )
-        {
-            for ( String target : i18nConstantsWithLookupBundles )
+        try {
+            // constants with lookup
+            if ( i18nConstantsWithLookupBundles != null )
             {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
-                    .arg( target ).execute();
+                for ( String target : i18nConstantsWithLookupBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createConstantsWithLookup" )
+                        .arg( target )
+                        .execute();
+                }
+            }
+
+            // constants
+            if ( i18nConstantsBundles != null )
+            {
+                for ( String target : i18nConstantsBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( target )
+                        .execute();
+                }
+            }
+
+            // messages
+            if ( i18nMessagesBundles != null )
+            {
+                for ( String target : i18nMessagesBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createMessages" )
+                        .arg( target )
+                        .execute();
+                }
             }
         }
-
-        // constants
-        if ( i18nConstantsBundles != null )
+        catch (JavaCommandException e)
         {
-            for ( String target : i18nConstantsBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
-            }
-        }
-
-        // messages
-        if ( i18nMessagesBundles != null )
-        {
-            for ( String target : i18nMessagesBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
-                    .execute();
-            }
+            throw new MojoExecutionException( e.getMessage(), e );
         }
     }
 

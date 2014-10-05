@@ -125,24 +125,25 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     public void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.codeserver.CodeServer" );
+        JavaCommand cmd = createJavaCommand()
+            .setMainClass( "com.google.gwt.dev.codeserver.CodeServer" );
 
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-                .withinClasspath( getGwtDevJar() )
-                .withinClasspath( getGwtCodeServerJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+                .addToClasspath( getGwtDevJar() )
+                .addToClasspath( getGwtCodeServerJar() );
         }
 
-        cmd.withinScope( Artifact.SCOPE_COMPILE );
+        cmd.addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) );
         addCompileSourceArtifacts( cmd );
         addPersistentUnitCache(cmd);
 
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-                .withinClasspath( getGwtDevJar() )
-                .withinClasspath( getGwtCodeServerJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+                .addToClasspath( getGwtDevJar() )
+                .addToClasspath( getGwtCodeServerJar() );
         }
 
         cmd.arg( !precompile, "-noprecompile" );
@@ -174,7 +175,14 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
             cmd.arg( module );
         }
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
     
     public void setExecutedProject( MavenProject executedProject )

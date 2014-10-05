@@ -110,22 +110,23 @@ public class CSSMojo
                         try
                         {
                             final StringBuilder content = new StringBuilder();
-                            out = new StreamConsumer()
-                            {
-                                public void consumeLine( String line )
-                                {
-                                    content.append( line ).append( SystemUtils.LINE_SEPARATOR );
-                                }
-                            };
-                            new JavaCommand( "com.google.gwt.resources.css.InterfaceGenerator" )
-                                .withinScope( Artifact.SCOPE_COMPILE )
+                            createJavaCommand()
+                                .setMainClass( "com.google.gwt.resources.css.InterfaceGenerator" )
+                                .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
                                 .arg( "-standalone" )
                                 .arg( "-typeName" )
                                 .arg( typeName )
                                 .arg( "-css" )
                                 .arg( candidate.getAbsolutePath() )
-                                .withinClasspath( getGwtDevJar() )
-                                .withinClasspath( getGwtUserJar() )
+                                .addToClasspath( getGwtDevJar() )
+                                .addToClasspath( getGwtUserJar() )
+                                .setOut( new StreamConsumer()
+                                    {
+                                        public void consumeLine( String line )
+                                        {
+                                            content.append( line ).append( SystemUtils.LINE_SEPARATOR );
+                                        }
+                                    } )
                                 .execute();
                             if ( content.length() == 0 )
                             {
@@ -141,7 +142,11 @@ public class CSSMojo
                         }
                         catch ( IOException e )
                         {
-                            throw new MojoExecutionException( "Failed to write to file: " + javaOutput );
+                            throw new MojoExecutionException( "Failed to write to file: " + javaOutput, e );
+                        }
+                        catch ( JavaCommandException e )
+                        {
+                            throw new MojoExecutionException( e.getMessage(), e );
                         }
                         break;
                     }
