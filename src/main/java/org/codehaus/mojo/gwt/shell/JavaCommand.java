@@ -19,15 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
@@ -37,38 +28,44 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.StreamConsumer;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  * @since 2.1.0-1
  */
 public class JavaCommand
 {
-    private String className;
+    private String mainClass;
 
-    private List<File> classpath = new LinkedList<File>();
+    private List<File> classpath = new ArrayList<File>();
 
-    private final List<String> args = new ArrayList<String>();
+    private List<String> args = new ArrayList<String>();
 
     private Properties systemProperties = new Properties();
 
     private Properties env = new Properties();
 
-    private Collection<File> classPathFiles;
-    
     private List<String> jvmArgs;
-    
+
     private String jvm;
-    
+
     private Log log;
-    
+
     private int timeOut;
-    
-    private List<ClassPathProcessor> classPathProcessors;
-    
+
+    private List<ClassPathProcessor> classPathProcessors = new ArrayList<ClassPathProcessor>();
+
     /**
      * A plexus-util StreamConsumer to redirect messages to plugin log
      */
-    protected StreamConsumer out = new StreamConsumer()
+    private StreamConsumer out = new StreamConsumer()
     {
         public void consumeLine( String line )
         {
@@ -86,45 +83,154 @@ public class JavaCommand
             log.error( line );
         }
     };
-    
-    /**
-     * 
-     * 
-     */
-    public JavaCommand( JavaCommandRequest javaCommandRequest)
+
+    public String getMainClass()
     {
-        this.className = javaCommandRequest.getClassName();
-        this.classPathFiles = javaCommandRequest.getClassPathFiles();
-        this.jvmArgs = javaCommandRequest.getJvmArgs();
-        this.jvm = javaCommandRequest.getJvm();
-        this.log = javaCommandRequest.getLog();
-        this.timeOut = javaCommandRequest.getTimeOut();
-        this.classPathProcessors = javaCommandRequest.getClassPathProcessors();
+        return mainClass;
     }
 
-    public JavaCommand withinScope( String scope )
-        throws MojoExecutionException
+    public JavaCommand setMainClass( String mainClass )
     {
-        if ( this.classPathFiles != null )
-        {
-            classpath.addAll( this.classPathFiles );
-        }
-        if ( this.classPathProcessors != null )
-        {
-            for ( ClassPathProcessor classPathProcessor : this.classPathProcessors )
-            {
-                classPathProcessor.postProcessClassPath( classpath );
-            }
-        }
+        this.mainClass = mainClass;
         return this;
     }
 
-    public JavaCommand withinClasspath( File... path )
+    public List<File> getClasspath()
     {
-        for ( File file : path )
+        return classpath;
+    }
+
+    public JavaCommand setClasspath( List<File> classpath )
+    {
+        this.classpath = classpath;
+        return this;
+    }
+
+    public List<String> getArgs()
+    {
+        return args;
+    }
+
+    public JavaCommand setArgs( List<String> args )
+    {
+        this.args = args;
+        return this;
+    }
+
+    public Properties getSystemProperties()
+    {
+        return systemProperties;
+    }
+
+    public JavaCommand setSystemProperties( Properties systemProperties )
+    {
+        this.systemProperties = systemProperties;
+        return this;
+    }
+
+    public Properties getEnv()
+    {
+        return env;
+    }
+
+    public JavaCommand setEnv( Properties env )
+    {
+        this.env = env;
+        return this;
+    }
+
+    public List<String> getJvmArgs()
+    {
+        if (this.jvmArgs == null)
         {
-            classpath.add( file );
+            this.jvmArgs = new ArrayList<String>();
         }
+        return jvmArgs;
+    }
+
+    public JavaCommand setJvmArgs( List<String> jvmArgs )
+    {
+        this.jvmArgs = jvmArgs;
+        return this;
+    }
+
+    public String getJvm()
+    {
+        return jvm;
+    }
+
+    public JavaCommand setJvm( String jvm )
+    {
+        this.jvm = jvm;
+        return this;
+    }
+
+    public Log getLog()
+    {
+        return log;
+    }
+
+    public JavaCommand setLog( Log log )
+    {
+        this.log = log;
+        return this;
+    }
+
+    public int getTimeOut()
+    {
+        return timeOut;
+    }
+
+    public JavaCommand setTimeOut( int timeOut )
+    {
+        this.timeOut = timeOut;
+        return this;
+    }
+
+    public List<ClassPathProcessor> getClassPathProcessors()
+    {
+        return classPathProcessors;
+    }
+
+    public JavaCommand addClassPathProcessors( ClassPathProcessor classPathProcessor )
+    {
+        classPathProcessors.add( classPathProcessor );
+        return this;
+    }
+
+    public JavaCommand setClassPathProcessors( List<ClassPathProcessor> classPathProcessors )
+    {
+        this.classPathProcessors = classPathProcessors;
+        return this;
+    }
+
+    public JavaCommand setOut( StreamConsumer out )
+    {
+        this.out = out;
+        return this;
+    }
+
+    public JavaCommand addToClasspath( File... path )
+    {
+        addToClasspath( Arrays.asList( path ) );
+        return this;
+    }
+
+    public JavaCommand addToClasspath( Collection<File> elements )
+    {
+        classpath.addAll( elements );
+        return this;
+    }
+
+    public JavaCommand prependToClasspath( File... elements )
+    {
+        prependToClasspath( Arrays.asList( elements ) );
+        return this;
+    }
+
+    public JavaCommand prependToClasspath( Collection<File> elements )
+    {
+        classpath.addAll( 0, elements );
         return this;
     }
 
@@ -165,6 +271,11 @@ public class JavaCommand
     public void execute()
         throws JavaCommandException
     {
+        for (ClassPathProcessor classPathProcessor : classPathProcessors )
+        {
+            classPathProcessor.postProcessClassPath( classpath );
+        }
+
         List<String> command = new ArrayList<String>();
         if (this.jvmArgs != null)
         {
@@ -179,17 +290,17 @@ public class JavaCommand
         command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
         if ( systemProperties != null )
         {
-            for ( Map.Entry entry : systemProperties.entrySet() )
+            for ( Map.Entry<?, ?> entry : systemProperties.entrySet() )
             {
                 command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
             }
         }
-        command.add( className );
+        command.add( mainClass );
         command.addAll( args );
 
         try
         {
-            String[] arguments = (String[]) command.toArray( new String[command.size()] );
+            String[] arguments = command.toArray( new String[command.size()] );
 
             // On windows, the default Shell will fall into command line length limitation issue
             // On Unixes, not using a Shell breaks the classpath (NoClassDefFoundError:
@@ -201,7 +312,7 @@ public class JavaCommand
             cmd.addArguments( arguments );
             if ( env != null )
             {
-                for ( Map.Entry entry : env.entrySet() )
+                for ( Map.Entry<?, ?> entry : env.entrySet() )
                 {
                     log.debug( "add env " + (String) entry.getKey() + " with value " + (String) entry.getValue() );
                     cmd.addEnvironment( (String) entry.getKey(), (String) entry.getValue() );
@@ -262,10 +373,5 @@ public class JavaCommand
         }
         log.debug( "use jvm " + jvm );
         return jvm;
-    }
-    
-    public void withinClasspathFirst( File oophmJar )
-    {
-        classpath.add( 0, oophmJar );
     }
 }
