@@ -255,7 +255,7 @@ public abstract class AbstractGwtShellMojo
             String dependencyId = StringUtils.join( parts.iterator(), ":" );
             boolean found = false;
 
-            for ( Artifact artifact : getProject().getArtifacts() )
+            for ( Artifact artifact : getProjectArtifacts() )
             {
                 getLog().debug( "compare " + dependencyId + " with " + artifact.getDependencyConflictId() );
                 if ( artifact.getDependencyConflictId().equals( dependencyId ) )
@@ -304,4 +304,5 @@ public abstract class AbstractGwtShellMojo
             cmd.systemProperty( "gwt.persistentunitcachedir", persistentunitcachedir.getAbsolutePath() );
         }
     }
+
 }
