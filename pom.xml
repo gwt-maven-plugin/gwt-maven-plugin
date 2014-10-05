@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>30</version>
+    <version>33</version>
   </parent>
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.7.0-SNAPSHOT</version>
@@ -34,7 +34,7 @@
   <url>http://mojo.codehaus.org/gwt-maven-plugin</url>
   <inceptionYear>2007</inceptionYear>
   <prerequisites>
-    <maven>2.1</maven>
+    <maven>3</maven>
   </prerequisites>
   <licenses>
     <license>
@@ -123,20 +123,26 @@
     <gwt.version>2.7.0-SNAPSHOT</gwt.version>
     <!--  apt filterting doesn't support dot -->
     <gwtVersion>${gwt.version}</gwtVersion>
-    <mavenVersion>2.0.9</mavenVersion>
+    <mavenVersion>3.0.5</mavenVersion>
+    <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
     <mojo.java.target>1.6</mojo.java.target>
-    <doxia-sitetoolsVersion>1.1.4</doxia-sitetoolsVersion>
+    <doxia-sitetoolsVersion>1.6</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
     <stagingSiteRepositoryId>codehaus</stagingSiteRepositoryId>
     <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>
-    <invokerPluginVersion>1.5</invokerPluginVersion>    
   </properties>
 
   <dependencies>
+    <!--  TODO: migrate our API usage and eventually remove that dependency -->
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
+      <artifactId>maven-compat</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
       <version>${mavenVersion}</version>
     </dependency>
     <dependency>
@@ -168,13 +174,13 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-9-stable-1</version>
+      <version>1.5.5</version>
     </dependency>
     
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-sink-api</artifactId>
-      <version>1.1.4</version>
+      <version>${doxia-sitetoolsVersion}</version>
     </dependency>
     
     <!-- Doxia-sitetools -->
@@ -194,6 +200,7 @@
       </exclusions>
     </dependency>    
     
+    <!-- TODO: get rid of this! -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -203,18 +210,18 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>2.0.5</version>
+      <version>3.0.18</version>
     </dependency>
     <dependency>
       <groupId>com.thoughtworks.qdox</groupId>
       <artifactId>qdox</artifactId>
-      <version>1.12</version>
+      <version>1.12.1</version>
     </dependency>
     <dependency>
       <!-- used to generate eclipse .lanch files -->
-      <groupId>freemarker</groupId>
+      <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
-      <version>2.3.6</version>
+      <version>2.3.20</version>
     </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
@@ -235,28 +242,18 @@
       <!-- used to unpack gwt native libs -->
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>1.0-alpha-9</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-container-default</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-component-api</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>2.6.3</version>
     </dependency>
 	<dependency>
       <!--  used for GwtSourcesJarMojo -->
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-archiver</artifactId>
-      <version>2.4.1</version>
+      <version>2.5</version>
 	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.11</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -273,43 +270,44 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.0.1</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.5</version>
+      <version>2.6</version>
     </dependency>    
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
-      <version>1.1</version>
+      <version>1.1.3</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <!-- ICU 2.6.1 (inherited via jaxen) contains bad class files that break ASM (helpmojo java-annotations extractor and animal-sniffer) -->
     <dependency>
-      <groupId>org.apache.bcel</groupId>
-      <artifactId>bcel</artifactId>
-      <version>5.2</version>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <!-- required when running GWT 1.6 Hosted server to fix JAXP parser mismatches -->
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
-      <version>2.9.1</version>
+      <version>2.10.0</version>
     </dependency>
     <dependency>
-      <groupId>classworlds</groupId>
-      <artifactId>classworlds</artifactId>
-      <version>1.1-alpha-2</version>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-classworlds</artifactId>
+      <version>2.5.2</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
-      <version>1.5.3</version>
+      <version>2.3</version>
     </dependency>
     <dependency>
       <groupId>org.sonatype.plexus</groupId>
@@ -318,16 +316,16 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
+      <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>1.0-beta-1</version>
+      <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <!-- used to check for up-to-date compilation output -->
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-javac</artifactId>
-      <version>1.5.3</version>
+      <version>2.3</version>
     </dependency>
   </dependencies>
   <profiles>
@@ -345,6 +343,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
+            <version>1.9</version>
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
@@ -375,53 +374,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    
-    <profile>
-      <id>grid</id>
-      <properties>
-        <invokerPluginVersion>1.6-SNAPSHOT</invokerPluginVersion>
-        <itParallelThreads>1</itParallelThreads>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-invoker-plugin</artifactId>
-            <configuration>
-              <parallelThreads>${itParallelThreads}</parallelThreads>
-            </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>1.0</version>
-            <executions>
-              <execution>
-                <id>mojo-enforcer-rules</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <requirePluginVersions>
-                       <banSnapshots>false</banSnapshots>
-                       <!--
-                       oups documentation sucks !!
-                       http://maven.apache.org/enforcer/enforcer-rules/requirePluginVersions.html
-                       log says 
-                       Cause: Cannot find setter nor field in org.apache.maven.plugins.enforcer.RequirePluginVersions for 'unCheckedPluginsList'
-
-                       <unCheckedPluginsList>org.apache.maven.plugins:maven-invoker-plugin</unCheckedPluginsList>
-                        -->
-                    </requirePluginVersions>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>          
-        </plugins>
-      </build>  
     </profile>
     
     <profile>
@@ -491,7 +443,7 @@
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-component-metadata</artifactId>
-        <version>1.5.1</version>
+        <version>1.5.5</version>
         <executions>
           <execution>
             <goals>
@@ -503,7 +455,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>${mavenPluginPluginVersion}</version>
         <configuration>
+          <!-- see http://jira.codehaus.org/browse/MNG-5346 -->
+          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
           <requirements>
             <jdk>${maven.compiler.target}</jdk>
           </requirements>
@@ -516,22 +471,6 @@
           <escapeString>\</escapeString>
         </configuration>
       </plugin>
-      
-      <!--<plugin>
-        <artifactId>maven-pdf-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>pdf</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <outputDirectory>${project.build.directory}/site/pdf</outputDirectory>
-        </configuration>
-      </plugin>-->
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
@@ -539,44 +478,30 @@
           <stagingSiteURL>${stagingSiteURL}</stagingSiteURL>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.1</version>
-      </plugin>
-      <!-- comment this as it failed with java.lang.ArrayIndexOutOfBoundsException:
+      <!-- disabled: bug when dealing with ICU classes (from jaxen)-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.6</version>
+        <version>1.11</version>
         <configuration>
           <signature>
             <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java15</artifactId>
-            <version>1.0</version>
+            <artifactId>java16</artifactId>
+            <version>1.1</version>
           </signature>
         </configuration>
         <executions>
           <execution>
-            <id>check-java-1.5-compat</id>
+            <id>check-java-1.6-compat</id>
             <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>      
-      -->
+      </plugin>
+      <!-- -->
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-invoker-plugin</artifactId>
-          <version>${invokerPluginVersion}</version>
-        </plugin>      
-      </plugins>
-    </pluginManagement>
   </build>
 
   <reporting>
