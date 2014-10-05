@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -196,9 +197,13 @@ public abstract class AbstractGwtShellMojo
         String userExtraJvmArgs = getExtraJvmArgs();
         if ( userExtraJvmArgs != null )
         {
-            for ( String extraArg : userExtraJvmArgs.split( " " ) )
+            try
             {
-                extra.add( extraArg );
+                return new ArrayList<String>(Arrays.asList( CommandLineUtils.translateCommandline( StringUtils.removeDuplicateWhitespace( userExtraJvmArgs ) ) ) );
+            }
+            catch ( Exception e )
+            {
+                throw new RuntimeException( e );
             }
         }
         return extra;
