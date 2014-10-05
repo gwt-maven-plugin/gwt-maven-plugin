@@ -48,7 +48,7 @@
           <optimizationLevel>1</optimizationLevel>
           <extraParam>true</extraParam>
           <soyc>false</soyc>
-          <strict>true</strict>
+          <failOnError>true</failOnError>
           <workDir>${project.build.directory}/workDir</workDir>
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
