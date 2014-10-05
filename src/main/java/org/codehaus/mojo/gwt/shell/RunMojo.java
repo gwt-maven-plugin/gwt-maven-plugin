@@ -242,10 +242,10 @@ public class RunMojo
      * <p>
      * The default value depends on the JVM used to launch Maven.
      *
-     * @parameter expression="${maven.compiler.source}"
+     * @parameter expression="${maven.compiler.source}" default-value="auto"
      * @since 2.6.0-rc1
      */
-    private String sourceLevel = System.getProperty("java.specification.version");
+    private String sourceLevel;
 
     /**
      * Runs Super Dev Mode instead of classic Development Mode.
@@ -385,7 +385,8 @@ public class RunMojo
             .arg( noServer, "-nostartServer" )
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
             .arg( superDevMode ? "-superDevMode" : "-nosuperDevMode" )
-            .arg( !incremental, "-noincremental" );
+            .arg( !incremental, "-noincremental" )
+            .arg( "-sourceLevel", sourceLevel );
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 )
         {
