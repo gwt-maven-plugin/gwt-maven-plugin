@@ -238,7 +238,7 @@ public abstract class AbstractGwtMojo
     {
         try
         {
-            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, getProjectArtifacts(), isGenerator() );
+            Collection<File> files = classpathBuilder.buildClasspathList( getProject(), scope, isGenerator() );
 
             if ( getLog().isDebugEnabled() )
             {
@@ -417,12 +417,6 @@ public abstract class AbstractGwtMojo
             generateDirectory.mkdirs();
         }
         return generateDirectory;
-    }
-
-    @SuppressWarnings( "unchecked" )
-    public Set<Artifact> getProjectArtifacts()
-    {
-        return project.getArtifacts();
     }
 
     @SuppressWarnings( "unchecked" )

@@ -170,19 +170,10 @@ public class MergeWebXmlMojo
     }
     
     private ClassLoader getAnnotationSearchClassLoader()
-        throws ClasspathBuilderException, MalformedURLException
+        throws MalformedURLException
     {
-        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet(), false );
 
-        List<URL> urls = new ArrayList<URL>( classPathFiles.size() );
-
-        for ( File file : classPathFiles )
-        {
-            urls.add( file.toURL() );
-        }
-
-        URLClassLoader url = new URLClassLoader( urls.toArray( new URL[urls.size()] ) );
-        return url;
+        return new URLClassLoader( new URL[] { new File( getProject().getBuild().getOutputDirectory() ).toURI().toURL() } );
 
     }
 }

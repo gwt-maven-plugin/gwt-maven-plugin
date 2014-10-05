@@ -57,7 +57,6 @@ public class ClasspathBuilder
      * times).
      *
      * @param project The maven project the Mojo is running for
-     * @param artifacts the project artifacts (all scopes)
      * @param scope artifact scope to use
      * @param isGenerator whether to use processed resources and compiled classes (false), or raw resources (true).
      * @return file collection for classpath
@@ -65,7 +64,7 @@ public class ClasspathBuilder
      */
     @SuppressWarnings( "unchecked" )
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
-                                                Set<Artifact> artifacts, boolean isGenerator )
+                                                boolean isGenerator )
         throws ClasspathBuilderException
     {
         getLogger().debug( "establishing classpath list (scope = " + scope + ")" );
@@ -95,13 +94,14 @@ public class ClasspathBuilder
             items.add( new File( project.getBuild().getTestOutputDirectory() ) );
 
             // Add all project dependencies in classpath
-            for ( Artifact artifact : artifacts )
+            for ( Artifact artifact : project.getArtifacts() )
             {
                 items.add( artifact.getFile() );
             }
         }
         else if ( scope.equals( SCOPE_COMPILE ) )
         {
+            Set<Artifact> artifacts = project.getArtifacts();
             // Add all project dependencies in classpath
             getLogger().debug( "candidate artifacts : " + artifacts.size() );
             for ( Artifact artifact : artifacts )
@@ -118,7 +118,7 @@ public class ClasspathBuilder
         {
             // Add all dependencies BUT "TEST" as we need PROVIDED ones to setup the execution
             // GWTShell that is NOT a full JEE server
-            for ( Artifact artifact : artifacts )
+            for ( Artifact artifact : project.getArtifacts() )
             {
                 getLogger().debug( "candidate artifact : " + artifact );
                 if ( !artifact.getScope().equals( SCOPE_TEST ) && artifact.getArtifactHandler().isAddedToClasspath() )
@@ -152,8 +152,8 @@ public class ClasspathBuilder
         {
             String projectReferenceId =
                 getProjectReferenceId( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion() );
-            MavenProject refProject = (MavenProject) project.getProjectReferences().get( projectReferenceId );
-            if ( refProject != null )
+            MavenProject refProject = project.getProjectReferences().get( projectReferenceId );
+            if ( refProject != null && "sources".equals( artifact.getClassifier() ) )
             {
                 addSources( items, getSourceRoots( refProject, scope ) );
             }
@@ -178,7 +178,7 @@ public class ClasspathBuilder
         {
             String projectReferenceId =
                 getProjectReferenceId( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion() );
-            MavenProject refProject = (MavenProject) project.getProjectReferences().get( projectReferenceId );
+            MavenProject refProject = project.getProjectReferences().get( projectReferenceId );
             if ( refProject != null )
             {
                 addResources( items, getResources( refProject, scope ) );
