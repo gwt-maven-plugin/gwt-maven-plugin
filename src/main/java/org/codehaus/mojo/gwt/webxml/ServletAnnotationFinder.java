@@ -31,7 +31,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.ClassMetadata;
 import org.springframework.util.ClassUtils;
 
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -55,6 +58,57 @@ public class ServletAnnotationFinder
         // no op
     }
 
+	private MetadataReader getMetadataReader(String className,
+											 MetadataReaderFactory factory,
+											 PathMatchingResourcePatternResolver resourceResolver)
+		throws IOException
+	{
+		String resourcePath = ClassUtils.convertClassNameToResourcePath(className);
+		Resource resource = resourceResolver.getResource(resourcePath + ".class");
+		if (resource.exists()) {
+			return factory.getMetadataReader(resource);
+		}
+		return null;
+	}
+
+	private boolean extendsRemoteServlet(ClassMetadata classMetadata,
+										 MetadataReaderFactory factory,
+										 PathMatchingResourcePatternResolver resourceResolver)
+		throws IOException
+	{
+		if (classMetadata.hasSuperClass()) {
+			String name = classMetadata.getSuperClassName();
+			if (name.equals("com.google.gwt.user.server.rpc.RemoteServiceServlet")) {
+				return true;
+			}
+			MetadataReader r = getMetadataReader(classMetadata.getSuperClassName(), factory, resourceResolver);
+			return extendsRemoteServlet(r.getClassMetadata(), factory, resourceResolver);
+		}
+		return false;
+	}
+
+	private AnnotationMetadata getAnnotationMetadataIfServlet(MetadataReader metadataReader,
+															  MetadataReaderFactory factory,
+															  PathMatchingResourcePatternResolver resourceResolver)
+	{
+		ClassMetadata classMetadata = metadataReader.getClassMetadata();
+
+		try {
+			if (classMetadata.isConcrete() && extendsRemoteServlet(classMetadata, factory, resourceResolver)) {
+				for (String i : metadataReader.getClassMetadata().getInterfaceNames()) {
+					MetadataReader r = getMetadataReader(i, factory, resourceResolver);
+					if (r != null && r.getAnnotationMetadata()
+						.hasAnnotation( RemoteServiceRelativePath.class.getName() )) {
+						return r.getAnnotationMetadata();
+					}
+				}
+			}
+		} catch (IOException e) {
+			getLogger().warn("Failed to read class metadata: " + e);
+		}
+		return null;
+	}
+
     /**
      * @param packageName
      * @return cannot return <code>null</null>
@@ -77,9 +131,12 @@ public class ServletAnnotationFinder
             getLogger().debug( "springresource " + resource.getFilename() );
             MetadataReader metadataReader = simpleMetadataReaderFactory.getMetadataReader( resource );
 
-            if ( metadataReader.getAnnotationMetadata().hasAnnotation( RemoteServiceRelativePath.class.getName() ) )
+			AnnotationMetadata annotationMetadata = getAnnotationMetadataIfServlet(metadataReader,
+																				   simpleMetadataReaderFactory,
+																				   pathMatchingResourcePatternResolver);
+            if ( annotationMetadata != null )
             {
-                Map<String, Object> annotationAttributes = metadataReader.getAnnotationMetadata()
+                Map<String, Object> annotationAttributes = annotationMetadata
                     .getAnnotationAttributes( RemoteServiceRelativePath.class.getName() );
                 getLogger().debug( "found RemoteServiceRelativePath annotation for class "
                                        + metadataReader.getClassMetadata().getClassName() );
