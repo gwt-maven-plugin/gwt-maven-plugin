@@ -27,5 +27,19 @@
         </execute>
       </action>
     </pluginExecution>
+    <pluginExecution>
+      <pluginExecutionFilter>
+        <goals>
+          <goal>i18n</goal>
+        </goals>
+      </pluginExecutionFilter>
+      <action>
+        <execute>
+          <!-- i18n does not support incremental builds (yet) -->
+          <runOnIncremental>false</runOnIncremental>
+          <runOnConfiguration>true</runOnConfiguration>
+        </execute>
+      </action>
+    </pluginExecution>
   </pluginExecutions>
 </lifecycleMappingMetadata>
