@@ -20,7 +20,7 @@
 -->
 <!DOCTYPE module PUBLIC "//gwt-module/" "http://google-web-toolkit.googlecode.com/svn/tags/1.6.2/distro-source/core/src/gwt-module.dtd">
 <!-- START SNIPPET: hello-module -->
-<module>
+<module rename-to="hello">
   <inherits name="com.google.gwt.user.User"/>
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
 
@@ -28,7 +28,6 @@
 
   <entry-point class="org.codehaus.mojo.gwt.test.client.Hello"/>
 
-  <servlet class="org.codehaus.mojo.gwt.test.server.HelloRemoteServlet" path="/org.codehaus.mojo.gwt.test.Hello/Hello"/>
   <set-property name="user.agent" value="gecko1_8"/>
 </module>
 <!-- END SNIPPET: hello-module -->

@@ -67,7 +67,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>org.codehaus.mojo.gwt.test.Hello/Hello.html</runTarget>
+          <runTarget>hello/Hello.html</runTarget>
           <draftCompile>true</draftCompile>
           <optimizationLevel>1</optimizationLevel>          
         </configuration>
