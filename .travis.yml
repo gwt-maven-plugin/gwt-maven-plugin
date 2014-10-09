@@ -1,0 +1,22 @@
+language: java
+
+jdk:
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
+  - oraclejdk8
+
+install: mvn -U install clean --fail-never --quiet -DskipTests
+
+script:  mvn -U verify --fail-at-end
+
+notifications:
+  email:
+    on_success: never
+
+matrix:
+  allow_failures:
+    - jdk: openjdk6
+    - jdk: oraclejdk8
+  fast_finish: true
+
