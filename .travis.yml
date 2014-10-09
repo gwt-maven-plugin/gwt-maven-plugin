@@ -20,3 +20,11 @@ matrix:
     - jdk: oraclejdk8
   fast_finish: true
 
+env:
+  global:
+    - secure: F2kgyU0SYq/hGaZc7BNWa59MSUL5IvzpasuZqPgO7zvVbGzsLKphrmonoCZo1oWiX5vHrDY5XuSFom8M2W+7+aHifrkKC6nmOz7ltdVBmed3UGMvitqF+Zng6gqOP+hB0pgdlhDmD450luTz+VNDjAAeZndJenWFqy+xltIax24=
+    - secure: MX+HvNp6GDxM3MLujcj39Kc1cZGL5jjmbyXeiV8452NSH/d7EKTE4wCagB+kdeNnF5dKKk+Fg0BeDKJ1y8LegEcuwNpAm8MLB6P8BmwVwgfYBWb6/H4Ag1PBCXZR5XivXRk66WYxPyw1ritKxkx/SgfrkHPjh3wYvuNdnJDzxLY=
+
+after_success:
+  - ci/deploy-snapshot.sh
+
