@@ -22,6 +22,8 @@ package org.codehaus.mojo.gwt.eclipse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -126,7 +128,13 @@ public class EclipseTestMojo
 
         try
         {
-            context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath() );
+            Collection<String> gwtDevJarPath = new ArrayList<String>();
+            for (File f : getGwtDevJar())
+            {
+                gwtDevJarPath.add( f.getAbsolutePath().replace( '\\', '/' ) );
+            }
+            context.put( "gwtDevJarPath", gwtDevJarPath );
+
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             Template template = cfg.getTemplate( "test-launch.fm", "UTF-8" );
             template.process( context, configWriter );

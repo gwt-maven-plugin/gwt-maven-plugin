@@ -30,8 +30,8 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -210,21 +210,14 @@ public class JavaCommand
         return this;
     }
 
-    public JavaCommand addToClasspath( File... path )
+    public JavaCommand addToClasspath( File file )
     {
-        addToClasspath( Arrays.asList( path ) );
-        return this;
+        return addToClasspath( Collections.singleton( file ) );
     }
 
     public JavaCommand addToClasspath( Collection<File> elements )
     {
         classpath.addAll( elements );
-        return this;
-    }
-
-    public JavaCommand prependToClasspath( File... elements )
-    {
-        prependToClasspath( Arrays.asList( elements ) );
         return this;
     }
 

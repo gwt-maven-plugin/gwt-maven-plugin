@@ -22,6 +22,7 @@ package org.codehaus.mojo.gwt.eclipse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -270,7 +271,13 @@ public class EclipseMojo
             context.put( "extraJvmArgs", extraJvmArgs );
             context.put( "project", eclipseUtil.getProjectName( getProject() ) );
 
-            context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath().replace( '\\', '/' ) );
+            Collection<String> gwtDevJarPath = new ArrayList<String>();
+            for (File f : getGwtDevJar())
+            {
+                gwtDevJarPath.add( f.getAbsolutePath().replace( '\\', '/' ) );
+            }
+            context.put( "gwtDevJarPath", gwtDevJarPath );
+
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             String templateName = useGoogleEclipsePlugin ? "google.fm" : "launch.fm";
             Template template = cfg.getTemplate( templateName, "UTF-8" );

@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +65,12 @@ import java.util.Set;
 public abstract class AbstractGwtMojo
     extends AbstractMojo
 {
+    private static final String GWT_USER = "com.google.gwt:gwt-user";
+
+    private static final String GWT_CODESERVER = "com.google.gwt:gwt-codeserver";
+
+    private static final String GWT_DEV = "com.google.gwt:gwt-dev";
+
     /** GWT artifacts groupId */
     public static final String GWT_GROUP_ID = "com.google.gwt";
 
@@ -232,25 +239,25 @@ public abstract class AbstractGwtMojo
         return false;
     }
 
-    protected File getGwtDevJar()
-        throws MojoExecutionException
+    protected Collection<File> getGwtDevJar() throws MojoExecutionException
     {
-        checkGwtUserVersion();
-        return pluginArtifactMap.get( "com.google.gwt:gwt-dev" ).getFile();
+        return getJarFiles( GWT_DEV );
     }
 
-    protected File getGwtCodeServerJar()
-        throws MojoExecutionException
+    protected Collection<File> getGwtCodeServerJar() throws MojoExecutionException
     {
-        checkGwtUserVersion();
-        return pluginArtifactMap.get( "com.google.gwt:gwt-codeserver" ).getFile();
+        return getJarFiles( GWT_CODESERVER );
     }
 
-    protected File[] getGwtUserJar()
-            throws MojoExecutionException
+    protected Collection<File> getGwtUserJar() throws MojoExecutionException
+    {
+        return getJarFiles( GWT_USER );
+    }
+
+    private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException
     {
         checkGwtUserVersion();
-        Artifact gwtUserArtifact = pluginArtifactMap.get( "com.google.gwt:gwt-user" );
+        Artifact gwtUserArtifact = pluginArtifactMap.get( artifactId );
 
         Set<Artifact> artifacts = new HashSet<Artifact>();
         ArtifactResolutionResult result = null;
@@ -269,12 +276,11 @@ public abstract class AbstractGwtMojo
         }
 
         Collection<Artifact> resolved = result.getArtifacts();
-        int i = 0;
-        File[] files = new File[ resolved.size() + 1 ];
-        files[i++] = gwtUserArtifact.getFile();
+        Collection<File> files = new ArrayList<File>(resolved.size() + 1 );
+        files.add( gwtUserArtifact.getFile() );
         for ( Artifact artifact : resolved )
         {
-            files[i++] = artifact.getFile();
+            files.add( artifact.getFile() );
         }
 
         return files;
@@ -302,7 +308,7 @@ public abstract class AbstractGwtMojo
             IOUtils.closeQuietly( inputStream );
         }
 
-        Artifact gwtUser = project.getArtifactMap().get( "com.google.gwt:gwt-user" );
+        Artifact gwtUser = project.getArtifactMap().get( GWT_USER );
         if (gwtUser != null)
         {
             String mojoGwtVersion = properties.getProperty( "gwt.version" );
