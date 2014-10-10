@@ -232,7 +232,6 @@ public abstract class AbstractGwtMojo
         return false;
     }
 
-	// FIXME move to GwtDevHelper stuff to avoid duplicates
     protected File getGwtDevJar()
         throws MojoExecutionException
     {
