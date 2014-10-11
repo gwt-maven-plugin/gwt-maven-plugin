@@ -146,7 +146,9 @@ public abstract class AbstractGwtMojo
      * see issue http://code.google.com/p/google-web-toolkit/issues/detail?id=5290
      *
      * @since 2.1.0-1
+     * @deprecated tweak your dependencies and/or split your project with a client-only module
      */
+    @Deprecated
     @Parameter(defaultValue = "false", property = "gwt.gwtSdkFirstInClasspath")
     protected boolean gwtSdkFirstInClasspath;
 
