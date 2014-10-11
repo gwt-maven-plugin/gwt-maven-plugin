@@ -520,7 +520,7 @@ public class TestMojo
         {
             sb.append( " -Xnamespace " ).append( quote( namespace ) );
         }
-        if ( jsInteropMode != null && !jsInteropMode.trim().isEmpty() )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
         {
             sb.append( " -XjsInteropMode " ).append( quote( jsInteropMode ) );
         }

@@ -337,7 +337,7 @@ public class RunMojo
             .arg( !incremental, "-noincremental" )
             .arg( "-sourceLevel", sourceLevel );
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }
