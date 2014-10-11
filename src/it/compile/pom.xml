@@ -67,6 +67,7 @@
           <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
           <incrementalCompileWarnings>true</incrementalCompileWarnings>
           <missingDepsFile>${project.build.directory}/missingDeps</missingDepsFile>
+          <jsInteropMode>JS</jsInteropMode>
           <namespace>NONE</namespace>
           <overlappingSourceWarnings>true</overlappingSourceWarnings>
         </configuration>

@@ -53,7 +53,7 @@ assert content.contains( '-XnoordinalizeEnums' );
 assert content.contains( '-XnoremoveDuplicateFunctions' );
 assert content.contains( "'-sourceLevel' 'auto'" );
 assert content.contains( '-incrementalCompileWarnings' );
-assert content.contains( "'-XjsInteropMode' 'NONE'" );
+assert content.contains( "'-XjsInteropMode' 'JS'" );
 assert content.contains( "'-Xnamespace' 'NONE'" );
 assert content.contains( '-overlappingSourceWarnings' );
   
