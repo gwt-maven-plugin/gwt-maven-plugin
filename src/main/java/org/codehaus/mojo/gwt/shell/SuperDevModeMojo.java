@@ -130,7 +130,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         if ( gwtSdkFirstInClasspath )
         {
             cmd.addToClasspath( getGwtUserJar() )
-                .addToClasspath( getGwtDevJar() )
                 .addToClasspath( getGwtCodeServerJar() );
         }
 
@@ -141,7 +140,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         if ( !gwtSdkFirstInClasspath )
         {
             cmd.addToClasspath( getGwtUserJar() )
-                .addToClasspath( getGwtDevJar() )
                 .addToClasspath( getGwtCodeServerJar() );
         }
 
