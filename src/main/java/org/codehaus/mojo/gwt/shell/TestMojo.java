@@ -105,7 +105,7 @@ public class TestMojo
      * to any other value, that value will be passed as the <code>-runStyle</code> argument,
      * allowing you to use an arbitrary RunStyle when running tests.
      */
-    @Parameter(defaultValue = "manual", property = "gwt.test.mode")
+    @Parameter(defaultValue = "htmlunit", property = "gwt.test.mode")
     private String mode;
 
     /**
