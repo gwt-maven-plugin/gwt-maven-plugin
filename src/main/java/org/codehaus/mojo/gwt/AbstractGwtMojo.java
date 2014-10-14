@@ -33,12 +33,15 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.artifact.MavenMetadataSource;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -48,6 +51,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +82,9 @@ public abstract class AbstractGwtMojo
 
     @Parameter(property = "plugin.artifactMap", required = true, readonly = true)
     private Map<String, Artifact> pluginArtifactMap;
+
+    @Component
+    private MavenProjectBuilder projectBuilder;
 
     @Component
     protected ArtifactResolver resolver;
@@ -259,27 +266,32 @@ public abstract class AbstractGwtMojo
     private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException
     {
         checkGwtUserVersion();
-        Artifact gwtUserArtifact = pluginArtifactMap.get( artifactId );
+        Artifact rootArtifact = pluginArtifactMap.get( artifactId );
 
-        Set<Artifact> artifacts = new HashSet<Artifact>();
-        ArtifactResolutionResult result = null;
+        ArtifactResolutionResult result;
         try
         {
-            result = resolver.resolveTransitively( artifacts, gwtUserArtifact,
-                    remoteRepositories, localRepository, artifactMetadataSource );
+            // Code shamelessly copied from exec-maven-plugin.
+            MavenProject rootProject =
+                            this.projectBuilder.buildFromRepository( rootArtifact, this.remoteRepositories,
+                                                                     this.localRepository );
+            List<Dependency> dependencies = rootProject.getDependencies();
+            Set<Artifact> dependencyArtifacts =
+                            MavenMetadataSource.createArtifacts( artifactFactory, dependencies, null, null, null );
+            dependencyArtifacts.add( rootProject.getArtifact() );
+            result = resolver.resolveTransitively( dependencyArtifacts, rootArtifact,
+                                                   Collections.EMPTY_MAP, localRepository,
+                                                   remoteRepositories, artifactMetadataSource,
+                                                   null, Collections.EMPTY_LIST);
         }
-        catch (ArtifactResolutionException e)
-        {
-            throw new MojoExecutionException( "Failed to resolve artifact", e);
-        }
-        catch (ArtifactNotFoundException e)
+        catch (Exception e)
         {
             throw new MojoExecutionException( "Failed to resolve artifact", e);
         }
 
         Collection<Artifact> resolved = result.getArtifacts();
         Collection<File> files = new ArrayList<File>(resolved.size() + 1 );
-        files.add( gwtUserArtifact.getFile() );
+        files.add( rootArtifact.getFile() );
         for ( Artifact artifact : resolved )
         {
             files.add( artifact.getFile() );
