@@ -368,6 +368,12 @@
               </goals>
               <settingsFile>src/it/settings.xml</settingsFile>
               <cloneProjectsTo>${project.build.directory}/it-tests</cloneProjectsTo>
+              <extraArtifacts>
+                <extraArtifact>com.google.gwt:gwt-servlet:${gwtVersion}:jar</extraArtifact>
+                <!-- for some reason, com.google.web.bindery:requestfactory isn't installed,
+                     whereas it's needed by com.google.gwt:gwt -->
+                <extraArtifact>com.google.web.bindery:requestfactory:${gwtVersion}:pom</extraArtifact>
+              </extraArtifacts>
             </configuration>
             <executions>
               <execution>
