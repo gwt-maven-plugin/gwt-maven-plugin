@@ -53,7 +53,7 @@ public class GwtSourcesJarMojo
     @Parameter(alias = "jarName", property = "jar.finalName", defaultValue = "project.build.finalName", required = true)
     private String finalName;
 
-    @Parameter(property = "project.build.directory", required = true, readonly = true)
+    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
     private File outputDirectory;
 
     /**

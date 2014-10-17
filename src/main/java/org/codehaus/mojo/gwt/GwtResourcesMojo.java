@@ -41,7 +41,7 @@ import org.codehaus.plexus.util.FileUtils;
 public class GwtResourcesMojo
     extends GwtResourcesBaseMojo
 {
-    @Parameter(property = "project.build.outputDirectory", required = true, readonly = true)
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File outputDirectory;
 
     /**

@@ -80,7 +80,7 @@ public abstract class AbstractGwtMojo
 
     // --- Some Maven tools ----------------------------------------------------
 
-    @Parameter(property = "plugin.artifactMap", required = true, readonly = true)
+    @Parameter(defaultValue = "${plugin.artifactMap}", required = true, readonly = true)
     private Map<String, Artifact> pluginArtifactMap;
 
     @Component
@@ -97,10 +97,10 @@ public abstract class AbstractGwtMojo
 
     // --- Some MavenSession related structures --------------------------------
 
-    @Parameter(property = "localRepository", required = true, readonly = true)
+    @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
     protected ArtifactRepository localRepository;
 
-    @Parameter(property = "project.remoteArtifactRespositories", required = true, readonly = true)
+    @Parameter(defaultValue = "${project.pluginArtifactRepositories}", required = true, readonly = true)
     protected List<ArtifactRepository> remoteRepositories;
 
     @Component
