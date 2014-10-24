@@ -267,6 +267,16 @@ public class RunMojo
     private String jsInteropMode;
 
     /**
+     * EXPERIMENTAL: Emit extra information allow chrome dev tools to display Java identifiers in many places instead of JavaScript functions.
+     * <p>
+     * Value can be one of NONE, ONLY_METHOD_NAME, ABBREVIATED or FULL.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
+    private String methodNameDisplayMode;
+
+    /**
      * @return the startup URL to open in hosted browser (gwt 1.6+)
      */
     public String getStartupUrl()
@@ -340,6 +350,10 @@ public class RunMojo
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
+        if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
+        {
+            cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
         }
 
         if ( workDir != null )

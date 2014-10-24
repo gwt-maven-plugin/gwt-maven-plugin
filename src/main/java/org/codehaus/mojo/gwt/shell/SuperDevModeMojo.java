@@ -115,6 +115,16 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private String jsInteropMode;
 
     /**
+     * EXPERIMENTAL: Emit extra information allow chrome dev tools to display Java identifiers in many places instead of JavaScript functions.
+     * <p>
+     * Value can be one of NONE, ONLY_METHOD_NAME, ABBREVIATED or FULL.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
+    private String methodNameDisplayMode;
+
+    /**
      * The MavenProject executed by the "process-classes" phase.
      */
     @Parameter(defaultValue = "${executedProject}")
@@ -152,6 +162,10 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
+        if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
+        {
+            cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
         }
         if ( bindAddress != null && bindAddress.length() > 0 )
         {

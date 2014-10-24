@@ -56,5 +56,6 @@ assert content.contains( '-incrementalCompileWarnings' );
 assert content.contains( "'-XjsInteropMode' 'JS'" );
 assert content.contains( "'-Xnamespace' 'NONE'" );
 assert content.contains( '-overlappingSourceWarnings' );
+assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" );
   
 return true;

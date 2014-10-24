@@ -70,6 +70,7 @@
           <jsInteropMode>JS</jsInteropMode>
           <namespace>NONE</namespace>
           <overlappingSourceWarnings>true</overlappingSourceWarnings>
+          <methodNameDisplayMode>FULL</methodNameDisplayMode>
         </configuration>
         <executions>
           <execution>
