@@ -238,11 +238,6 @@
     </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-codeserver</artifactId>
-      <version>${gwt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
       <version>${gwt.version}</version>
     </dependency>

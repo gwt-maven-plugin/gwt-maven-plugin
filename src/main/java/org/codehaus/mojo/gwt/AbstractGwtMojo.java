@@ -71,8 +71,6 @@ public abstract class AbstractGwtMojo
 {
     private static final String GWT_USER = "com.google.gwt:gwt-user";
 
-    private static final String GWT_CODESERVER = "com.google.gwt:gwt-codeserver";
-
     private static final String GWT_DEV = "com.google.gwt:gwt-dev";
 
     /** GWT artifacts groupId */
@@ -251,11 +249,6 @@ public abstract class AbstractGwtMojo
     protected Collection<File> getGwtDevJar() throws MojoExecutionException
     {
         return getJarFiles( GWT_DEV );
-    }
-
-    protected Collection<File> getGwtCodeServerJar() throws MojoExecutionException
-    {
-        return getJarFiles( GWT_CODESERVER );
     }
 
     protected Collection<File> getGwtUserJar() throws MojoExecutionException
