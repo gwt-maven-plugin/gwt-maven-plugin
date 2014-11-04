@@ -33,7 +33,10 @@ import org.codehaus.plexus.util.FileUtils;
 /**
  * Copy GWT java source code and module descriptor as resources in the build
  * outputDirectory. Alternative to declaring a &lt;resource&gt; in the POM with finer
- * filtering as the module descriptor is read to detect sources to be copied.
+ * filtering as the module descriptor is read to detect sources to be copied. Only
+ * the <code>path</code> attribute of the {@code <source>} and {@code <super-source>}
+ * are supported, and all files matching "**&#47;*.java" will be included.
+ * 
  * 
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  */
