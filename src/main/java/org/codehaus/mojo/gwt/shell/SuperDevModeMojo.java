@@ -153,6 +153,7 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
                 .addToClasspath( getGwtDevJar() );
         }
 
+        cmd.arg( "-logLevel", getLogLevel() );
         cmd.arg( !precompile, "-noprecompile" );
         cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
