@@ -118,6 +118,68 @@ abstract class GwtResourcesBaseMojo
     }
 
     /**
+     * Collect GWT java source code and module descriptor to be added as resources.
+     */
+    protected Collection<ResourceFile> getAllTestResourceFiles()
+            throws MojoExecutionException
+    {
+        try
+        {
+            Set<ResourceFile> sourcesAndResources = new HashSet<ResourceFile>();
+            Set<String> sourcesAndResourcesPath = new HashSet<String>();
+            Set<String> allSourcesAndResourcesPath = new HashSet<String>();
+            allSourcesAndResourcesPath.addAll( getProject().getCompileSourceRoots() );
+            sourcesAndResourcesPath.addAll( getProject().getTestCompileSourceRoots() );
+            for ( Resource resource : getProject().getResources() )
+            {
+                sourcesAndResourcesPath.add( resource.getDirectory() );
+            }
+            allSourcesAndResourcesPath.addAll(sourcesAndResourcesPath);
+
+            for ( String name : getModules() )
+            {
+                GwtModule module = readModule( name );
+
+                sourcesAndResources.add( getDescriptor( module, allSourcesAndResourcesPath ) );
+                int count = 1;
+
+                for ( String source : module.getSources() )
+                {
+                    getLog().debug( "GWT sources from " + name + '.' + source );
+                    Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.java" );
+                    sourcesAndResources.addAll( files );
+                    count += files.size();
+
+                    Collection<ResourceFile> uifiles = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.ui.xml" );
+                    sourcesAndResources.addAll( uifiles );
+                    count += uifiles.size();
+                }
+                for ( String source : module.getSuperSources() )
+                {
+                    getLog().debug( "GWT super-sources from " + name + '.' + source );
+                    Collection<ResourceFile> files = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.java" );
+                    sourcesAndResources.addAll( files );
+                    count += files.size();
+
+                    Collection<ResourceFile> uifiles = getAsResources( module, source, sourcesAndResourcesPath,
+                            "**/*.ui.xml" );
+                    sourcesAndResources.addAll( uifiles );
+                    count += uifiles.size();
+                }
+                getLog().info( count + " source files from GWT module " + name );
+            }
+            return sourcesAndResources;
+        }
+        catch ( GwtModuleReaderException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
+    }
+
+    /**
      * @param source
      * @param include TODO
      * @param name
@@ -131,7 +193,7 @@ abstract class GwtResourcesBaseMojo
         for ( String path : paths )
         {
             File basedir = new File( path );
-            // the default "src/main/resource" may not phisicaly exist in project
+            // the default "src/main/resource" may not physically exist in project
             if ( !basedir.exists() )
             {
                 continue;

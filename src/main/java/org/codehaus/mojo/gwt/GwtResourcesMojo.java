@@ -44,6 +44,9 @@ public class GwtResourcesMojo
     @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File outputDirectory;
 
+    @Parameter(defaultValue = "${project.build.testOutputDirectory}", required = true, readonly = true)
+    private File testOutputDirectory;
+
     /**
      * {@inheritDoc}
      * 
@@ -66,6 +69,30 @@ public class GwtResourcesMojo
                     {
                         throw new MojoExecutionException( "Failed to create destination directory "
                             + target.getParentFile() );
+                    }
+                }
+                FileUtils.copyFile( f, target );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Failed to copy GWT source " + f, e );
+            }
+        }
+
+        Collection<ResourceFile> testFiles = getAllTestResourceFiles();
+        for ( ResourceFile testFile : testFiles )
+        {
+            File f = new File( testFile.basedir, testFile.fileRelativeName );
+            File target = new File( testOutputDirectory, testFile.fileRelativeName );
+            try
+            {
+                getLog().debug( "copy " + f + " to outputDirectory" );
+                if ( !target.getParentFile().exists() )
+                {
+                    if ( !target.getParentFile().mkdirs() )
+                    {
+                        throw new MojoExecutionException( "Failed to create destination directory "
+                                + target.getParentFile() );
                     }
                 }
                 FileUtils.copyFile( f, target );

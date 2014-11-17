@@ -119,6 +119,12 @@ public abstract class AbstractGwtMojo
     private File generateDirectory;
 
     /**
+     * Folder where generated-test-source will be created (automatically added to compile classpath).
+     */
+    @Parameter(defaultValue = "${project.build.directory}/generated-test-sources/gwt", required = true)
+    private File generateTestDirectory;
+
+    /**
      * Location on filesystem where GWT will write output files (-out option to GWTCompiler).
      */
     @Parameter(property = "gwt.war", defaultValue="${project.build.directory}/${project.build.finalName}", alias = "outputDirectory")
@@ -259,7 +265,7 @@ public abstract class AbstractGwtMojo
     private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException
     {
         checkGwtUserVersion();
-        Artifact rootArtifact = pluginArtifactMap.get( artifactId );
+        Artifact rootArtifact = pluginArtifactMap.get(artifactId);
 
         ArtifactResolutionResult result;
         try
@@ -360,6 +366,14 @@ public abstract class AbstractGwtMojo
     }
 
     /**
+     * @param path file to add to the project compile directories
+     */
+    protected void addTestCompileSourceRoot( File path )
+    {
+        getProject().addTestCompileSourceRoot(path.getAbsolutePath() );
+    }
+
+    /**
      * @return the project
      */
     public MavenProject getProject()
@@ -397,6 +411,27 @@ public abstract class AbstractGwtMojo
             generateDirectory.mkdirs();
         }
         return generateDirectory;
+    }
+
+    protected File setupGenerateTestDirectory() {
+        if ( !generateTestDirectory.exists() )
+        {
+            getLog().debug( "Creating target test directory " + generateTestDirectory.getAbsolutePath() );
+            generateTestDirectory.mkdirs();
+        }
+        getLog().debug( "Add compile test source root " + generateTestDirectory.getAbsolutePath() );
+        addTestCompileSourceRoot(generateTestDirectory);
+        return generateTestDirectory;
+    }
+
+    public File getGenerateTestDirectory()
+    {
+        if ( !generateTestDirectory.exists() )
+        {
+            getLog().debug( "Creating target directory " + generateTestDirectory.getAbsolutePath() );
+            generateTestDirectory.mkdirs();
+        }
+        return generateTestDirectory;
     }
 
     public Set<Artifact> getProjectArtifacts()
