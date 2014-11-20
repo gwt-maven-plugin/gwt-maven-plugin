@@ -125,6 +125,14 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private String methodNameDisplayMode;
 
     /**
+     * An output directory where files for launching Super Dev Mode will be written. (Optional.)
+     * 
+     * @since 2.7.0
+     */
+    @Parameter(property = "gwt.codeServer.launcherDir")
+    private File launcherDir;
+
+    /**
      * The MavenProject executed by the "process-classes" phase.
      */
     @Parameter(defaultValue = "${executedProject}")
@@ -153,6 +161,7 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
                 .addToClasspath( getGwtDevJar() );
         }
 
+        cmd.arg( "-logLevel", getLogLevel() );
         cmd.arg( !precompile, "-noprecompile" );
         cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
@@ -179,6 +188,11 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         {
             codeServerWorkDir.mkdirs();
             cmd.arg( "-workDir", codeServerWorkDir.getAbsolutePath() );
+        }
+
+        if ( launcherDir != null )
+        {
+            cmd.arg( "-launcherDir", launcherDir.getAbsolutePath() );
         }
 
         for ( String module : getModules() )

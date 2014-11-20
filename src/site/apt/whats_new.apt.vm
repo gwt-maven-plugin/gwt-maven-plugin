@@ -45,7 +45,9 @@ What's new in gwt-maven-plugin ${project.version}
  * <<<gwt:test>>>'s <<<mode>>> now defaults to <<<htmlunit>>> rather than <<<manual>>>
    (what a curious choie to begin with)
 
- * Fix <<<sourceLevel>>> for <<<gwt:run>>>
+ * Fix <<<sourceLevel>>> for <<<gwt:run>>>, add it for <<<gwt:run-codeserver>>>
+
+ * Add <<<launcherDir>>> to <<<gwt:run-codeserver>>>
 
  * Correctly process <<<extraJvmArgs>>> containing quoted args, and similarly quote
    each argument passed to GWT
