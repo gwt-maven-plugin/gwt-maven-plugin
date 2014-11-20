@@ -69,6 +69,12 @@ public abstract class AbstractGwtModuleMojo
     @Parameter(property = "gwt.module")
     private String module;
 
+    /**
+     * Location of the compiled classes.
+     */
+    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
+    protected File buildOutputDirectory;
+    
     public List<String> getGwtModules()
     {
         String[] modules = getModules();

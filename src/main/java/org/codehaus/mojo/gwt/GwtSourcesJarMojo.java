@@ -53,8 +53,6 @@ public class GwtSourcesJarMojo
     @Parameter(alias = "jarName", property = "jar.finalName", defaultValue = "project.build.finalName", required = true)
     private String finalName;
 
-    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
-    private File outputDirectory;
 
     /**
      * The Jar archiver.
@@ -77,8 +75,8 @@ public class GwtSourcesJarMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        File jarFile = new File( outputDirectory, finalName + ".jar" );
-        File origJarFile = new File( outputDirectory, finalName + "-b4gwt.jar" );
+        File jarFile = new File( buildOutputDirectory, finalName + ".jar" );
+        File origJarFile = new File( buildOutputDirectory, finalName + "-b4gwt.jar" );
         if ( origJarFile.exists() )
         {
             if ( !origJarFile.delete() )
