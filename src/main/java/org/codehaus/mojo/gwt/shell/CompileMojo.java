@@ -398,6 +398,16 @@ public class CompileMojo
     @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
     private String methodNameDisplayMode;
 
+    /**
+     * Use the project directory as the location used by the java.util.prefs.PreferencesFactory.
+     * <p>
+     * This prevents error messages from the java.util.prefs.FileSystemPreferences.syncWorld method
+     * about "Couldn't flush user prefs: java.util.prefs.BackingStoreException: Couldn't get file lock."
+     * by using local files instead of having to share system-wide preference files.
+     */
+    @Parameter(defaultValue = "true", property = "java.preferencies.local")
+    private boolean localJavaPreferences;
+    
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
@@ -506,6 +516,12 @@ public class CompileMojo
         if ( optimizationLevel >= 0 )
         {
             cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
+        }
+        
+        if( localJavaPreferences ) { 
+            String buildDir = buildOutputDirectory.getAbsolutePath();
+            cmd.getJvmArgs().add("-Djava.util.prefs.userRoot="+buildDir);
+            cmd.getJvmArgs().add("-Djava.util.prefs.systemRoot="+buildDir);
         }
 
         if ( extraParam || compileReport || ( saveSource && saveSourceOutput == null ) )

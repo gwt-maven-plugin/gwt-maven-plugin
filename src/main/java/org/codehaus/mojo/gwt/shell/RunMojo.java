@@ -105,12 +105,6 @@ public class RunMojo
     private int codeServerPort;
 
     /**
-     * Location of the compiled classes.
-     */
-    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
-    private File buildOutputDirectory;
-
-    /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
      * <p>
      * Can be set from command line using '-Dgwt.noserver=...'

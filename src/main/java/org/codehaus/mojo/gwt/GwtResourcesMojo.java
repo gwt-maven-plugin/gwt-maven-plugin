@@ -41,8 +41,6 @@ import org.codehaus.plexus.util.FileUtils;
 public class GwtResourcesMojo
     extends GwtResourcesBaseMojo
 {
-    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
-    private File outputDirectory;
 
     /**
      * {@inheritDoc}
@@ -56,7 +54,7 @@ public class GwtResourcesMojo
         for ( ResourceFile file : files )
         {
             File f = new File( file.basedir, file.fileRelativeName );
-            File target = new File( outputDirectory, file.fileRelativeName );
+            File target = new File( buildOutputDirectory, file.fileRelativeName );
             try
             {
                 getLog().debug( "copy " + f + " to outputDirectory" );

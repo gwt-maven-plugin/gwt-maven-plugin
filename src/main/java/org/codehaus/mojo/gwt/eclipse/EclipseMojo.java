@@ -81,12 +81,6 @@ public class EclipseMojo
     private MavenProject executedProject;
 
     /**
-     * Location of the compiled classes.
-     */
-    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
-    private File buildOutputDirectory;
-
-    /**
      * Location of the hosted-mode web application structure.
      */
     @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
