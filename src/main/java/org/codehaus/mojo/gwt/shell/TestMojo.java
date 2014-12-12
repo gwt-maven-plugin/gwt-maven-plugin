@@ -257,9 +257,6 @@ public class TestMojo
      * <p>
      * Can be set from command line using '-Dgwt.draftCompile=true'.
      * </p>
-     * <p>
-     * This is equivalent to '-Dgwt.compiler.optimizationLevel=0 -Dgwt.compiler.disableAggressiveOptimization=true'.
-     * </p>
      *
      * @since 2.6.0-rc1
      */

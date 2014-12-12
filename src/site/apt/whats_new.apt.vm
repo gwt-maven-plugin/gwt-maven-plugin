@@ -31,46 +31,7 @@ What's new in gwt-maven-plugin ${project.version}
 
  * Updated to GWT ${gwtVersion}
 
-   This includes adding new configuration properties, and removing <<<remoteweb>>>
-   from <<<gwt:test>>>, and the <<<gwt:browser>>> mojo
-
- * Require Maven 3
-
- * Updated and simplified archetype
-
-   This includes removing <<<gwt:i18n>>> (that shouldn't be used at build-time),
-   using the new <<<com.google.gwt:gwt>>> BOM and adding <<<gwt-dev>>> as a project
-   dependency.
-
- * <<<gwt:test>>>'s <<<mode>>> now defaults to <<<htmlunit>>> rather than <<<manual>>>
-   (what a curious choie to begin with)
-
- * Fix <<<sourceLevel>>> for <<<gwt:run>>>, add it for <<<gwt:run-codeserver>>>
-
- * Add <<<launcherDir>>> to <<<gwt:run-codeserver>>>
-
- * Correctly process <<<extraJvmArgs>>> containing quoted args, and similarly quote
-   each argument passed to GWT
-
- * Run <<<gwt:i18n>>> on project configuration in Eclipse (with M2Eclipse)
-
- * The <<<@RemoteServiceRelativePath>>> is now scanned from the service interfaces
-   rather than the implementations.
-
- * Removed the warning about gwt-dev being a project dependency. A good Maven build
-   segregates client code into its own module, where the mentionned "conflicts"
-   shouldn't happen (or would happen anyway when running GWT tools like the compiler
-   or dev mode).
-
- * Similarly, deprecate <<<gwtSdkFirstInClasspath>>>. In future versions, projects
-   wil be responsible for providing the compile-time GWT dependencies (including
-   <<<gwt-dev>>> and <<<gwt-codeserver>>> themselves)
-
- * Make sure the <<<codeServerWorkDir>>> exists when launching <<<gwt:run-codeserver>>>
-
- * Better workaround for IBM JDK and loal workers
-
- * Remove long-deprecated <<<gwt:soyc>>>
+   This includes removing <<<disableAggressiveOptimization>>> for <<<gwt:compile>>> mojo.
 
  []
 

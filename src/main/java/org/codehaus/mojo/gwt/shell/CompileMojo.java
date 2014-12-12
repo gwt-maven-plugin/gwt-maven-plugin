@@ -126,9 +126,6 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.draftCompile=true'.
      * </p>
-     * <p>
-     * This is equivalent to '-Dgwt.compiler.optimizationLevel=0 -Dgwt.compiler.disableAggressiveOptimization=true'.
-     * </p>
      */
     @Parameter(defaultValue = "false", property = "gwt.draftCompile")
     private boolean draftCompile;
@@ -213,18 +210,6 @@ public class CompileMojo
      */
     @Parameter(alias = "enableClosureCompiler", defaultValue = "false", property = "gwt.compiler.enableClosureCompiler")
     private boolean closureCompiler;
-
-    /**
-     * EXPERIMENTAL: add -XdisableAggressiveOptimization parameter to the compiler command line
-     * <p>
-     * Can be set from the command line using '-Dgwt.compiler.disableAggressiveOptimization=true'
-     * </p>
-     *
-     * @since 2.5.0-rc1
-     * @deprecated since 2.6.0-rc1
-     */
-    @Parameter(defaultValue = "false", property = "gwt.compiler.disableAggressiveOptimization")
-    private boolean disableAggressiveOptimization;
 
     /**
      * EXPERIMENTAL: Gather compiler metrics.
@@ -463,7 +448,6 @@ public class CompileMojo
             .arg( closureCompiler, "-XclosureCompiler" )
             .arg( compileReport, "-compileReport" )
             .arg( compilerMetrics, "-XcompilerMetrics" )
-            .arg( disableAggressiveOptimization, "-XnoaggressiveOptimizations" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
             .arg( !clusterFunctions, "-XnoclusterFunctions" )
             .arg( enforceStrictResources, "-XenforceStrictResources" )
