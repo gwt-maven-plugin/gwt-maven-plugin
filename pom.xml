@@ -125,7 +125,7 @@
     <!--  apt filterting doesn't support dot -->
     <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>3.0.5</mavenVersion>
-    <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
+    <mavenPluginPluginVersion>3.4</mavenPluginPluginVersion>
     <mojo.java.target>1.6</mojo.java.target>
     <doxia-sitetoolsVersion>1.6</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
@@ -466,17 +466,18 @@
         <artifactId>maven-plugin-plugin</artifactId>
         <version>${mavenPluginPluginVersion}</version>
         <configuration>
-          <!-- see http://jira.codehaus.org/browse/MNG-5346 -->
-          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
           <requirements>
             <jdk>${maven.compiler.target}</jdk>
           </requirements>
         </configuration>
         <executions>
           <execution>
+            <id>default-descriptor</id>
             <phase>process-classes</phase>
+          </execution>
+          <execution>
+            <id>help-mojo</id>
             <goals>
-              <goal>descriptor</goal>
               <goal>helpmojo</goal>
             </goals>
           </execution>
