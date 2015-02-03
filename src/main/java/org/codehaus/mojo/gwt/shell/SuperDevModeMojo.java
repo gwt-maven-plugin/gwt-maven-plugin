@@ -95,7 +95,7 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(alias = "struct", defaultValue = "false", property = "gwt.compiler.strict")
+    @Parameter(alias = "strict", defaultValue = "false", property = "gwt.compiler.strict")
     private boolean failOnError;
 
     /**
