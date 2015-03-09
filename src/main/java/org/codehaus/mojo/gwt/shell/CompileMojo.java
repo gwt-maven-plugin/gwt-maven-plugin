@@ -312,30 +312,12 @@ public class CompileMojo
     private String sourceLevel;
 
     /**
-     * Whether to show warnings during monolithic compiles for issues that will break
-     * in incremental compiles (strict compile errors, strict source directory inclusion,
-     * missing dependencies).
-     * 
-     * @since 2.7.0-rc1
-     */
-    @Parameter(defaultValue = "false")
-    private boolean incrementalCompileWarnings;
-
-    /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @since 2.7.0-rc1
      */
     @Parameter(defaultValue = "NONE")
     private String jsInteropMode;
-
-    /**
-     * Specifies a file into which detailed missing dependency information will be written.
-     * 
-     * @since 2.7.0-rc1
-     */
-    @Parameter
-    private File missingDepsFile;
 
     /**
      * Puts most JavaScript globals into namespaces.
@@ -349,11 +331,6 @@ public class CompileMojo
     @Parameter
     private String namespace;
 
-    /**
-     * Whether to show warnings during monolithic compiles for overlapping source inclusion.
-     * 
-     * @since 2.7.0-rc1
-     */
     @Parameter(defaultValue = "false")
     private boolean overlappingSourceWarnings;
 
@@ -457,8 +434,6 @@ public class CompileMojo
             .arg( !removeDuplicateFunctions, "-XnoremoveDuplicateFunctions" )
             .arg( saveSource, "-saveSource" )
             .arg( "-sourceLevel", sourceLevel )
-            .arg( incrementalCompileWarnings, "-incrementalCompileWarnings" )
-            .arg( overlappingSourceWarnings, "-overlappingSourceWarnings")
             .arg( enableJsonSoyc, "-XenableJsonSoyc" )
             .arg( incremental, "-incremental" )
         ;
@@ -470,11 +445,6 @@ public class CompileMojo
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
             cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
-        }
-
-        if ( missingDepsFile != null )
-        {
-            cmd.arg( "-missingDepsFile", missingDepsFile.getAbsolutePath() );
         }
 
         if ( namespace != null && namespace.length() > 0 )

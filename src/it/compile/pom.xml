@@ -64,11 +64,8 @@
           <removeDuplicateFunctions>false</removeDuplicateFunctions>
           <saveSource>true</saveSource>
           <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
-          <incrementalCompileWarnings>true</incrementalCompileWarnings>
-          <missingDepsFile>${project.build.directory}/missingDeps</missingDepsFile>
           <jsInteropMode>JS</jsInteropMode>
           <namespace>NONE</namespace>
-          <overlappingSourceWarnings>true</overlappingSourceWarnings>
           <methodNameDisplayMode>FULL</methodNameDisplayMode>
         </configuration>
         <executions>
