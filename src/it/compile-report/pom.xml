@@ -38,7 +38,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>@sitePluginVersion@</version>
+        <version>3.4</version>
       </plugin>       
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -52,6 +52,7 @@
           <extraParam>false</extraParam>
           <compileReport>true</compileReport>
           <soycDetailed>true</soycDetailed>
+          <enableJsonSoyc>true</enableJsonSoyc>
         </configuration>
         <executions>
           <execution>

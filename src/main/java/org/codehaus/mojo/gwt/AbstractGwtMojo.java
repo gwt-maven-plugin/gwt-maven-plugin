@@ -21,19 +21,6 @@ package org.codehaus.mojo.gwt;
 
 import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
-import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
@@ -46,10 +33,30 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.artifact.MavenMetadataSource;
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Abstract Support class for all GWT-related operations.
@@ -62,119 +69,102 @@ import org.apache.maven.project.MavenProject;
 public abstract class AbstractGwtMojo
     extends AbstractMojo
 {
+    private static final String GWT_USER = "com.google.gwt:gwt-user";
+
+    private static final String GWT_DEV = "com.google.gwt:gwt-dev";
+
     /** GWT artifacts groupId */
     public static final String GWT_GROUP_ID = "com.google.gwt";
 
     // --- Some Maven tools ----------------------------------------------------
 
-    /**
-     * @parameter expression="${plugin.version}"
-     * @required
-     * @readonly
-     */
-    private String version;
+    @Parameter(defaultValue = "${plugin.artifactMap}", required = true, readonly = true)
+    private Map<String, Artifact> pluginArtifactMap;
 
-    /**
-     * @parameter expression="${plugin.artifacts}"
-     * @required
-     * @readonly
-     */
-    private Collection<Artifact> pluginArtifacts;
+    @Component
+    private MavenProjectBuilder projectBuilder;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactResolver resolver;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactFactory artifactFactory;
 
-
-    /**
-     * @required
-     * @readonly
-     * @component
-     */
+    @Component
     protected ClasspathBuilder classpathBuilder;
 
     // --- Some MavenSession related structures --------------------------------
 
-    /**
-     * @parameter expression="${localRepository}"
-     * @required
-     * @readonly
-     */
+    @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
     protected ArtifactRepository localRepository;
 
-    /**
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @required
-     * @readonly
-     */
+    @Parameter(defaultValue = "${project.pluginArtifactRepositories}", required = true, readonly = true)
     protected List<ArtifactRepository> remoteRepositories;
 
-    /**
-     * @component
-     */
+    @Component
     protected ArtifactMetadataSource artifactMetadataSource;
 
     /**
      * The maven project descriptor
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
     // --- Plugin parameters ---------------------------------------------------
 
     /**
      * Folder where generated-source will be created (automatically added to compile classpath).
-     *
-     * @parameter default-value="${project.build.directory}/generated-sources/gwt"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/gwt", required = true)
     private File generateDirectory;
 
     /**
      * Location on filesystem where GWT will write output files (-out option to GWTCompiler).
-     *
-     * @parameter expression="${gwt.war}" default-value="${project.build.directory}/${project.build.finalName}"
-     * @alias outputDirectory
      */
+    @Parameter(property = "gwt.war", defaultValue="${project.build.directory}/${project.build.finalName}", alias = "outputDirectory")
     private File webappDirectory;
 
     /**
-     * Location of the web application static resources (same as maven-war-plugin parameter)
-     *
-     * @parameter default-value="${basedir}/src/main/webapp"
+     * Prefix to prepend to module names inside {@code webappDirectory} or in URLs in DevMode.
+     * <p>
+     * Could also be seen as a suffix to {@code webappDirectory}.
      */
+    @Parameter(property = "gwt.modulePathPrefix")
+    protected String modulePathPrefix;
+
+    /**
+     * Location of the web application static resources (same as maven-war-plugin parameter)
+     */
+    @Parameter(defaultValue="${basedir}/src/main/webapp")
     protected File warSourceDirectory;
 
     /**
      * Select the place where GWT application is built. In <code>inplace</code> mode, the warSourceDirectory is used to
      * match the same use case of the {@link war:inplace
      * http://maven.apache.org/plugins/maven-war-plugin/inplace-mojo.html} goal.
-     *
-     * @parameter default-value="false" expression="${gwt.inplace}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.inplace")
     private boolean inplace;
-    
+
     /**
      * The forked command line will use gwt sdk jars first in classpath.
      * see issue http://code.google.com/p/google-web-toolkit/issues/detail?id=5290
      *
-     * @parameter default-value="false" expression="${gwt.gwtSdkFirstInClasspath}"
      * @since 2.1.0-1
+     * @deprecated tweak your dependencies and/or split your project with a client-only module
      */
+    @Deprecated
+    @Parameter(defaultValue = "false", property = "gwt.gwtSdkFirstInClasspath")
     protected boolean gwtSdkFirstInClasspath;
 
     public File getOutputDirectory()
     {
-        return inplace ? warSourceDirectory : webappDirectory;
+        File out = inplace ? warSourceDirectory : webappDirectory;
+        if ( !StringUtils.isBlank( modulePathPrefix ) ) 
+        {
+            out = new File(out, modulePathPrefix);
+        }
+        return out;
     }
 
     /**
@@ -256,98 +246,51 @@ public abstract class AbstractGwtMojo
         return false;
     }
 
-	// FIXME move to GwtDevHelper stuff to avoid duplicates
-    protected File getGwtDevJar()
-        throws MojoExecutionException
+    protected Collection<File> getGwtDevJar() throws MojoExecutionException
     {
-        checkGwtDevAsDependency();
-        checkGwtUserVersion();
-        return getArtifact( "com.google.gwt", "gwt-dev" ).getFile();
+        return getJarFiles( GWT_DEV );
     }
 
-    protected File getGwtCodeServerJar()
-        throws MojoExecutionException
+    protected Collection<File> getGwtUserJar() throws MojoExecutionException
     {
-        checkGwtUserVersion();
-        return getArtifact( "com.google.gwt", "gwt-codeserver" ).getFile();
+        return getJarFiles( GWT_USER );
     }
 
-    protected Artifact getArtifact( String groupId, String artifactId )
-    {
-        return getArtifact( groupId, artifactId, null );
-    }
-
-    protected File[] getGwtUserJar()
-            throws MojoExecutionException
+    private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException
     {
         checkGwtUserVersion();
-        Artifact gwtUserArtifact = getArtifact( "com.google.gwt", "gwt-user" );
+        Artifact rootArtifact = pluginArtifactMap.get( artifactId );
 
-        Set<Artifact> artifacts = new HashSet<Artifact>();
-        ArtifactResolutionResult result = null;
+        ArtifactResolutionResult result;
         try
         {
-            result = resolver.resolveTransitively( artifacts, gwtUserArtifact,
-                    remoteRepositories, localRepository, artifactMetadataSource );
+            // Code shamelessly copied from exec-maven-plugin.
+            MavenProject rootProject =
+                            this.projectBuilder.buildFromRepository( rootArtifact, this.remoteRepositories,
+                                                                     this.localRepository );
+            List<Dependency> dependencies = rootProject.getDependencies();
+            Set<Artifact> dependencyArtifacts =
+                            MavenMetadataSource.createArtifacts( artifactFactory, dependencies, null, null, null );
+            dependencyArtifacts.add( rootProject.getArtifact() );
+            result = resolver.resolveTransitively( dependencyArtifacts, rootArtifact,
+                                                   Collections.EMPTY_MAP, localRepository,
+                                                   remoteRepositories, artifactMetadataSource,
+                                                   null, Collections.EMPTY_LIST);
         }
-        catch (ArtifactResolutionException e)
-        {
-            throw new MojoExecutionException( "Failed to resolve artifact", e);
-        }
-        catch (ArtifactNotFoundException e)
+        catch (Exception e)
         {
             throw new MojoExecutionException( "Failed to resolve artifact", e);
         }
 
         Collection<Artifact> resolved = result.getArtifacts();
-        int i = 0;
-        File[] files = new File[ resolved.size() + 1 ];
-        files[i++] = gwtUserArtifact.getFile();
+        Collection<File> files = new ArrayList<File>(resolved.size() + 1 );
+        files.add( rootArtifact.getFile() );
         for ( Artifact artifact : resolved )
         {
-            files[i++] = artifact.getFile();
+            files.add( artifact.getFile() );
         }
 
         return files;
-    }
-
-    protected Artifact getArtifact( String groupId, String artifactId, String classifier )
-    {
-        for ( Artifact artifact : pluginArtifacts )
-        {
-            if ( groupId.equals( artifact.getGroupId() ) && artifactId.equals( artifact.getArtifactId() ) )
-            {
-                if ( classifier != null && classifier.equals( artifact.getClassifier() ) )
-                {
-                    return artifact;
-                }
-                if ( classifier == null && artifact.getClassifier() == null )
-                {
-                    return artifact;
-                }
-            }
-        }
-        getLog().error( "Failed to retrieve " + groupId + ":" + artifactId + ":" + classifier );
-        return null;
-    }
-
-    /**
-     * TODO remove !
-     * Check that gwt-dev is not define in dependencies : this can produce version conflicts with other dependencies, as
-     * gwt-dev is a "uber-jar" with some commons-* and jetty libs inside.
-     */
-    private void checkGwtDevAsDependency()
-    {
-        for ( Iterator iterator = getProject().getArtifacts().iterator(); iterator.hasNext(); )
-        {
-            Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                && "gwt-dev".equals( artifact.getArtifactId() )
-                && !SCOPE_TEST.equals(  artifact.getScope() ) )
-            {
-                getLog().warn( "Don't declare gwt-dev as a project dependency. This may introduce complex dependency conflicts" );
-            }
-        }
     }
 
     /**
@@ -371,22 +314,18 @@ public abstract class AbstractGwtMojo
         {
             IOUtils.closeQuietly( inputStream );
         }
-        for ( Iterator iterator = getProject().getCompileArtifacts().iterator(); iterator.hasNext(); )
+
+        Artifact gwtUser = project.getArtifactMap().get( GWT_USER );
+        if (gwtUser != null)
         {
-            Artifact artifact = (Artifact) iterator.next();
-            if ( GWT_GROUP_ID.equals( artifact.getGroupId() )
-                 && "gwt-user".equals( artifact.getArtifactId() ) )
+            String mojoGwtVersion = properties.getProperty( "gwt.version" );
+            //ComparableVersion with an up2date maven version
+            ArtifactVersion mojoGwtArtifactVersion = new DefaultArtifactVersion( mojoGwtVersion );
+            ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( gwtUser.getVersion() );
+            if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
             {
-                String mojoGwtVersion = properties.getProperty( "gwt.version" );
-                //ComparableVersion with an up2date maven version
-                ArtifactVersion mojoGwtArtifactVersion = new DefaultArtifactVersion( mojoGwtVersion );
-                ArtifactVersion userGwtArtifactVersion = new DefaultArtifactVersion( artifact.getVersion() );
-                if ( userGwtArtifactVersion.compareTo( mojoGwtArtifactVersion ) < 0 )
-                {
-                    getLog().warn( "You're project declares dependency on gwt-user " + artifact.getVersion()
-                                       + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
-                }
-                break;
+                getLog().warn( "Your project declares dependency on gwt-user " + gwtUser.getVersion()
+                                   + ". This plugin is designed for at least gwt version " + mojoGwtVersion );
             }
         }
     }
@@ -439,6 +378,17 @@ public abstract class AbstractGwtMojo
         return this.remoteRepositories;
     }
 
+    protected File setupGenerateDirectory() {
+        if ( !generateDirectory.exists() )
+        {
+            getLog().debug( "Creating target directory " + generateDirectory.getAbsolutePath() );
+            generateDirectory.mkdirs();
+        }
+        getLog().debug( "Add compile source root " + generateDirectory.getAbsolutePath() );
+        addCompileSourceRoot( generateDirectory );
+        return generateDirectory;
+    }
+
     public File getGenerateDirectory()
     {
         if ( !generateDirectory.exists() )
@@ -449,17 +399,15 @@ public abstract class AbstractGwtMojo
         return generateDirectory;
     }
 
-    @SuppressWarnings( "unchecked" )
     public Set<Artifact> getProjectArtifacts()
     {
         return project.getArtifacts();
     }
 
-    @SuppressWarnings( "unchecked" )
     public Set<Artifact> getProjectRuntimeArtifacts()
     {
         Set<Artifact> artifacts = new HashSet<Artifact>();
-        for (Artifact projectArtifact : (Collection<Artifact>) project.getArtifacts() )
+        for (Artifact projectArtifact : project.getArtifacts() )
         {
             String scope = projectArtifact.getScope();
             if ( SCOPE_RUNTIME.equals( scope )

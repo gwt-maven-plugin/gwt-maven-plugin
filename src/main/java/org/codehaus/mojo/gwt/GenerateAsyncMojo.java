@@ -36,6 +36,11 @@ import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
@@ -47,14 +52,13 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
 
 /**
- * Goal which generate Asyn interface.
+ * Goal which generate Async interface.
  * 
- * @goal generateAsync
- * @phase generate-sources
- * @requiresDependencyResolution compile
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @version $Id$
  */
+@Mojo(name = "generateAsync", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE,
+      threadSafe = true)
 public class GenerateAsyncMojo
     extends AbstractGwtMojo
 {
@@ -75,47 +79,40 @@ public class GenerateAsyncMojo
 
     /**
      * Pattern for GWT service interface
-     * 
-     * @parameter default-value="**\/*Service.java"
      */
+    @Parameter(defaultValue = "**/*Service.java")
     private String servicePattern;
 
     /**
      * Return a com.google.gwt.http.client.Request on async interface to allow cancellation.
-     * 
-     * @parameter default-value="false"
      */
+    @Parameter(defaultValue = "false")
     private boolean returnRequest;
 
     /**
      * A (MessageFormat) Pattern to get the GWT-RPC servlet URL based on service interface name. For example to
      * "{0}.rpc" if you want to map GWT-RPC calls to "*.rpc" in web.xml, for example when using Spring dispatch servlet
      * to handle RPC requests.
-     * 
-     * @parameter default-value="{0}" expression="${gwt.rpcPattern}"
      */
+    @Parameter(defaultValue = "{0}", property = "gwt.rpcPattern")
     private String rpcPattern;
 
     /**
      * Stop the build on error
-     * 
-     * @parameter default-value="true" expression="${maven.gwt.failOnError}"
      */
+    @Parameter(defaultValue = "true", property = "maven.gwt.failOnError")
     private boolean failOnError;
 
     /**
      * Pattern for GWT service interface
-     * 
-     * @parameter default-value="false" expression="${generateAsync.force}"
      */
+    @Parameter(defaultValue = "false", property = "generateAsync.force")
     private boolean force;
 
-    /**
-     * @parameter expression="${project.build.sourceEncoding}"
-     */
+    @Parameter(property = "project.build.sourceEncoding")
     private String encoding;
 
-    /** @component */
+    @Component
     private BuildContext buildContext;
 
     @Override
@@ -124,10 +121,6 @@ public class GenerateAsyncMojo
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings( "unchecked" )
     public void execute()
         throws MojoExecutionException
     {
@@ -136,6 +129,8 @@ public class GenerateAsyncMojo
             getLog().info( "GWT generateAsync is skipped" );
             return;
         }
+
+        setupGenerateDirectory();
 
         if ( encoding == null )
         {
@@ -146,12 +141,11 @@ public class GenerateAsyncMojo
         JavaDocBuilder builder = createJavaDocBuilder();
 
         List<String> sourceRoots = getProject().getCompileSourceRoots();
-        boolean generated = false;
         for ( String sourceRoot : sourceRoots )
         {
             try
             {
-                generated |= scanAndGenerateAsync( new File( sourceRoot ), builder );
+                scanAndGenerateAsync( new File( sourceRoot ), builder );
             }
             catch ( Throwable e )
             {
@@ -161,11 +155,6 @@ public class GenerateAsyncMojo
                     throw new MojoExecutionException( "Failed to generate Async interface", e );
                 }
             }
-        }
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
         }
     }
 
@@ -229,6 +218,8 @@ public class GenerateAsyncMojo
         PrintWriter writer = new PrintWriter( new BufferedWriter(
             new OutputStreamWriter( buildContext.newFileOutputStream( targetFile ), encoding ) ) );
 
+        boolean hasRemoteServiceRelativePath = hasRemoteServiceRelativePath(clazz);
+
         String className = clazz.getName();
         if ( clazz.getPackage() != null )
         {
@@ -237,7 +228,11 @@ public class GenerateAsyncMojo
         }
         writer.println( "import com.google.gwt.core.client.GWT;" );
         writer.println( "import com.google.gwt.user.client.rpc.AsyncCallback;" );
-        writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+
+        if (!hasRemoteServiceRelativePath)
+        {
+            writer.println( "import com.google.gwt.user.client.rpc.ServiceDefTarget;" );
+        }
 
         writer.println();
         writer.println( "public interface " + className + "Async" );
@@ -316,22 +311,6 @@ public class GenerateAsyncMojo
         }
 
         writer.println();
-
-        String uri = MessageFormat.format( rpcPattern, className );
-        if ( clazz.getAnnotations() != null )
-        {
-            for ( Annotation annotation : clazz.getAnnotations() )
-            {
-                getLog().debug( "annotation found on service interface " + annotation );
-                if ( annotation.getType().getValue().equals( "com.google.gwt.user.client.rpc.RemoteServiceRelativePath" ) )
-                {
-                    uri = null;
-                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface" );
-                    break;
-                }
-            }
-        }
-
         writer.println( "    /**" );
         writer.println( "     * Utility class to get the RPC Async interface from client-side code" );
         writer.println( "     */" );
@@ -344,10 +323,9 @@ public class GenerateAsyncMojo
         writer.println( "            if ( instance == null )" );
         writer.println( "            {" );
         writer.println( "                instance = (" + className + "Async) GWT.create( " + className + ".class );" );
-        if ( uri != null )
+        if ( !hasRemoteServiceRelativePath )
         {
-            // null is used as a marker for the presence of a @RemoteServiceRelativePath annotation, which is handled by
-            // the GWT generator
+            String uri = MessageFormat.format( rpcPattern, className );
             writer.println( "                ServiceDefTarget target = (ServiceDefTarget) instance;" );
             writer.println( "                target.setServiceEntryPoint( GWT.getModuleBaseURL() + \"" + uri + "\" );" );
         }
@@ -357,7 +335,7 @@ public class GenerateAsyncMojo
         writer.println( "" );
         writer.println( "        private Util()" );
         writer.println( "        {" );
-        writer.println( "            // Utility class should not be instanciated" );
+        writer.println( "            // Utility class should not be instantiated" );
         writer.println( "        }" );
         writer.println( "    }" );
 
@@ -370,14 +348,13 @@ public class GenerateAsyncMojo
         return javaClass.isInterface() && javaClass.isPublic() && javaClass.isA( REMOTE_SERVICE_INTERFACE );
     }
 
-    @SuppressWarnings( "unchecked" )
     private JavaDocBuilder createJavaDocBuilder()
         throws MojoExecutionException
     {
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.setEncoding( encoding );
         builder.getClassLibrary().addClassLoader( getProjectClassLoader() );
-        for ( String sourceRoot : (List<String>) getProject().getCompileSourceRoots() )
+        for ( String sourceRoot : getProject().getCompileSourceRoots() )
         {
             builder.getClassLibrary().addSourceFolder( new File( sourceRoot ) );
         }
@@ -409,6 +386,24 @@ public class GenerateAsyncMojo
         }
 
         return method.getTagByName( "deprecated" ) != null;
+    }
+
+    private boolean hasRemoteServiceRelativePath(final JavaClass clazz)
+    {
+        if ( clazz != null && clazz.getAnnotations() != null )
+        {
+            for ( Annotation annotation : clazz.getAnnotations() )
+            {
+                getLog().debug( "annotation found on service interface " + annotation );
+                if ( annotation.getType().getValue().equals( "com.google.gwt.user.client.rpc.RemoteServiceRelativePath" ) )
+                {
+                    getLog().debug( "@RemoteServiceRelativePath annotation found on service interface" );
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private ClassLoader getProjectClassLoader() throws MojoExecutionException

@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.maven.doxia.siterenderer.Renderer;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
@@ -41,77 +44,69 @@ import org.codehaus.plexus.util.FileUtils;
 /**
  * see http://code.google.com/webtoolkit/doc/latest/DevGuideCompileReport.html#Usage
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
- * @goal compile-report
  * @since 2.1.0-1
  */
+@Mojo(name = "compile-report", threadSafe = true)
 public class CompileReport
     extends AbstractMavenReport
 {
 
     /**
      * The output directory of the gwt compiler reports.
-     *
-     * @parameter default-value="${project.reporting.outputDirectory}/gwtCompileReports"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project.reporting.outputDirectory}/gwtCompileReports", required = true, readonly = true)
     protected File reportingOutputDirectory;
 
     /**
      * The directory into which extra, non-deployed files will be written.
-     *
-     * @parameter default-value="${project.build.directory}/extra"
      */
+    @Parameter(defaultValue = "${project.build.directory}/extra")
     private File extra;
-    
+
     /**
      * Doxia Site Renderer component.
      *
-     * @component
      * @since 2.1.0-1
      */
-    protected Renderer siteRenderer;  
-    
+    @Component
+    protected Renderer siteRenderer;
+
     /**
      * The output directory for the report. Note that this parameter is only evaluated if the goal is run directly from
      * the command line. If the goal is run indirectly as part of a site generation, the output directory configured in
      * the Maven Site Plugin is used instead.
      *
-     * @parameter default-value="${project.reporting.outputDirectory}"
-     * @required
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "${project.reporting.outputDirectory}", required = true)
     protected File outputDirectory;
-    
+
     /**
      * The Maven Project.
      *
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
      * @since 2.1.0-1
      */
-    protected MavenProject project;    
-   
-    
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    protected MavenProject project;
+
     /**
-     * @component
      * @since 2.1.0-1
      */
-    protected ClasspathBuilder classpathBuilder;    
-    
+    @Component
+    protected ClasspathBuilder classpathBuilder;
+
     /**
-     * @parameter default-value="false" expression="${gwt.compilerReport.skip}"
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "false", property = "gwt.compilerReport.skip")
     private boolean skip;    
     
     /**
      * Internationalization component.
      *
-     * @component
      * @since 2.1.0-1
      */
+    @Component
     protected I18N i18n;
 
     /**

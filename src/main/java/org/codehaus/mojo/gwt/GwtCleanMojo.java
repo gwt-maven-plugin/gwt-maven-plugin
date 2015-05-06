@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -31,8 +32,8 @@ import org.codehaus.plexus.util.FileUtils;
  * Cleanup the webapp directory for GWT module compilation output
  * 
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
- * @goal clean
  */
+@Mojo(name = "clean", threadSafe = true)
 public class GwtCleanMojo
     extends AbstractGwtModuleMojo
 {

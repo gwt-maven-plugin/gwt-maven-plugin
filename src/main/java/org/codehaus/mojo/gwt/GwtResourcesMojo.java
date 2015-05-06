@@ -25,6 +25,9 @@ import java.util.Collection;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -33,17 +36,12 @@ import org.codehaus.plexus.util.FileUtils;
  * filtering as the module descriptor is read to detect sources to be copied.
  * 
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
- * @goal resources
- * @phase process-resources
  */
+@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
 public class GwtResourcesMojo
     extends GwtResourcesBaseMojo
 {
-    /**
-     * @parameter expression="${project.build.outputDirectory}"
-     * @required
-     * @readonly
-     */
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File outputDirectory;
 
     /**

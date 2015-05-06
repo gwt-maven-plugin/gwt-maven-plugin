@@ -26,63 +26,56 @@ import java.io.File;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * Creates I18N interfaces for constants and messages files.
  *
- * @goal i18n
- * @phase generate-sources
- * @requiresDependencyResolution compile
- * @description Creates I18N interfaces for constants and messages files.
  * @author Sascha-Matthias Kulawik <sascha@kulawik.de>
  * @author ccollins
  * @version $Id$
  */
+@Mojo(name = "i18n", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class I18NMojo
     extends AbstractGwtShellMojo
 {
     /**
      * List of resourceBundles that should be used to generate i18n Messages interfaces.
-     *
-     * @parameter
-     * @alias i18nMessagesNames
      */
+    @Parameter(alias = "i18nMessagesNames")
     private String[] i18nMessagesBundles;
 
     /**
      * Shortcut for a single i18nMessagesBundle
-     *
-     * @parameter
      */
+    @Parameter
     private String i18nMessagesBundle;
 
     /**
      * List of resourceBundles that should be used to generate i18n Constants interfaces.
-     *
-     * @parameter
-     * @alias i18nConstantsNames
      */
+    @Parameter(alias = "i18nConstantsNames")
     private String[] i18nConstantsBundles;
 
     /**
      * Shortcut for a single i18nConstantsBundle
-     *
-     * @parameter
      */
+    @Parameter
     private String i18nConstantsBundle;
 
     /**
      * List of resourceBundles that should be used to generate i18n ConstantsWithLookup interfaces.
-     *
-     * @parameter
      */
+    @Parameter
     private String[] i18nConstantsWithLookupBundles;
 
     /**
      * Shortcut for a single i18nConstantsWithLookupBundle
-     *
-     * @parameter
      */
+    @Parameter
     private String i18nConstantsWithLookupBundle;
 
     
@@ -95,53 +88,64 @@ public class I18NMojo
         throws MojoExecutionException, MojoFailureException
     {
         setup();
-        boolean generated = false;
 
-        // constants with lookup
-        if ( i18nConstantsWithLookupBundles != null )
-        {
-            for ( String target : i18nConstantsWithLookupBundles )
+        try {
+            // constants with lookup
+            if ( i18nConstantsWithLookupBundles != null )
             {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createConstantsWithLookup" )
-                    .arg( target ).execute();
-                generated = true;
+                for ( String target : i18nConstantsWithLookupBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createConstantsWithLookup" )
+                        .arg( target )
+                        .execute();
+                }
+            }
+
+            // constants
+            if ( i18nConstantsBundles != null )
+            {
+                for ( String target : i18nConstantsBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( target )
+                        .execute();
+                }
+            }
+
+            // messages
+            if ( i18nMessagesBundles != null )
+            {
+                for ( String target : i18nMessagesBundles )
+                {
+                    ensureTargetPackageExists( getGenerateDirectory(), target );
+                    createJavaCommand()
+                        .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
+                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                        .addToClasspath( getGwtUserJar() )
+                        .addToClasspath( getGwtDevJar() )
+                        .arg( "-out", getGenerateDirectory().getAbsolutePath() )
+                        .arg( "-createMessages" )
+                        .arg( target )
+                        .execute();
+                }
             }
         }
-
-        // constants
-        if ( i18nConstantsBundles != null )
+        catch (JavaCommandException e)
         {
-            for ( String target : i18nConstantsBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( target ).execute();
-                generated = true;
-            }
-        }
-
-        // messages
-        if ( i18nMessagesBundles != null )
-        {
-            for ( String target : i18nMessagesBundles )
-            {
-                ensureTargetPackageExists( getGenerateDirectory(), target );
-                new JavaCommand( "com.google.gwt.i18n.tools.I18NSync" ).withinScope( Artifact.SCOPE_COMPILE )
-                    .withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() )
-                    .arg( "-out", getGenerateDirectory().getAbsolutePath() ).arg( "-createMessages" ).arg( target )
-                    .execute();
-                generated = true;
-            }
-        }
-
-        if ( generated )
-        {
-            getLog().debug( "add compile source root " + getGenerateDirectory() );
-            addCompileSourceRoot( getGenerateDirectory() );
+            throw new MojoExecutionException( e.getMessage(), e );
         }
     }
 
@@ -170,6 +174,8 @@ public class I18NMojo
                 "neither i18nConstantsBundles, i18nMessagesBundles nor i18nConstantsWithLookupBundles present. \n"
                 + "Cannot execute i18n goal" );
         }
+
+        setupGenerateDirectory();
     }
 
 

@@ -29,6 +29,7 @@ assert new File(basedir, 'target/workDir/org.codehaus.mojo.gwt.test.Hello').exis
 assert new File(basedir, 'target/deploy').exists();
 assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 assert new File(basedir, 'target/persistentunitcache').exists();
+// assert new File(basedir, 'target/savedSources').exists();
 
 assert !new File(basedir, 'target/.generated').exists();
 
@@ -36,12 +37,21 @@ assert new File(basedir, 'build.log').exists();
 
 content = new File(basedir, 'build.log').text;
 assert content.contains( '-draftCompile' );
-assert content.contains( '-strict' );
-assert content.contains( '-optimize 1' );
+assert content.contains( '-failOnError' );
+assert content.contains( "'-optimize' '1'" );
 assert content.contains( '-Dgwt.persistentunitcache=true' );
-assert content.contains( '-XenableClosureCompiler' );
-assert content.contains( '-XdisableAggressiveOptimization' );
+assert content.contains( '-XclosureCompiler' );
 assert content.contains( '-XcompilerMetrics' );
-assert content.contains( '-XfragmentCount 2' );
+assert content.contains( "'-XfragmentCount' '2'" );
+assert content.contains( '-XnoclusterFunctions' );
+assert content.contains( '-XenforceStrictResources' );
+assert content.contains( '-XnoinlineLiteralParameters' );
+assert content.contains( '-XnooptimizeDataflow' );
+assert content.contains( '-XnoordinalizeEnums' );
+assert content.contains( '-XnoremoveDuplicateFunctions' );
+assert content.contains( "'-sourceLevel' 'auto'" );
+assert content.contains( "'-XjsInteropMode' 'JS'" );
+assert content.contains( "'-Xnamespace' 'NONE'" );
+assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" );
   
 return true;

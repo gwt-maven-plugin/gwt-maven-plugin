@@ -22,6 +22,7 @@ package org.codehaus.mojo.gwt.eclipse;
 import java.io.File;
 
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -30,8 +31,8 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 /**
  * @author ndeloof
  * @version $Id$
- * @plexus.component role="org.codehaus.mojo.gwt.eclipse.EclipseUtil"
  */
+@Component(role = EclipseUtil.class)
 public class EclipseUtil
     extends AbstractLogEnabled
 {

@@ -37,6 +37,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -57,23 +58,15 @@ public abstract class AbstractGwtModuleMojo
     implements GwtModuleReader
 {
     /**
-     * @deprecated use {@link DefaultGwtModuleReader#GWT_MODULE_EXTENSION}
-     */
-    public static final String GWT_MODULE_EXTENSION = DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
-
-    /**
      * The project GWT modules. If not set, the plugin will scan the project for <code>.gwt.xml</code> files.
-     *
-     * @parameter
-     * @alias compileTargets
      */
+    @Parameter(alias = "compileTargets")
     private String[] modules;
 
     /**
      * A single GWT module. Shortcut for &lt;modules&gt; or option to specify a single module from command line
-     *
-     * @parameter expression="${gwt.module}"
      */
+    @Parameter(property = "gwt.module")
     private String module;
 
     public List<String> getGwtModules()
@@ -87,7 +80,6 @@ public abstract class AbstractGwtModuleMojo
      *
      * @return the modules
      */
-    @SuppressWarnings( "unchecked" )
     // FIXME move to DefaultGwtModuleReader !
     public String[] getModules()
     {
@@ -101,7 +93,7 @@ public abstract class AbstractGwtModuleMojo
             //Use a Set to avoid duplicate when user set src/main/java as <resource>
             Set<String> mods = new HashSet<String>();
 
-            Collection<String> sourcePaths = (Collection<String>) getProject().getCompileSourceRoots();
+            Collection<String> sourcePaths = getProject().getCompileSourceRoots();
             for ( String sourcePath : sourcePaths )
             {
                 File sourceDirectory = new File( sourcePath );
@@ -109,14 +101,14 @@ public abstract class AbstractGwtModuleMojo
                 {
                     DirectoryScanner scanner = new DirectoryScanner();
                     scanner.setBasedir( sourceDirectory.getAbsolutePath() );
-                    scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
+                    scanner.setIncludes( new String[] { "**/*" + DefaultGwtModuleReader.GWT_MODULE_EXTENSION } );
                     scanner.scan();
 
                     mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
                 }
             }
 
-            Collection<Resource> resources = (Collection<Resource>) getProject().getResources();
+            Collection<Resource> resources = getProject().getResources();
             for ( Resource resource : resources )
             {
                 File resourceDirectoryFile = new File( resource.getDirectory() );
@@ -126,7 +118,7 @@ public abstract class AbstractGwtModuleMojo
                 }
                 DirectoryScanner scanner = new DirectoryScanner();
                 scanner.setBasedir( resource.getDirectory() );
-                scanner.setIncludes( new String[] { "**/*" + GWT_MODULE_EXTENSION } );
+                scanner.setIncludes( new String[] { "**/*" + DefaultGwtModuleReader.GWT_MODULE_EXTENSION } );
                 scanner.scan();
                 mods.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
             }
@@ -140,7 +132,8 @@ public abstract class AbstractGwtModuleMojo
             int i = 0;
             for ( String fileName : mods )
             {
-                String path = fileName.substring( 0, fileName.length() - GWT_MODULE_EXTENSION.length() );
+                String path =
+                    fileName.substring( 0, fileName.length() - DefaultGwtModuleReader.GWT_MODULE_EXTENSION.length() );
                 modules[i++] = path.replace( File.separatorChar, '.' );
             }
             if ( modules.length > 0 )
@@ -155,7 +148,7 @@ public abstract class AbstractGwtModuleMojo
     public GwtModule readModule( String name )
         throws GwtModuleReaderException
     {
-        String modulePath = name.replace( '.', '/' ) + GWT_MODULE_EXTENSION;
+        String modulePath = name.replace( '.', '/' ) + DefaultGwtModuleReader.GWT_MODULE_EXTENSION;
         Collection<String> sourceRoots = getProject().getCompileSourceRoots();
         for ( String sourceRoot : sourceRoots )
         {
@@ -167,7 +160,7 @@ public abstract class AbstractGwtModuleMojo
                 return readModule( name, xml );
             }
         }
-        Collection<Resource> resources = (Collection<Resource>) getProject().getResources();
+        Collection<Resource> resources = getProject().getResources();
         for ( Resource resource : resources )
         {
             File root = new File( resource.getDirectory() );
@@ -239,14 +232,6 @@ public abstract class AbstractGwtModuleMojo
             getLog().error( error );
             throw new GwtModuleReaderException( error, e );
         }
-    }
-
-    /**
-     * @param path file to add to the project compile directories
-     */
-    protected void addCompileSourceRoot( File path )
-    {
-        getProject().addCompileSourceRoot( path.getAbsolutePath() );
     }
 
 }

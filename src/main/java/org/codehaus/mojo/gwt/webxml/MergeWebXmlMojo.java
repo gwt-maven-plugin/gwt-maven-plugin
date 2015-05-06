@@ -19,41 +19,36 @@ package org.codehaus.mojo.gwt.webxml;
  * under the License.
  */
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.codehaus.mojo.gwt.GwtModule;
+import org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.mojo.gwt.ClasspathBuilder;
-import org.codehaus.mojo.gwt.ClasspathBuilderException;
-import org.codehaus.mojo.gwt.GwtModule;
-import org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo;
 
 /**
  * Merges GWT servlet elements into deployment descriptor (and non GWT servlets into shell).
  * <p>
  * <b>If you use {@link #scanRemoteServiceRelativePathAnnotation} you must bind this mojo to at least compile phase</b>
  * Because the classpath scanner need to see compile classes
- * </p>
- * @goal mergewebxml
- * @phase process-resources
- * @requiresDependencyResolution compile
- * @description Merges GWT servlet elements into deployment descriptor (and non GWT servlets into shell).
+ * 
  * @author cooper
  * @version $Id$
  */
+@Mojo(name = "mergewebxml", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class MergeWebXmlMojo
     extends AbstractGwtWebMojo
 {
@@ -61,38 +56,27 @@ public class MergeWebXmlMojo
     /**
      * Location on filesystem where merged web.xml will be created. The maven-war-plugin must be configured to use this
      * path as <a href="http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html#webXml"> webXml</a> parameter
-     * 
-     * @parameter default-value="${project.build.directory}/web.xml"
      */
+    @Parameter(defaultValue = "${project.build.directory}/web.xml")
     private File mergedWebXml;
-    
+
     /**
-     * 
-     * @parameter default-value="false"
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "false")
     private boolean scanRemoteServiceRelativePathAnnotation;
-    
+
     /**
-     * @parameter
      * @since 2.1.0-1
      */
+    @Parameter
     private Map<String,String> packageNamePerModule;
-    
+
     /**
-     * @component
-     * @required
-     * @readonly
      * @since 2.1.0-1
      */
+    @Component
     private ServletAnnotationFinder servletAnnotationFinder;
-
-
-    /** Creates a new instance of MergeWebXmlMojo */
-    public MergeWebXmlMojo()
-    {
-        super();
-    }
 
     @Override
     protected boolean isGenerator() {
@@ -104,11 +88,11 @@ public class MergeWebXmlMojo
         throws MojoExecutionException, MojoFailureException
     {
 
-    	if ( "pom".equals( getProject().getPackaging() ) )
+        if ( "pom".equals( getProject().getPackaging() ) )
         {
-    		getLog().info( "GWT mergewebxml is skipped" );
-    		return;
-    	}
+            getLog().info( "GWT mergewebxml is skipped" );
+            return;
+        }
 
         try
         {
@@ -169,19 +153,10 @@ public class MergeWebXmlMojo
     }
     
     private ClassLoader getAnnotationSearchClassLoader()
-        throws ClasspathBuilderException, MalformedURLException
+        throws MalformedURLException
     {
-        Collection<File> classPathFiles = classpathBuilder.buildClasspathList( getProject(), Artifact.SCOPE_COMPILE, Collections.<Artifact>emptySet(), false );
 
-        List<URL> urls = new ArrayList<URL>( classPathFiles.size() );
-
-        for ( File file : classPathFiles )
-        {
-            urls.add( file.toURL() );
-        }
-
-        URLClassLoader url = new URLClassLoader( urls.toArray( new URL[urls.size()] ) );
-        return url;
+        return new URLClassLoader( new URL[] { new File( getProject().getBuild().getOutputDirectory() ).toURI().toURL() } );
 
     }
 }

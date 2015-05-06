@@ -19,8 +19,6 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
-import static org.codehaus.plexus.util.AbstractScanner.DEFAULTEXCLUDES;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +31,12 @@ import java.util.regex.Pattern;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.archiver.ArchiverException;
@@ -43,32 +47,28 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Goal which run a GWT module in the GWT Hosted mode.
+ * Runs the project in the GWT (Classic or Super) Dev Mode for development.
  *
- * @goal run
- * @execute phase=process-classes goal:war:exploded
- * @requiresDirectInvocation
- * @requiresDependencyResolution test
- * @description Runs the the project in the GWT Hosted mode for development.
  * @author ccollins
  * @author cooper
  * @version $Id$
  */
+@Mojo(name = "run", requiresDirectInvocation = true, requiresDependencyResolution = ResolutionScope.TEST)
+@Execute(phase = LifecyclePhase.PROCESS_CLASSES, goal = "war:exploded")
 public class RunMojo
     extends AbstractGwtWebMojo
 {
     /**
      * Location of the hosted-mode web application structure.
-     *
-     * @parameter default-value="${project.build.directory}/${project.build.finalName}"
      */
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
     // Parameter shared with EclipseMojo
     private File hostedWebapp;
 
     /**
      * The MavenProject executed by the "compile" phase
-     * @parameter expression="${executedProject}"
      */
+    @Parameter(defaultValue = "${executedProject}")
     private MavenProject executedProject;
 
     /**
@@ -81,98 +81,55 @@ public class RunMojo
      * When the GWT module host page is part of the module "public" folder, the runTarget MAY define the full GWT module
      * path (<code>com.myapp.gwt.Module/Module.html</code>) that will be automatically converted according to the
      * <code>rename-to</code> directive into <code>renamed/Module.html</code>.
-     *
-     * @parameter expression="${runTarget}"
-     * @required
      */
+    @Parameter(property = "runTarget", required = true)
     private String runTarget;
 
     /**
      * Forked process execution timeOut (in seconds). Primary used for integration-testing.
-     * @parameter
      */
+    @Parameter
     @SuppressWarnings("unused")
     private int runTimeOut;
 
     /**
      * Runs the embedded GWT server on the specified port.
-     *
-     * @parameter default-value="8888" expression="${gwt.port}"
      */
+    @Parameter(defaultValue = "8888", property = "gwt.port")
     private int port;
 
     /**
      * Runs the code server on the specified port.
-     *
-     * @parameter default-value="9997" expression="${gwt.codeServerPort}"
      */
+    @Parameter(defaultValue = "9997", property = "gwt.codeServerPort")
     private int codeServerPort;
 
     /**
-     * Specify the location on the filesystem for the generated embedded Tomcat directory.
-     *
-     * @parameter default-value="${project.build.directory}/tomcat"
-     */
-    private File tomcat;
-
-    /**
      * Location of the compiled classes.
-     *
-     * @parameter default-value="${project.build.outputDirectory}"
-     * @required
-     * @readOnly
      */
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true, readonly = true)
     private File buildOutputDirectory;
-
-
-    /**
-     * Source Tomcat context.xml for GWT shell - copied to /gwt/localhost/ROOT.xml (used as the context.xml for the
-     * SHELL - requires Tomcat 5.0.x format - hence no default).
-     *
-     * @parameter
-     */
-    private File contextXml;
 
     /**
      * Prevents the embedded GWT Tomcat server from running (even if a port is specified).
      * <p>
      * Can be set from command line using '-Dgwt.noserver=...'
-     *
-     * @parameter default-value="false" expression="${gwt.noserver}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.noserver")
     private boolean noServer;
 
     /**
      * Specifies a different embedded web server to run (must implement ServletContainerLauncher)
-     *
-     * @parameter expression="${gwt.server}"
      */
+    @Parameter(property = "gwt.server")
     private String server;
-
-    /**
-     * Set GWT shell protocol/host whitelist.
-     * <p>
-     * Can be set from command line using '-Dgwt.whitelist=...'
-     *
-     * @parameter expression="${gwt.whitelist}"
-     */
-    private String whitelist;
-
-    /**
-     * Set GWT shell protocol/host blacklist.
-     * <p>
-     * Can be set from command line using '-Dgwt.blacklist=...'
-     *
-     * @parameter expression="${gwt.blacklist}"
-     */
-    private String blacklist;
 
     /**
      * List of System properties to pass when running the hosted mode.
      *
-     * @parameter
      * @since 1.2
      */
+    @Parameter
     private Map<String, String> systemProperties;
     
     /**
@@ -180,10 +137,11 @@ public class RunMojo
      * <p>
      * Can be set from command line using '-Dgwt.copyWebapp=...'
      * </p>
-     * @parameter default-value="false" expression="${gwt.copyWebapp}"
+     *
      * @since 2.1.0-1
      */
-    private boolean copyWebapp;    
+    @Parameter(defaultValue = "false", property = "gwt.copyWebapp")
+    private boolean copyWebapp;
 
     /**
      * set the appengine sdk to use
@@ -191,103 +149,132 @@ public class RunMojo
      * Artifact will be downloaded with groupId : {@link #appEngineGroupId} 
      * and artifactId {@link #appEngineArtifactId}
      * <p>
-     * @parameter default-value="1.3.8" expression="${gwt.appEngineVersion}"
+     *
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "1.3.8", property = "gwt.appEngineVersion")
     private String appEngineVersion;
-    
+
     /**
      * <p>
      * List of {@link Pattern} jars to exclude from the classPath when running
      * dev mode
      * </p>
-     * @parameter 
+     * 
      * @since 2.1.0-1
      */
+    @Parameter
     private List<String> runClasspathExcludes;
-    
+
     /**
      * <p>
      * Location to find appengine sdk or to unzip downloaded one see {@link #appEngineVersion}
      * </p>
-     * @parameter default-value="${project.build.directory}/appengine-sdk/" expression="${gwt.appEngineHome}"
+     *
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "${project.build.directory}/appengine-sdk/", property = "gwt.appEngineHome")
     private File appEngineHome;
-    
+
     /**
-     * <p>
      * groupId to download appengine sdk from maven repo
-     * </p>
-     * @parameter default-value="com.google.appengine" expression="${gwt.appEngineGroupId}"
+     *
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "com.google.appengine", property = "gwt.appEngineGroupId")
     private String appEngineGroupId;
-    
+
     /**
-     * <p>
      * groupId to download appengine sdk from maven repo
-     * </p>
-     * @parameter default-value="appengine-java-sdk" expression="${gwt.appEngineArtifactId}"
+     * 
      * @since 2.1.0-1
-     */    
-    private String appEngineArtifactId;    
-    
-    
+     */
+    @Parameter(defaultValue = "appengine-java-sdk", property = "gwt.appEngineArtifactId")
+    private String appEngineArtifactId;
+
     /**
      * To look up Archiver/UnArchiver implementations
      * @since 2.1.0-1
-     * @component
      */
+    @Component
     protected ArchiverManager archiverManager;
-    
-    
-    
+
      /**
      * Set GWT shell bindAddress.
      * <p>
      * Can be set from command line using '-Dgwt.bindAddress=...'
      * @since 2.1.0-1
-     * @parameter expression="${gwt.bindAddress}"
      */
-    private String bindAddress;    
-
-    public String getRunTarget()
-    {
-        return this.runTarget;
-    }
+    @Parameter(property = "gwt.bindAddress")
+    private String bindAddress;
 
     /**
-     * @return the GWT module to run (gwt 1.6+) -- expected to be unique
+     * EXPERIMENTAL: Cache results of generators with stable output.
+     * 
+     * @since 2.6.0-rc1
      */
-    public String getRunModule()
-        throws MojoExecutionException
-    {
-        String[] modules = getModules();
-        if ( noServer )
-        {
-            if (modules.length != 1)
-            {
-                getLog().error(
-                    "Running in 'noserver' mode you must specify the single module to run using -Dgwt.module=..." );
-                throw new MojoExecutionException( "No single module specified" );
-            }
-            return modules[0];
-        }
-        if ( modules.length == 1 )
-        {
-            // A single module is set, no ambiguity
-            return modules[0];
-        }
-        int dash = runTarget.indexOf( '/' );
-        if ( dash > 0 )
-        {
-            return runTarget.substring( 0, dash );
-        }
-        // The runTarget MUST start with the full GWT module path
-        throw new MojoExecutionException(
-            "Unable to choose a GWT module to run. Please specify your module(s) in the configuration" );
-    }
+    @Parameter(defaultValue = "true", property = "gwt.cacheGeneratorResults")
+    private boolean cacheGeneratorResults;
+
+    /**
+     * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter
+    private File workDir;
+
+    /**
+     * Logs to a file in the given directory, as well as graphically
+     * 
+     * @since 2.6.0-rc1
+     */
+    @Parameter
+    private File logDir;
+
+    /**
+     * Specifies Java source level.
+     * <p>
+     * The default value depends on the JVM used to launch Maven.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "auto", property = "maven.compiler.source")
+    private String sourceLevel;
+
+    /**
+     * Runs Super Dev Mode instead of classic Development Mode.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.superDevMode")
+    private boolean superDevMode;
+
+    /**
+     * Compiles faster by reusing data from the previous compile.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(alias = "compilePerFile", defaultValue = "true", property = "gwt.compiler.incremental")
+    private boolean incremental;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE")
+    private String jsInteropMode;
+
+    /**
+     * EXPERIMENTAL: Emit extra information allow chrome dev tools to display Java identifiers in many places instead of JavaScript functions.
+     * <p>
+     * Value can be one of NONE, ONLY_METHOD_NAME, ABBREVIATED or FULL.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
+    private String methodNameDisplayMode;
 
     /**
      * @return the startup URL to open in hosted browser (gwt 1.6+)
@@ -325,22 +312,19 @@ public class RunMojo
         return runTarget;
     }
 
-    protected String getFileName()
-    {
-        return "run";
-    }
-
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.DevMode" );
+        JavaCommand cmd = createJavaCommand()
+            .setMainClass( "com.google.gwt.dev.DevMode" );
 
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+                .addToClasspath( getGwtDevJar() );
         }
 
-        cmd.withinScope( Artifact.SCOPE_RUNTIME );
+        cmd.addToClasspath( getClasspath( Artifact.SCOPE_RUNTIME ) );
         addCompileSourceArtifacts( cmd );
         addArgumentDeploy(cmd);
         addArgumentGen( cmd );
@@ -348,7 +332,8 @@ public class RunMojo
 
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() ).withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+                .addToClasspath( getGwtDevJar() );
         }
 
         cmd.arg( "-war", hostedWebapp.getAbsolutePath() )
@@ -356,20 +341,33 @@ public class RunMojo
             .arg( "-port", Integer.toString( getPort() ) )
             .arg( "-codeServerPort" , Integer.toString( codeServerPort ))
             .arg( "-startupUrl", getStartupUrl() )
-            .arg( noServer, "-noserver" );
+            .arg( noServer, "-nostartServer" )
+            .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
+            .arg( !superDevMode, "-nosuperDevMode" )
+            .arg( !incremental, "-noincremental" )
+            .arg( "-sourceLevel", sourceLevel );
+
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        {
+            cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
+        if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
+        {
+            cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
+        }
+
+        if ( workDir != null )
+        {
+            cmd.arg( "-workDir", workDir.getAbsolutePath() );
+        }
+        if ( logDir != null )
+        {
+            cmd.arg( "-logdir", logDir.getAbsolutePath() );
+        }
 
         if ( server != null )
         {
             cmd.arg( "-server", server );
-        }
-
-        if ( whitelist != null && whitelist.length() > 0 )
-        {
-            cmd.arg( "-whitelist", whitelist );
-        }
-        if ( blacklist != null && blacklist.length() > 0 )
-        {
-            cmd.arg( "-blacklist", blacklist );
         }
 
         if ( systemProperties != null && !systemProperties.isEmpty() )
@@ -394,6 +392,11 @@ public class RunMojo
             cmd.arg( "-bindAddress" ).arg( bindAddress );
         }
 
+        if ( modulePathPrefix != null && !modulePathPrefix.isEmpty() )
+        {
+            cmd.arg( "-modulePathPrefix" ).arg( modulePathPrefix );
+        }
+
         if ( !noServer )
         {
             setupExplodedWar();
@@ -408,7 +411,14 @@ public class RunMojo
             cmd.arg( module );
         }
 
-        cmd.execute();
+        try
+        {
+            cmd.execute();
+        }
+        catch ( JavaCommandException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
     }
 
     @Override
@@ -610,19 +620,9 @@ public class RunMojo
         }
     }
 
-    public File getContextXml()
-    {
-        return this.contextXml;
-    }
-
     public int getPort()
     {
         return this.port;
-    }
-
-    public File getTomcat()
-    {
-        return this.tomcat;
     }
 
     /**

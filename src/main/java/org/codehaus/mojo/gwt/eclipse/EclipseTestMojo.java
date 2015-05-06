@@ -22,6 +22,8 @@ package org.codehaus.mojo.gwt.eclipse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +31,11 @@ import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.gwt.shell.TestMojo;
 import org.codehaus.mojo.gwt.test.TestTemplate;
@@ -41,33 +48,29 @@ import freemarker.template.TemplateException;
 /**
  * Goal which creates Eclipse lauch configurations for GWTTestCases.
  *
- * @goal eclipseTest
- * @execute phase=generate-test-resources
  * @version $Id$
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @deprecated use google eclipse plugin http://code.google.com/intl/fr-FR/eclipse/docs/users_guide.html
  */
+@Deprecated
+@Mojo(name = "eclipseTest")
+@Execute(phase = LifecyclePhase.GENERATE_TEST_RESOURCES)
 public class EclipseTestMojo
     extends TestMojo
 {
-    /**
-     * @component
-     */
+    @Component
     private EclipseUtil eclipseUtil;
 
     /**
      * The currently executed project (phase=generate-resources).
-     *
-     * @parameter expression="${executedProject}"
-     * @readonly
      */
+    @Parameter(defaultValue = "${executedProject}", readonly = true)
     private MavenProject executedProject;
 
     /**
      * Location of the file.
-     *
-     * @parameter default-value="${project.build.directory}/www-test"
      */
+    @Parameter(defaultValue = "${project.build.directory}/www-test")
     private File testOutputDirectory;
 
     /**
@@ -125,7 +128,13 @@ public class EclipseTestMojo
 
         try
         {
-            context.put( "gwtDevJarPath", getGwtDevJar().getAbsolutePath() );
+            Collection<String> gwtDevJarPath = new ArrayList<String>();
+            for (File f : getGwtDevJar())
+            {
+                gwtDevJarPath.add( f.getAbsolutePath().replace( '\\', '/' ) );
+            }
+            context.put( "gwtDevJarPath", gwtDevJarPath );
+
             Writer configWriter = WriterFactory.newXmlWriter( launchFile );
             Template template = cfg.getTemplate( "test-launch.fm", "UTF-8" );
             template.process( context, configWriter );

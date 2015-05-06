@@ -21,6 +21,8 @@ assert new File(basedir, 'target/extra').exists();
 assert new File(basedir, 'target/extra/hello/soycReport').exists();
 assert new File(basedir, 'target/extra/hello/soycReport/compile-report').exists();
 assert new File(basedir, 'target/extra/hello/soycReport/compile-report/index.html').exists();
+assert new File(basedir, 'target/extra/hello/soycReport/entities0.json').exists();
+assert new File(basedir, 'target/extra/hello/soycReport/fragments0.json').exists();
 assert new File(basedir, 'target/site/gwtCompileReports/hello').exists();
 assert new File(basedir, 'target/site/gwtCompileReports/hello/index.html').exists();
 assert new File(basedir, 'target/site/gwtCompileReports/hello/soyc.css').exists();

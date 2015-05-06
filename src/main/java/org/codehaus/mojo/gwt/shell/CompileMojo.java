@@ -23,55 +23,49 @@ package org.codehaus.mojo.gwt.shell;
  *
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-
-import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.mojo.gwt.GwtModule;
-import org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader;
 import org.codehaus.mojo.gwt.utils.GwtModuleReaderException;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.HashSet;
+
 /**
- * Invokes the GWTCompiler for the project source.
+ * Invokes the GWT Compiler for the project source.
  * See compiler options :
- * http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
+ * http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
  *
- * @phase prepare-package
- * @goal compile
- * @requiresDependencyResolution compile
  * @version $Id$
  * @author cooper
  * @author ccollins
  * @author <a href="mailto:nicolas@apache.org">Nicolas De loof</a>
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
+@Mojo(name = "compile", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class CompileMojo
     extends AbstractGwtShellMojo
 {
 
-    /**
-     * @parameter expression="${gwt.compiler.skip}" default-value="false"
-     */
+    @Parameter(property = "gwt.compiler.skip", defaultValue = "false")
     private boolean skip;
 
     /**
      * Don't try to detect if GWT compilation is up-to-date and can be skipped.
      * <p>
      * Can be set from command line using '-Dgwt.compiler.force=true'.
-     * </p>
-     * @parameter expression="${gwt.compiler.force}" default-value="false"
      */
+    @Parameter(property = "gwt.compiler.force", defaultValue = "false")
     private boolean force;
 
     /**
@@ -81,36 +75,23 @@ public class CompileMojo
      * <p>
      * Can be unset from command line using '-Dgwt.compiler.localWorkers=n'.
      * </p>
-     * 
-     * @parameter expression="${gwt.compiler.localWorkers}"
      */
+    @Parameter(property = "gwt.compiler.localWorkers")
     private int localWorkers;
 
     /**
-     * Whether or not to enable assertions in generated scripts (-ea).
-     *
-     * @parameter default-value="false"
+     * Whether or not to enable assertions in generated scripts (-checkAssertions).
      */
-    private boolean enableAssertions;
-
-    /**
-     * Logs output in a graphical tree view.
-     * <p>
-     * Can be set from command line using '-Dgwt.treeLogger=true'.
-     * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.treeLogger}"
-     */
-    private boolean treeLogger;
+    @Parameter(alias = "enableAssertions", defaultValue = "false")
+    private boolean checkAssertions;
 
     /**
      * EXPERIMENTAL: Disables some java.lang.Class methods (e.g. getName()).
      * <p>
      * Can be set from command line using '-Dgwt.disableClassMetadata=true'.
      * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.disableClassMetadata}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.disableClassMetadata")
     private boolean disableClassMetadata;
 
     /**
@@ -118,9 +99,8 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.disableCastChecking=true'.
      * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.disableCastChecking}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.disableCastChecking")
     private boolean disableCastChecking;
 
     /**
@@ -128,9 +108,8 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.disableRunAsync=true'.
      * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.disableRunAsync}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.disableRunAsync")
     private boolean disableRunAsync;
 
     /**
@@ -138,9 +117,8 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.validateOnly=true'.
      * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.validateOnly}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.validateOnly")
     private boolean validateOnly;
 
     /**
@@ -148,120 +126,239 @@ public class CompileMojo
      * <p>
      * Can be set from command line using '-Dgwt.draftCompile=true'.
      * </p>
-     * <p>
-     * This is equivalent to '-Dgwt.compiler.optimizationLevel=0 -Dgwt.compiler.disableAggressiveOptimization=true'.
-     * </p>
-     *
-     * @parameter default-value="false" expression="${gwt.draftCompile}"
      */
+    @Parameter(defaultValue = "false", property = "gwt.draftCompile")
     private boolean draftCompile;
 
     /**
      * The directory into which extra, non-deployed files will be written.
-     *
-     * @parameter default-value="${project.build.directory}/extra"
      */
+    @Parameter(defaultValue = "${project.build.directory}/extra")
     private File extra;
 
     /**
-     * The temp directory is used for temporary compiled files (defaults is system temp directory).
-     *
-     * @parameter
+     * The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
      */
+    @Parameter
     private File workDir;
-    
+
     /**
      * add -extra parameter to the compiler command line
      * <p>
      * Can be set from command line using '-Dgwt.extraParam=true'.
-     * </p>
-     * @parameter default-value="false" expression="${gwt.extraParam}"
+     *
      * @since 2.1.0-1
      */
+    @Parameter(defaultValue = "false", property = "gwt.extraParam")
     private boolean extraParam;
-    
+
     /**
-     * add -compileReport parameter to the compiler command line
+     * Compile a report that tells the "Story of Your Compile".
      * <p>
      * Can be set from command line using '-Dgwt.compiler.compileReport=true'.
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.compileReport}"
+     *
      * @since 2.1.0-1
-     */    
+     */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.compileReport")
     private boolean compileReport;
-    
+
     /**
-     * add -optimize parameter to the compiler command line the value must be between 0 and 9
-     * by default -1 so no arg to the compiler
+     * Sets the optimization level used by the compiler.  0=none 9=maximum.
+     * <p>
+     * -1 uses the default level of the compiler.
+     * </p>
      * <p>
      * Can be set from command line using '-Dgwt.compiler.optimizationLevel=n'.
      * </p>
      * @parameter default-value="-1" expression="${gwt.compiler.optimizationLevel}"
      * @since 2.1.0-1
-     */    
-    private int optimizationLevel;    
-    
+     */
+    @Parameter(defaultValue = "-1", property = "gwt.compiler.optimizationLevel")
+    private int optimizationLevel;
+
     /**
-     * add -XsoycDetailed parameter to the compiler command line
+     * EXPERIMENTAL: Emit extra, detailed compile-report information in the "Story Of Your Compile" at the expense of compile time.
      * <p>
      * Can be set from command line using '-Dgwt.compiler.soycDetailed=true'.
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.soycDetailed}"
+     *
      * @since 2.1.0-1
-     */    
-    private boolean soycDetailed;    
-    
-    
+     */
+    @Parameter(alias = "soycDetailed", defaultValue = "false", property = "gwt.compiler.soycDetailed")
+    private boolean detailedSoyc;
+
     /**
-     * add -strict parameter to the compiler command line
+     * Fail compilation if any input file contains an error.
      * 
      * <p>
      * Can be set from command line using '-Dgwt.compiler.strict=true'.
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.strict}"
+     *
      * @since 2.1.0-1
-     */    
-    private boolean strict;     
-    
+     */
+    @Parameter(alias = "strict", defaultValue = "false", property = "gwt.compiler.strict")
+    private boolean failOnError;
+
     /**
-     * EXPERIMENTAL: add -XenableClosureCompiler parameter to the compiler command line
+     * EXPERIMENTAL: Compile output Javascript with the Closure compiler for even further optimizations.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.enableClosureCompiler=true'
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.enableClosureCompiler}"
+     *
      * @since 2.5.0-rc1
      */
-    private boolean enableClosureCompiler;
+    @Parameter(alias = "enableClosureCompiler", defaultValue = "false", property = "gwt.compiler.enableClosureCompiler")
+    private boolean closureCompiler;
 
     /**
-     * EXPERIMENTAL: add -XdisableAggressiveOptimization parameter to the compiler command line
-     * <p>
-     * Can be set from the command line using '-Dgwt.compiler.disableAggressiveOptimization=true'
-     * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.disableAggressiveOptimization}"
-     * @since 2.5.0-rc1
-     */
-    private boolean disableAggressiveOptimization;
-
-    /**
-     * EXPERIMENTAL: add -XcompilerMetrics parameter to the compiler command line
+     * EXPERIMENTAL: Gather compiler metrics.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.compilerMetrics=true'
      * </p>
-     * @parameter default-value="false" expression="${gwt.compiler.compilerMetrics}"
+     *
      * @since 2.5.0-rc1
      */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.compilerMetrics")
     private boolean compilerMetrics;
 
     /**
-     * EXPERIMENTAL: add -XfragmentCount parameter to the compiler command line
+     * EXPERIMENTAL: Limits of number of fragments using a code splitter that merges split points.
      * <p>
      * Can be set from the command line using '-Dgwt.compiler.fragmentCount=n'
      * </p>
-     * @parameter default-value="-1" expression="${gwt.compiler.fragmentCount}"
+     *
      * @since 2.5.0-rc1
      */
+    @Parameter(defaultValue = "-1", property = "gwt.compiler.fragmentCount")
     private int fragmentCount;
+
+    /**
+     * EXPERIMENTAL: Cluster similar functions in the output to improve compression.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.clusterFunctions")
+    private boolean clusterFunctions;
+
+    /**
+     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public" for
+     * modules that don't define any dependencies.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
+    private boolean enforceStrictResources;
+
+    /**
+     * EXPERIMENTAL: Inline literal parameters to shrink function declarations and
+     * provide more deadcode elimination possibilities.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.inlineLiteralParameters")
+    private boolean inlineLiteralParameters;
+
+    /**
+     * EXPERIMENTAL: Analyze and optimize dataflow.
+     *
+     * since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.optimizeDataflow")
+    private boolean optimizeDataflow;
+
+    /**
+     * EXPERIMENTAL: Ordinalize enums to reduce some large strings.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.ordinalizeEnums")
+    private boolean ordinalizeEnums;
+
+    /**
+     * EXPERIMENTAL: Removing duplicate functions.
+     * <p>
+     * Will interfere with stacktrace deobfuscation and so is only honored when compiler.stackMode is set to strip.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.removeDuplicateFunctions")
+    private boolean removeDuplicateFunctions;
+
+    /**
+     * Enables saving source code needed by debuggers.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "false", property = "gwt.saveSource")
+    private boolean saveSource;
+
+    /**
+     * Overrides where source files useful to debuggers will be written.
+     * <p>
+     * Default: saved with extras.
+     *
+     * @since 2.6.0-rc2
+     */
+    @Parameter
+    private File saveSourceOutput;
+
+    /**
+     * Specifies Java source level.
+     *
+     * @since 2.6.0-rc1
+     */
+    @Parameter(defaultValue = "auto", property = "maven.compiler.source")
+    private String sourceLevel;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE")
+    private String jsInteropMode;
+
+    /**
+     * Puts most JavaScript globals into namespaces.
+     * <p>
+     * Value is one of PACKAGE or NONE.
+     * <p>
+     * Default: PACKAGE for -draftCompile, otherwise NONE
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter
+    private String namespace;
+
+    @Parameter(defaultValue = "false")
+    private boolean overlappingSourceWarnings;
+
+    /**
+     * EXPERIMENTAL: Emit detailed compile-report information in the "Story Of Your Compile"  in the new json format.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "false")
+    private boolean enableJsonSoyc;
+
+    /**
+     * Compiles faster by reusing data from the previous compile.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(alias = "compilePerFile", defaultValue = "false", property = "gwt.compiler.incremental")
+    private boolean incremental;
+
+    /**
+     * EXPERIMENTAL: Emit extra information allow chrome dev tools to display Java identifiers in many places instead of JavaScript functions.
+     * <p>
+     * Value can be one of NONE, ONLY_METHOD_NAME, ABBREVIATED or FULL.
+     * 
+     * @since 2.7.0-rc1
+     */
+    @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
+    private String methodNameDisplayMode;
 
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
@@ -280,23 +377,36 @@ public class CompileMojo
         compile( getModules() );
     }
 
+    @Override
+    protected String getExtraJvmArgs()
+    {
+        String jvmArgs = super.getExtraJvmArgs();
+        // workaround to GWT issue 4031 with IBM JDK
+        // @see https://code.google.com/p/google-web-toolkit/issues/detail?id=4031#c16
+        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()) && !StringUtils.isEmpty( jvmArgs ))
+        {
+            return jvmArgs + " -Dgwt.jjs.javaArgs=" + StringUtils.quoteAndEscape( jvmArgs, '"', new char[] { '"', ' ', '\t', '\r', '\n' } );
+        }
+        return jvmArgs;
+    }
+
     private void compile( String[] modules )
         throws MojoExecutionException
     {
         boolean upToDate = true;
 
-        JavaCommand cmd = new JavaCommand( "com.google.gwt.dev.Compiler" );
+        JavaCommand cmd = createJavaCommand()
+            .setMainClass( "com.google.gwt.dev.Compiler" );
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-               .withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+               .addToClasspath( getGwtDevJar() );
         }
-        cmd.withinScope( Artifact.SCOPE_COMPILE );
-
+        cmd.addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) );
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.withinClasspath( getGwtUserJar() )
-               .withinClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getGwtUserJar() )
+               .addToClasspath( getGwtDevJar() );
         }
 
         cmd.arg( "-logLevel", getLogLevel() )
@@ -304,25 +414,55 @@ public class CompileMojo
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
             // optional advanced arguments
-            .arg( enableAssertions, "-ea" ).arg( draftCompile, "-draftCompile" )
-            .arg( validateOnly, "-validateOnly" ).arg( treeLogger, "-treeLogger" )
-            .arg( disableClassMetadata, "-XdisableClassMetadata" )
-            .arg( disableCastChecking, "-XdisableCastChecking" )
-            .arg( disableRunAsync, "-XdisableRunAsync" )
-            .arg( strict, "-strict" )
-            .arg( soycDetailed, "-XsoycDetailed" )
-            .arg( enableClosureCompiler, "-XenableClosureCompiler" )
+            .arg( checkAssertions, "-checkAssertions" )
+            .arg( draftCompile, "-draftCompile" )
+            .arg( validateOnly, "-validateOnly" )
+            .arg( disableClassMetadata, "-XnoclassMetadata" )
+            .arg( disableCastChecking, "-XnocheckCasts" )
+            .arg( disableRunAsync, "-XnocodeSplitting" )
+            .arg( failOnError, "-failOnError" )
+            .arg( detailedSoyc, "-XdetailedSoyc" )
+            .arg( closureCompiler, "-XclosureCompiler" )
+            .arg( compileReport, "-compileReport" )
             .arg( compilerMetrics, "-XcompilerMetrics" )
-            .arg( disableAggressiveOptimization, "-XdisableAggressiveOptimization" )
-            .arg( "-XfragmentCount", String.valueOf( fragmentCount ) );
+            .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
+            .arg( !clusterFunctions, "-XnoclusterFunctions" )
+            .arg( enforceStrictResources, "-XenforceStrictResources" )
+            .arg( !inlineLiteralParameters, "-XnoinlineLiteralParameters" )
+            .arg( !optimizeDataflow, "-XnooptimizeDataflow" )
+            .arg( !ordinalizeEnums, "-XnoordinalizeEnums" )
+            .arg( !removeDuplicateFunctions, "-XnoremoveDuplicateFunctions" )
+            .arg( saveSource, "-saveSource" )
+            .arg( "-sourceLevel", sourceLevel )
+            .arg( enableJsonSoyc, "-XenableJsonSoyc" )
+            .arg( incremental, "-incremental" )
+        ;
 
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        {
+            cmd.arg( "-XjsInteropMode", jsInteropMode );
+        }
+        if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
+        {
+            cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
+        }
+
+        if ( namespace != null && namespace.length() > 0 )
+        {
+            cmd.arg( "-Xnamespace", namespace );
+        }
+
+        if ( saveSourceOutput != null )
+        {
+            cmd.arg( "-saveSourceOutput", saveSourceOutput.getAbsolutePath() );
+        }
 
         if ( optimizationLevel >= 0 )
         {
             cmd.arg( "-optimize" ).arg( Integer.toString( optimizationLevel ) );
         }
 
-        if ( extraParam || compileReport )
+        if ( extraParam || compileReport || ( saveSource && saveSourceOutput == null ) )
         {
             getLog().debug( "create extra directory " );
             if ( !extra.exists() )
@@ -334,11 +474,6 @@ public class CompileMojo
         else
         {
             getLog().debug( "NOT create extra directory " );
-        }
-
-        if ( compileReport )
-        {
-            cmd.arg( "-compileReport" );
         }
 
         addCompileSourceArtifacts( cmd );
@@ -362,7 +497,14 @@ public class CompileMojo
         }
         if ( !upToDate )
         {
-            cmd.execute();
+            try
+            {
+                cmd.execute();
+            }
+            catch ( JavaCommandException e )
+            {
+                throw new MojoExecutionException( e.getMessage(), e );
+            }
         }
     }
 
@@ -371,18 +513,6 @@ public class CompileMojo
         if ( localWorkers > 0 )
         {
             return localWorkers;
-        }
-        // workaround to GWT issue 4031 whith IBM JDK
-        // @see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031
-        if ( System.getProperty( "java.vendor" ).startsWith( "IBM" ) && StringUtils.isEmpty(getJvm()))
-        {
-            StringBuilder sb = new StringBuilder( "Build is using IBM JDK, and no explicit JVM property has been set." );
-            sb.append( SystemUtils.LINE_SEPARATOR );
-            sb.append("localWorkers set to 1 as a workaround");
-            sb.append( SystemUtils.LINE_SEPARATOR );
-            sb.append( "see http://code.google.com/p/google-web-toolkit/issues/detail?id=4031" );
-            getLog().info( sb.toString() );
-            return 1;
         }
         return Runtime.getRuntime().availableProcessors();
     }
@@ -455,17 +585,16 @@ public class CompileMojo
             scanner.addSourceMapping( uiBinderMapping );
 
             Collection<File> compileSourceRoots = new HashSet<File>();
-           	for (Iterator iterator = getProject().getCompileSourceRoots().iterator(); iterator.hasNext();) {	
-				String sourceRoot = (String) iterator.next();
-           		for (String sourcePackage : gwtModule.getSources()) {
-			        String packagePath = gwtModule.getPackage().replace( '.', File.separatorChar );
-		            File sourceDirectory = new File (sourceRoot + File.separatorChar + packagePath + File.separator + sourcePackage);
-		            if(sourceDirectory.exists()) {
-		            	getLog().debug(" Looking in a source directory "+sourceDirectory.getAbsolutePath() + " for possible changes");
-			            compileSourceRoots.add(sourceDirectory);					
-		            }
-				}
-			}
+            for (String sourceRoot : getProject().getCompileSourceRoots()) {
+                for (String sourcePackage : gwtModule.getSources()) {
+                    String packagePath = gwtModule.getPackage().replace( '.', File.separatorChar );
+                    File sourceDirectory = new File (sourceRoot + File.separatorChar + packagePath + File.separator + sourcePackage);
+                    if(sourceDirectory.exists()) {
+                        getLog().debug(" Looking in a source directory "+sourceDirectory.getAbsolutePath() + " for possible changes");
+                        compileSourceRoots.add(sourceDirectory);					
+                    }
+                }
+            }
 
             for ( File sourceRoot : compileSourceRoots )
             {

@@ -48,15 +48,25 @@
           <optimizationLevel>1</optimizationLevel>
           <extraParam>true</extraParam>
           <soyc>false</soyc>
-          <strict>true</strict>
+          <failOnError>true</failOnError>
           <workDir>${project.build.directory}/workDir</workDir>
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
           <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
           <enableClosureCompiler>true</enableClosureCompiler>
-          <disableAggressiveOptimization>true</disableAggressiveOptimization>
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
+          <clusterFunctions>false</clusterFunctions>
+          <enforceStrictResources>true</enforceStrictResources>
+          <inlineLiteralParameters>false</inlineLiteralParameters>
+          <optimizeDataflow>false</optimizeDataflow>
+          <ordinalizeEnums>false</ordinalizeEnums>
+          <removeDuplicateFunctions>false</removeDuplicateFunctions>
+          <saveSource>true</saveSource>
+          <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
+          <jsInteropMode>JS</jsInteropMode>
+          <namespace>NONE</namespace>
+          <methodNameDisplayMode>FULL</methodNameDisplayMode>
         </configuration>
         <executions>
           <execution>
