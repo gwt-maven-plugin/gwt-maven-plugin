@@ -31,7 +31,7 @@ Testing GWT code with Maven
   One special aspect of gwt-maven-plugin to be familiar with is that it runs its own special <<<test>>> goal
   in order to support <<<GWTTestCase>>> and <<<GWTTestSuite>>> derived GWT tests. If you're not familiar with
   GWT testing support you should first read the related
-  {{{https://developers.google.com/web-toolkit/articles/testing_methodologies_using_gwt}documentation}}.
+  {{{http://www.gwtproject.org/articles/testing_methodologies_using_gwt}documentation}}.
 
   We do not consider GWTTestCase to be unit test as they require the whole GWT Module to run. For this reason, the <<<test>>> goal is
   bound by default to <<<integration-test>>> phase. But this is only our point of view and you may want to run such test during the
@@ -155,7 +155,7 @@ Testing GWT code with Maven
 
 * About GwtTestSuite
 
-  The {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideTesting#DevGuideJUnitSuites}Official GWT documentation}}
+  The {{{http://www.gwtproject.org/doc/latest/DevGuideTesting#DevGuideJUnitSuites}Official GWT documentation}}
   on TestSuites suggest to grouping your GWT tests in a suite by extending GwtTestSuite. Maven will not be able to
   run such a Suite. The snippet below is what will allow both the Eclipse Junit Runner and Maven to run the test cases.
 
@@ -194,7 +194,7 @@ Testing GWT code with Maven
 
   By default, tests run in DevMode. As an option, you can run your code compiled to JavaScript instead
   of using the dev mode bridge between Java and JavaScript, using the <<<productionMode>>> parameter. GWT Team suggest that you run your
-  tests in both modes to detect {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsCompatibility}differences between
+  tests in both modes to detect {{{http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility}differences between
   Java and JavaScript}}. You may configure your continuous integration server with <<<-Dgwt.test.prod=true>>> system property to check this.
 
 * testing with "real" browsers
@@ -203,7 +203,7 @@ Testing GWT code with Maven
   using the <<<mode>>> parameter (or <<<gwt.test.mode>>> system property) to "manual". GWT will then print a URL to access from your browser.
 
   You may also want to test your code on various browser, not just the hosted mode embeded one. You then need a remote browser available
-  for testing. See {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideTestingRemoteTesting}GWT documentation}} for more
+  for testing. See {{{http://www.gwtproject.org/doc/latest/DevGuideTestingRemoteTesting}GWT documentation}} for more
   explanations.
 
   Selenium mode can be used for running your test suite on real browsers using Selenium RC. Set the <<<mode>>> parameter

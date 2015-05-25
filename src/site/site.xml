@@ -36,7 +36,7 @@ under the License.
   <body>
     <links>
       <item name="Maven" href="http://maven.apache.org/"/>
-      <item name="Google Web Toolkit" href="https://developers.google.com/web-toolkit/"/>
+      <item name="GWT Project" href="http://www.gwtproject.org/"/>
       <item name="Google Plugin for Eclipse" href="https://developers.google.com/eclipse/"/>
     </links>
     <menu name="User Guide">

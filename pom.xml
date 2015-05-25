@@ -27,9 +27,9 @@
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.8.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-  <name>Maven GWT Plugin</name>
+  <name>Mojo's Maven Plugin for GWT</name>
   <description>
-    Maven plugin for the Google Web Toolkit.
+    Mojo's Maven Plugin for GWT
   </description>
   <url>http://mojo.codehaus.org/gwt-maven-plugin</url>
   <inceptionYear>2007</inceptionYear>

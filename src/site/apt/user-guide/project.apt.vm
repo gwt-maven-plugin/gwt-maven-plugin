@@ -7,7 +7,7 @@ Project organization
 
 * Conventions
 
- Compared to {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideOrganizingProjects#DevGuideDirectoriesPackageConventions}GWT Documentation}}
+ Compared to {{{http://www.gwtproject.org/doc/latest/DevGuideOrganizingProjects#DevGuideDirectoriesPackageConventions}GWT Documentation}}
  on directory layout, the plugin follows Maven conventions:
 
   <<<>>>
@@ -81,7 +81,7 @@ Project organization
   {{{http://maven.apache.org/guides/introduction/introduction-to-the-pom.html#Project_Aggregation}related maven documentation}}.
 
   <<NOTE>> that GWT also has a notion of
-  {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideOrganizingProjects#DevGuideModules}module}}.
+  {{{http://www.gwtproject.org/doc/latest/DevGuideOrganizingProjects#DevGuideModules}module}}.
   Both Maven and GWT use the term <module> to define units of
   modularization. To a degree both concepts go hand in hand, as
   gwt-modules define boundaries at which Maven-modules might be

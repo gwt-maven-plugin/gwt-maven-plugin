@@ -1,5 +1,5 @@
  ------
- Using GWT Maven Plugin to generate Async interfaces
+ Using Mojo's Maven Plugin for GWT to generate Async interfaces
  ------
  Nicolas de Loof
  ------
@@ -31,7 +31,7 @@ Generate Async interfaces for GWT-RPC services
 
   GWT client will communicate with server-side components using GWT-RPC data serialization protocol. If you're
   not familiar with this please review
-  {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideServerCommunication}the developper's guide}}.
+  {{{http://www.gwtproject.org/doc/latest/DevGuideServerCommunication}the developper's guide}}.
 
   The GWT-RPC model requires you to define two interfaces : one on server side to handle requests, and a sibling one
   on client side for invoking the RPC serialization process. The second one is asynchronous, and the two interfaces

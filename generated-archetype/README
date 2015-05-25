@@ -1,4 +1,4 @@
-This generated artifact is used to develop the GWT Maven plugin archetype. Having source control on the generated artifact allows to check that changes on the archetype produce the expected changes on the generated artifact, and to easily track those changes.
+This generated artifact is used to develop Mojo's Maven Plugin for GWT archetype. Having source control on the generated artifact allows to check that changes on the archetype produce the expected changes on the generated artifact, and to easily track those changes.
 
 When trying to implement a change on the archetype, the process should be the following :
 

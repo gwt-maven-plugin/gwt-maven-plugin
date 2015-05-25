@@ -86,7 +86,7 @@ reactor/                                     (aggregating parent project)
   and a <<<Hello>>> class.
 
   <<NOTE>> that GWT also has a notion of
-  {{{https://developers.google.com/web-toolkit/doc/latest/DevGuideOrganizingProjects#DevGuideModules}module}}. Both
+  {{{http://www.gwtproject.org/doc/latest/DevGuideOrganizingProjects#DevGuideModules}module}}. Both
   Maven and GWT use the term <module> to define units of
   modularization. To a degree both concepts go hand in hand, as
   GWT-modules define boundaries at which Maven-modules might be
