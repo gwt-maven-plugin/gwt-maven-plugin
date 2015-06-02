@@ -28,7 +28,7 @@ under the License.
     </bannerLeft>
     <bannerRight>
       <name>Github</name>
-      <src>http://gwt-maven-plugin.github.com/gwt-maven-plugin/images/gwt-maven-logo.png</src>
+      <src>https://gwt-maven-plugin.github.io/gwt-maven-plugin/images/gwt-maven-logo.png</src>
       <href>http://github.com/gwt-maven-plugin/gwt-maven-plugin</href>
     </bannerRight>
     <body>

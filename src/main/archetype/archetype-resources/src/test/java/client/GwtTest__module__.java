@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
  * 
  * If you run the tests using the Maven command line, you will have to 
  * navigate with your browser to a specific url given by Maven. 
- * See http://mojo.codehaus.org/gwt-maven-plugin/user-guide/testing.html 
+ * See https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html
  * for details.
  */
 public class GwtTest${module} extends GWTTestCase {
