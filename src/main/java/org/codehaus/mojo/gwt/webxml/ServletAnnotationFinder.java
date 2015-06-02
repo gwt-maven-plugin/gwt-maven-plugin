@@ -111,7 +111,7 @@ public class ServletAnnotationFinder
 
     /**
      * @param packageName
-     * @return cannot return <code>null</null>
+     * @return cannot return <code>null</code>
      * @throws IOException
      */
     public Set<ServletDescriptor> findServlets( String packageName, String startPath, ClassLoader classLoader )

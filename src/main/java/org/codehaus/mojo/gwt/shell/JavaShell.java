@@ -27,9 +27,7 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.shell.Shell;
 
 /**
- * plexus-util hack to run a command WITHOUT a shell
- *
- * @see PLXUTILS-107
+ * plexus-util hack to run a command WITHOUT a shell PLXUTILS-107
  */
 public class JavaShell
     extends Shell
