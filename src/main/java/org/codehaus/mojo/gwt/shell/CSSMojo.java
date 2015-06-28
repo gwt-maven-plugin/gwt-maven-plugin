@@ -43,7 +43,7 @@ import java.nio.charset.Charset;
  * Will use the utility tool provided in gwt sdk which create a corresponding Java interface for accessing 
  * the classnames used in the file.
  *
- * @author Stale Undheim <undheim@corporater.com>
+ * @author <a href="mailto:undheim@corporater.com">Stale Undheim</a>
  * @author olamy
  * @since 2.1.0-1
  */

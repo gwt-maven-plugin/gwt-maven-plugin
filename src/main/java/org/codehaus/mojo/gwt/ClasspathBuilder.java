@@ -62,7 +62,6 @@ public class ClasspathBuilder
      * @param scope artifact scope to use
      * @param isGenerator whether to use processed resources and compiled classes (false), or raw resources (true).
      * @return file collection for classpath
-     * @throws MojoExecutionException 
      */
     public Collection<File> buildClasspathList( final MavenProject project, final String scope,
                                                 Set<Artifact> artifacts, boolean isGenerator )

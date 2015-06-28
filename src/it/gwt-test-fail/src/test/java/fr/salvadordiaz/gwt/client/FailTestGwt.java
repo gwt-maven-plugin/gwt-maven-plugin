@@ -4,7 +4,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 
 /**
  * Failing GwtTestCase <br/>
- * read : http://mojo.codehaus.org/gwt-maven-plugin/user-guide/testing.html pour plus d'informations
+ * read : https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html pour plus d'informations
  * 
  * @author salvador
  * @see GwtFailTestSuite

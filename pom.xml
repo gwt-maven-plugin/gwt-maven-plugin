@@ -31,7 +31,7 @@
   <description>
     Mojo's Maven Plugin for GWT
   </description>
-  <url>http://mojo.codehaus.org/gwt-maven-plugin</url>
+  <url>http://www.mojohaus.org/gwt-maven-plugin</url>
   <inceptionYear>2007</inceptionYear>
   <prerequisites>
     <maven>3</maven>
@@ -130,8 +130,8 @@
     <doxia-sitetoolsVersion>1.6</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
-    <stagingSiteRepositoryId>codehaus</stagingSiteRepositoryId>
-    <stagingSiteURL>dav:https://dav.codehaus.org/mojo/${project.artifactId}-${project.version}</stagingSiteURL>
+    <stagingSiteRepositoryId>github-ssh</stagingSiteRepositoryId>
+    <stagingSiteURL>gitsite:git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</stagingSiteURL>
   </properties>
 
   <dependencies>
@@ -427,7 +427,7 @@
           </plugin>
         </plugins>
       </build>
-    </profile>    
+    </profile>
   </profiles>
 
   <build>
@@ -496,6 +496,13 @@
           <stagingRepositoryId>${stagingSiteRepositoryId}</stagingRepositoryId>
           <stagingSiteURL>${stagingSiteURL}</stagingSiteURL>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.stephenc.wagon</groupId>
+            <artifactId>wagon-gitsite</artifactId>
+            <version>0.4.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <!-- disabled: bug when dealing with ICU classes (from jaxen)-->
       <plugin>
