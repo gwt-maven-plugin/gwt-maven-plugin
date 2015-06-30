@@ -1,0 +1,7 @@
+org.codehaus.mojo.gwt
+org.codehaus.mojo.gwt.eclipse
+org.codehaus.mojo.gwt.reports
+org.codehaus.mojo.gwt.shell
+org.codehaus.mojo.gwt.test
+org.codehaus.mojo.gwt.utils
+org.codehaus.mojo.gwt.webxml

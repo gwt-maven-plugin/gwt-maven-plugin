@@ -7,12 +7,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Nicolas de Loof
-Olivier Lamy" />
-    <meta name="Date-Creation-yyyymmdd" content="20101202" />
     <meta name="Date-Revision-yyyymmdd" content="20150701" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Mojo's Maven Plugin for GWT &#x2013; Introduction</title>
+    <title>Mojo's Maven Plugin for GWT &#x2013; Surefire Report</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.4.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -55,7 +52,7 @@ Olivier Lamy" />
         Mojo's Maven Plugin for GWT</a>
                     <span class="divider">/</span>
       </li>
-        <li class="active ">Introduction</li>
+        <li class="active ">Surefire Report</li>
         
                 
                     
@@ -97,10 +94,12 @@ Olivier Lamy" />
                 <ul class="nav nav-list">
                     <li class="nav-header">User Guide</li>
                               
-      <li class="active">
+      <li>
   
-            <a href="#"><span class="none"></span>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <span class="none"></span>
+        Introduction</a>
+            </li>
                 
       <li>
   
@@ -236,104 +235,97 @@ Olivier Lamy" />
         FAQ</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                      
       <li>
   
                           <a href="project-info.html" title="Project Information">
-          <span class="icon-chevron-down"></span>
+          <span class="icon-chevron-right"></span>
         Project Information</a>
+                  </li>
+                                                                                                                                                                                                                                                                
+      <li>
+  
+                          <a href="project-reports.html" title="Project Reports">
+          <span class="icon-chevron-down"></span>
+        Project Reports</a>
                     <ul class="nav nav-list">
                     
       <li>
   
-                          <a href="integration.html" title="Continuous Integration">
+                          <a href="plugin-info.html" title="Plugin Documentation">
           <span class="none"></span>
-        Continuous Integration</a>
+        Plugin Documentation</a>
             </li>
                     
       <li>
   
-                          <a href="dependency-info.html" title="Dependency Information">
+                          <a href="checkstyle.html" title="Checkstyle">
           <span class="none"></span>
-        Dependency Information</a>
+        Checkstyle</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="apidocs/index.html" title="JavaDocs">
+          <span class="none"></span>
+        JavaDocs</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="testapidocs/index.html" title="Test JavaDocs">
+          <span class="none"></span>
+        Test JavaDocs</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="xref-test/index.html" title="Test Source Xref">
+          <span class="none"></span>
+        Test Source Xref</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="xref/index.html" title="Source Xref">
+          <span class="none"></span>
+        Source Xref</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="cpd.html" title="CPD">
+          <span class="none"></span>
+        CPD</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="pmd.html" title="PMD">
+          <span class="none"></span>
+        PMD</a>
             </li>
                     
       <li class="active">
   
-            <a href="#"><span class="none"></span>About</a>
+            <a href="#"><span class="none"></span>Surefire Report</a>
           </li>
                     
       <li>
   
-                          <a href="issue-tracking.html" title="Issue Tracking">
+                          <a href="cobertura/index.html" title="Cobertura Test Coverage">
           <span class="none"></span>
-        Issue Tracking</a>
+        Cobertura Test Coverage</a>
             </li>
                     
       <li>
   
-                          <a href="mail-lists.html" title="Mailing Lists">
+                          <a href="taglist.html" title="Tag List">
           <span class="none"></span>
-        Mailing Lists</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="team-list.html" title="Project Team">
-          <span class="none"></span>
-        Project Team</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="source-repository.html" title="Source Repository">
-          <span class="none"></span>
-        Source Repository</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="project-summary.html" title="Project Summary">
-          <span class="none"></span>
-        Project Summary</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependencies.html" title="Dependencies">
-          <span class="none"></span>
-        Dependencies</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependency-management.html" title="Dependency Management">
-          <span class="none"></span>
-        Dependency Management</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="license.html" title="Project License">
-          <span class="none"></span>
-        Project License</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="plugin-management.html" title="Plugin Management">
-          <span class="none"></span>
-        Plugin Management</a>
+        Tag List</a>
             </li>
               </ul>
         </li>
-                                                                                                                                                                                                                                                      
-      <li>
-  
-                          <a href="project-reports.html" title="Project Reports">
-          <span class="icon-chevron-right"></span>
-        Project Reports</a>
-                  </li>
             </ul>
                 
                     
@@ -361,33 +353,120 @@ Olivier Lamy" />
                 
         <div id="bodyColumn"  class="span10" >
                                   
-            <!-- Licensed to the Apache Software Foundation (ASF) under one --><!-- or more contributor license agreements.  See the NOTICE file --><!-- distributed with this work for additional information --><!-- regarding copyright ownership.  The ASF licenses this file --><!-- to you under the Apache License, Version 2.0 (the --><!-- "License"); you may not use this file except in compliance --><!-- with the License.  You may obtain a copy of the License at --><!--  --><!-- http://www.apache.org/licenses/LICENSE-2.0 --><!--  --><!-- Unless required by applicable law or agreed to in writing, --><!-- software distributed under the License is distributed on an --><!-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY --><!-- KIND, either express or implied.  See the License for the --><!-- specific language governing permissions and limitations --><!-- under the License. --><!-- NOTE: For help with the syntax of this file, see: --><!-- http://maven.apache.org/doxia/references/apt-format.html --><div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT"></a>Mojo's Maven Plugin for GWT</h2>
-<p>Welcome to Mojo's Maven Plugin for <a class="externalLink" href="http://www.gwtproject.org/">GWT</a> User Guide. This documentation will drive you to setup you GWT web application development using Maven as build tool. This guide covers project organisation and setup, integration with development environment, and running GWT SDK tools from maven command line.</p>
-<p>If you're new to GWT or Maven, you might want to first read the <a class="externalLink" href="http://www.gwtproject.org/doc/latest/DevGuide">GWT documentation</a> and get more familiar with Maven by reading at least its <a class="externalLink" href="http://maven.apache.org/guides/getting-started/index.html">getting started guide</a> or by reading the online <a class="externalLink" href="http://www.sonatype.com/books/mvnref-book/reference/public-book.html">reference book</a>.</p>
-<p><b> This mojo has been developped and tested with the gwt version 2.8.0-SNAPSHOT </b></p>
-<p><b> <a href="./whats_new.html">What's new in 2.8.0-SNAPSHOT ?</a> </b></p></div>
+            <script type="text/javascript">
+//<![CDATA[
+function toggleDisplay(elementId) {
+ var elm = document.getElementById(elementId + 'error');
+ if (elm && typeof elm.style != "undefined") {
+ if (elm.style.display == "none") {
+ elm.style.display = "";
+ document.getElementById(elementId + 'off').style.display = "none";
+ document.getElementById(elementId + 'on').style.display = "inline";
+ } else if (elm.style.display == "") { elm.style.display = "none";
+ document.getElementById(elementId + 'off').style.display = "inline";
+ document.getElementById(elementId + 'on').style.display = "none";
+ } 
+ } 
+ }
+//]]>
+</script>
 <div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT_supports:"></a>Mojo's Maven Plugin for GWT supports:</h2>
-<ul>
-<li>GWT compiler execution for packaging your application into a WAR <a href="./user-guide/compile.html">Compile and Debug</a></li>
-<li>generate GWT internationalization (&quot;i18n&quot;) interfaces from bundles <a href="./user-guide/i18n.html">Internationalization</a></li>
-<li>running tests (or test suites) based on GWTTestCase framework as part of Maven build, <a href="./user-guide/testing.html">Testing Support</a></li>
-<li>run (or debug) in DevMode from Maven <a href="./user-guide/hosted.html">DevMode</a></li>
-<li>generate boiler code for GWT-RPC Async interface from synchronous server-side interfaces <a href="./user-guide/async.html">Generate Async interfaces for GWT-RPC</a></li>
-<li>integrate nicelly into Eclipse, thanks to M2Eclipse and the Google Plugin for Eclipse. </li></ul></div>
+<h2><a name="Surefire_Report"></a>Surefire Report</h2></div>
 <div class="section">
-<h2><a name="TIPS"></a>TIPS</h2>
-<ul>
-<li><a href="./user-guide/archetype.html">Using the archetype</a></li>
-<li><a href="./user-guide/project.html">Organize project</a></li>
-<li><a href="./plugin-info.html">Goals and Parameters Reference</a></li>
-<li><a href="./faq.html">Frequently Asked Questions</a> </li></ul></div>
+<h2><a name="Summary"></a>Summary</h2><a name="Summary"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="table table-striped">
+<tr class="a">
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.914</td></tr></table><br />
+<p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
 <div class="section">
-<h2><a name="WANT_TO_CONTRIBUTE_"></a>WANT TO CONTRIBUTE ?</h2>
-<p>We are big fans of the <a class="externalLink" href="http://jenkins-ci.org/">Jenkins</a> community model, and want to apply it to lower the contribution barrier. Code is hosted on <a class="externalLink" href="https://github.com/gwt-maven-plugin/gwt-maven-plugin">GitHub</a>: fork it, improve it, and send pull requests. Just please log what you're working for in <a class="externalLink" href="http://jira.codehaus.org/browse/MGWT">JIRA</a> and use the JIRA ID as a prefix for your commits. If you feel comfortable with the code, just ask for commit permission to apply changes by yourself.</p>
-<p><tt></tt></p>
-<p>Development builds are tested on next GWT SDK milestones on <a class="externalLink" href="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/">BuildHive</a> </p><img src="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/badge/icon" alt="" /></div>
+<h2><a name="Package_List"></a>Package List</h2><a name="Package_List"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="table table-striped">
+<tr class="a">
+<th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#org.codehaus.mojo.gwt">org.codehaus.mojo.gwt</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.914</td></tr></table><br />
+<p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
+<div class="section">
+<h3><a name="org.codehaus.mojo.gwt"></a>org.codehaus.mojo.gwt</h3><a name="org.codehaus.mojo.gwt"></a>
+<table border="1" class="table table-striped">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#org.codehaus.mojo.gwtGwtModuleMojoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#org.codehaus.mojo.gwtGwtModuleMojoTest">GwtModuleMojoTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.191</td></tr>
+<tr class="a">
+<td><a href="#org.codehaus.mojo.gwtServletAnnotationFinderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#org.codehaus.mojo.gwtServletAnnotationFinderTest">ServletAnnotationFinderTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.723</td></tr></table></div><br /></div>
+<div class="section">
+<h2><a name="Test_Cases"></a>Test Cases</h2><a name="Test_Cases"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
+<div class="section">
+<h3><a name="GwtModuleMojoTest"></a>GwtModuleMojoTest</h3><a name="org.codehaus.mojo.gwtGwtModuleMojoTest"></a>
+<table border="1" class="table table-striped">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testGWT17</td>
+<td>1.191</td></tr></table></div>
+<div class="section">
+<h3><a name="ServletAnnotationFinderTest"></a>ServletAnnotationFinderTest</h3><a name="org.codehaus.mojo.gwtServletAnnotationFinderTest"></a>
+<table border="1" class="table table-striped">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testFindServletWithPrependPath</td>
+<td>0.373</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testFindServletWithPath</td>
+<td>0.18</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testFindServletEmptyPath</td>
+<td>0.17</td></tr></table></div><br /></div>
                   </div>
             </div>
           </div>

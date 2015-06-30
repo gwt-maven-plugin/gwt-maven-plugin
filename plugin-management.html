@@ -7,12 +7,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Nicolas de Loof
-Olivier Lamy" />
-    <meta name="Date-Creation-yyyymmdd" content="20101202" />
     <meta name="Date-Revision-yyyymmdd" content="20150701" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Mojo's Maven Plugin for GWT &#x2013; Introduction</title>
+    <title>Mojo's Maven Plugin for GWT &#x2013; Project Plugin Management</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.4.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -55,7 +52,7 @@ Olivier Lamy" />
         Mojo's Maven Plugin for GWT</a>
                     <span class="divider">/</span>
       </li>
-        <li class="active ">Introduction</li>
+        <li class="active ">Project Plugin Management</li>
         
                 
                     
@@ -97,10 +94,12 @@ Olivier Lamy" />
                 <ul class="nav nav-list">
                     <li class="nav-header">User Guide</li>
                               
-      <li class="active">
+      <li>
   
-            <a href="#"><span class="none"></span>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <span class="none"></span>
+        Introduction</a>
+            </li>
                 
       <li>
   
@@ -258,10 +257,12 @@ Olivier Lamy" />
         Dependency Information</a>
             </li>
                     
-      <li class="active">
+      <li>
   
-            <a href="#"><span class="none"></span>About</a>
-          </li>
+                          <a href="index.html" title="About">
+          <span class="none"></span>
+        About</a>
+            </li>
                     
       <li>
   
@@ -319,12 +320,10 @@ Olivier Lamy" />
         Project License</a>
             </li>
                     
-      <li>
+      <li class="active">
   
-                          <a href="plugin-management.html" title="Plugin Management">
-          <span class="none"></span>
-        Plugin Management</a>
-            </li>
+            <a href="#"><span class="none"></span>Plugin Management</a>
+          </li>
               </ul>
         </li>
                                                                                                                                                                                                                                                       
@@ -361,33 +360,129 @@ Olivier Lamy" />
                 
         <div id="bodyColumn"  class="span10" >
                                   
-            <!-- Licensed to the Apache Software Foundation (ASF) under one --><!-- or more contributor license agreements.  See the NOTICE file --><!-- distributed with this work for additional information --><!-- regarding copyright ownership.  The ASF licenses this file --><!-- to you under the Apache License, Version 2.0 (the --><!-- "License"); you may not use this file except in compliance --><!-- with the License.  You may obtain a copy of the License at --><!--  --><!-- http://www.apache.org/licenses/LICENSE-2.0 --><!--  --><!-- Unless required by applicable law or agreed to in writing, --><!-- software distributed under the License is distributed on an --><!-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY --><!-- KIND, either express or implied.  See the License for the --><!-- specific language governing permissions and limitations --><!-- under the License. --><!-- NOTE: For help with the syntax of this file, see: --><!-- http://maven.apache.org/doxia/references/apt-format.html --><div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT"></a>Mojo's Maven Plugin for GWT</h2>
-<p>Welcome to Mojo's Maven Plugin for <a class="externalLink" href="http://www.gwtproject.org/">GWT</a> User Guide. This documentation will drive you to setup you GWT web application development using Maven as build tool. This guide covers project organisation and setup, integration with development environment, and running GWT SDK tools from maven command line.</p>
-<p>If you're new to GWT or Maven, you might want to first read the <a class="externalLink" href="http://www.gwtproject.org/doc/latest/DevGuide">GWT documentation</a> and get more familiar with Maven by reading at least its <a class="externalLink" href="http://maven.apache.org/guides/getting-started/index.html">getting started guide</a> or by reading the online <a class="externalLink" href="http://www.sonatype.com/books/mvnref-book/reference/public-book.html">reference book</a>.</p>
-<p><b> This mojo has been developped and tested with the gwt version 2.8.0-SNAPSHOT </b></p>
-<p><b> <a href="./whats_new.html">What's new in 2.8.0-SNAPSHOT ?</a> </b></p></div>
-<div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT_supports:"></a>Mojo's Maven Plugin for GWT supports:</h2>
-<ul>
-<li>GWT compiler execution for packaging your application into a WAR <a href="./user-guide/compile.html">Compile and Debug</a></li>
-<li>generate GWT internationalization (&quot;i18n&quot;) interfaces from bundles <a href="./user-guide/i18n.html">Internationalization</a></li>
-<li>running tests (or test suites) based on GWTTestCase framework as part of Maven build, <a href="./user-guide/testing.html">Testing Support</a></li>
-<li>run (or debug) in DevMode from Maven <a href="./user-guide/hosted.html">DevMode</a></li>
-<li>generate boiler code for GWT-RPC Async interface from synchronous server-side interfaces <a href="./user-guide/async.html">Generate Async interfaces for GWT-RPC</a></li>
-<li>integrate nicelly into Eclipse, thanks to M2Eclipse and the Google Plugin for Eclipse. </li></ul></div>
-<div class="section">
-<h2><a name="TIPS"></a>TIPS</h2>
-<ul>
-<li><a href="./user-guide/archetype.html">Using the archetype</a></li>
-<li><a href="./user-guide/project.html">Organize project</a></li>
-<li><a href="./plugin-info.html">Goals and Parameters Reference</a></li>
-<li><a href="./faq.html">Frequently Asked Questions</a> </li></ul></div>
-<div class="section">
-<h2><a name="WANT_TO_CONTRIBUTE_"></a>WANT TO CONTRIBUTE ?</h2>
-<p>We are big fans of the <a class="externalLink" href="http://jenkins-ci.org/">Jenkins</a> community model, and want to apply it to lower the contribution barrier. Code is hosted on <a class="externalLink" href="https://github.com/gwt-maven-plugin/gwt-maven-plugin">GitHub</a>: fork it, improve it, and send pull requests. Just please log what you're working for in <a class="externalLink" href="http://jira.codehaus.org/browse/MGWT">JIRA</a> and use the JIRA ID as a prefix for your commits. If you feel comfortable with the code, just ask for commit permission to apply changes by yourself.</p>
-<p><tt></tt></p>
-<p>Development builds are tested on next GWT SDK milestones on <a class="externalLink" href="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/">BuildHive</a> </p><img src="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/badge/icon" alt="" /></div>
+            <div class="section">
+<h2><a name="Project_Plugin_Management"></a>Project Plugin Management</h2><a name="Project_Plugin_Management"></a>
+<table border="0" class="table table-striped">
+<tr class="a">
+<th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-antrun-plugin/">maven-antrun-plugin</a></td>
+<td>1.8</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-assembly-plugin/">maven-assembly-plugin</a></td>
+<td>2.5.3</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-checkstyle-plugin/">maven-checkstyle-plugin</a></td>
+<td>2.13</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-clean-plugin/">maven-clean-plugin</a></td>
+<td>2.5</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-compiler-plugin/">maven-compiler-plugin</a></td>
+<td>3.3</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-dependency-plugin/">maven-dependency-plugin</a></td>
+<td>2.9</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-deploy-plugin/">maven-deploy-plugin</a></td>
+<td>2.8.2</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/enforcer/maven-enforcer-plugin">maven-enforcer-plugin</a></td>
+<td>1.3.1</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-gpg-plugin/">maven-gpg-plugin</a></td>
+<td>1.6</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-install-plugin/">maven-install-plugin</a></td>
+<td>2.5.2</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-invoker-plugin/">maven-invoker-plugin</a></td>
+<td>1.10</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-jar-plugin/">maven-jar-plugin</a></td>
+<td>2.6</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-javadoc-plugin/">maven-javadoc-plugin</a></td>
+<td>2.9.1</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/jxr/maven-jxr-plugin/">maven-jxr-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugin-tools/maven-plugin-plugin">maven-plugin-plugin</a></td>
+<td>3.4</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-project-info-reports-plugin/">maven-project-info-reports-plugin</a></td>
+<td>2.8</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/maven-release/maven-release-plugin/">maven-release-plugin</a></td>
+<td>2.5.1</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-resources-plugin/">maven-resources-plugin</a></td>
+<td>2.7</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a></td>
+<td>3.4</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-source-plugin/">maven-source-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/surefire/maven-surefire-plugin">maven-surefire-plugin</a></td>
+<td>2.18.1</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/surefire/maven-surefire-report-plugin">maven-surefire-report-plugin</a></td>
+<td>2.18.1</td></tr>
+<tr class="b">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/animal-sniffer-parent/animal-sniffer-maven-plugin">animal-sniffer-maven-plugin</a></td>
+<td>1.11</td></tr>
+<tr class="a">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/cobertura-maven-plugin/">cobertura-maven-plugin</a></td>
+<td>2.7</td></tr>
+<tr class="b">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/l10n-maven-plugin">l10n-maven-plugin</a></td>
+<td>1.0-alpha-2</td></tr>
+<tr class="a">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/license-maven-plugin">license-maven-plugin</a></td>
+<td>1.7</td></tr>
+<tr class="b">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/taglist-maven-plugin">taglist-maven-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="a">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/versions-maven-plugin">versions-maven-plugin</a></td>
+<td>2.1</td></tr>
+<tr class="b">
+<td>org.codehaus.plexus</td>
+<td>plexus-maven-plugin</td>
+<td>1.3.8</td></tr></table></div>
                   </div>
             </div>
           </div>

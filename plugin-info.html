@@ -7,12 +7,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Nicolas de Loof
-Olivier Lamy" />
-    <meta name="Date-Creation-yyyymmdd" content="20101202" />
     <meta name="Date-Revision-yyyymmdd" content="20150701" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Mojo's Maven Plugin for GWT &#x2013; Introduction</title>
+    <title>Mojo's Maven Plugin for GWT &#x2013; Plugin Documentation</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.4.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -55,7 +52,7 @@ Olivier Lamy" />
         Mojo's Maven Plugin for GWT</a>
                     <span class="divider">/</span>
       </li>
-        <li class="active ">Introduction</li>
+        <li class="active ">Plugin Documentation</li>
         
                 
                     
@@ -97,10 +94,12 @@ Olivier Lamy" />
                 <ul class="nav nav-list">
                     <li class="nav-header">User Guide</li>
                               
-      <li class="active">
+      <li>
   
-            <a href="#"><span class="none"></span>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <span class="none"></span>
+        Introduction</a>
+            </li>
                 
       <li>
   
@@ -222,12 +221,10 @@ Olivier Lamy" />
             </li>
                               <li class="nav-header">Reference</li>
                               
-      <li>
+      <li class="active">
   
-                          <a href="plugin-info.html" title="Goals">
-          <span class="none"></span>
-        Goals</a>
-            </li>
+            <a href="#"><span class="none"></span>Goals</a>
+          </li>
                 
       <li>
   
@@ -236,104 +233,97 @@ Olivier Lamy" />
         FAQ</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                      
       <li>
   
                           <a href="project-info.html" title="Project Information">
-          <span class="icon-chevron-down"></span>
+          <span class="icon-chevron-right"></span>
         Project Information</a>
+                  </li>
+                                                                                                                                                                                                                                                                
+      <li>
+  
+                          <a href="project-reports.html" title="Project Reports">
+          <span class="icon-chevron-down"></span>
+        Project Reports</a>
                     <ul class="nav nav-list">
-                    
-      <li>
-  
-                          <a href="integration.html" title="Continuous Integration">
-          <span class="none"></span>
-        Continuous Integration</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependency-info.html" title="Dependency Information">
-          <span class="none"></span>
-        Dependency Information</a>
-            </li>
                     
       <li class="active">
   
-            <a href="#"><span class="none"></span>About</a>
+            <a href="#"><span class="none"></span>Plugin Documentation</a>
           </li>
                     
       <li>
   
-                          <a href="issue-tracking.html" title="Issue Tracking">
+                          <a href="checkstyle.html" title="Checkstyle">
           <span class="none"></span>
-        Issue Tracking</a>
+        Checkstyle</a>
             </li>
                     
       <li>
   
-                          <a href="mail-lists.html" title="Mailing Lists">
+                          <a href="apidocs/index.html" title="JavaDocs">
           <span class="none"></span>
-        Mailing Lists</a>
+        JavaDocs</a>
             </li>
                     
       <li>
   
-                          <a href="team-list.html" title="Project Team">
+                          <a href="testapidocs/index.html" title="Test JavaDocs">
           <span class="none"></span>
-        Project Team</a>
+        Test JavaDocs</a>
             </li>
                     
       <li>
   
-                          <a href="source-repository.html" title="Source Repository">
+                          <a href="xref-test/index.html" title="Test Source Xref">
           <span class="none"></span>
-        Source Repository</a>
+        Test Source Xref</a>
             </li>
                     
       <li>
   
-                          <a href="project-summary.html" title="Project Summary">
+                          <a href="xref/index.html" title="Source Xref">
           <span class="none"></span>
-        Project Summary</a>
+        Source Xref</a>
             </li>
                     
       <li>
   
-                          <a href="dependencies.html" title="Dependencies">
+                          <a href="cpd.html" title="CPD">
           <span class="none"></span>
-        Dependencies</a>
+        CPD</a>
             </li>
                     
       <li>
   
-                          <a href="dependency-management.html" title="Dependency Management">
+                          <a href="pmd.html" title="PMD">
           <span class="none"></span>
-        Dependency Management</a>
+        PMD</a>
             </li>
                     
       <li>
   
-                          <a href="license.html" title="Project License">
+                          <a href="surefire-report.html" title="Surefire Report">
           <span class="none"></span>
-        Project License</a>
+        Surefire Report</a>
             </li>
                     
       <li>
   
-                          <a href="plugin-management.html" title="Plugin Management">
+                          <a href="cobertura/index.html" title="Cobertura Test Coverage">
           <span class="none"></span>
-        Plugin Management</a>
+        Cobertura Test Coverage</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="taglist.html" title="Tag List">
+          <span class="none"></span>
+        Tag List</a>
             </li>
               </ul>
         </li>
-                                                                                                                                                                                                                                                      
-      <li>
-  
-                          <a href="project-reports.html" title="Project Reports">
-          <span class="icon-chevron-right"></span>
-        Project Reports</a>
-                  </li>
             </ul>
                 
                     
@@ -361,33 +351,157 @@ Olivier Lamy" />
                 
         <div id="bodyColumn"  class="span10" >
                                   
-            <!-- Licensed to the Apache Software Foundation (ASF) under one --><!-- or more contributor license agreements.  See the NOTICE file --><!-- distributed with this work for additional information --><!-- regarding copyright ownership.  The ASF licenses this file --><!-- to you under the Apache License, Version 2.0 (the --><!-- "License"); you may not use this file except in compliance --><!-- with the License.  You may obtain a copy of the License at --><!--  --><!-- http://www.apache.org/licenses/LICENSE-2.0 --><!--  --><!-- Unless required by applicable law or agreed to in writing, --><!-- software distributed under the License is distributed on an --><!-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY --><!-- KIND, either express or implied.  See the License for the --><!-- specific language governing permissions and limitations --><!-- under the License. --><!-- NOTE: For help with the syntax of this file, see: --><!-- http://maven.apache.org/doxia/references/apt-format.html --><div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT"></a>Mojo's Maven Plugin for GWT</h2>
-<p>Welcome to Mojo's Maven Plugin for <a class="externalLink" href="http://www.gwtproject.org/">GWT</a> User Guide. This documentation will drive you to setup you GWT web application development using Maven as build tool. This guide covers project organisation and setup, integration with development environment, and running GWT SDK tools from maven command line.</p>
-<p>If you're new to GWT or Maven, you might want to first read the <a class="externalLink" href="http://www.gwtproject.org/doc/latest/DevGuide">GWT documentation</a> and get more familiar with Maven by reading at least its <a class="externalLink" href="http://maven.apache.org/guides/getting-started/index.html">getting started guide</a> or by reading the online <a class="externalLink" href="http://www.sonatype.com/books/mvnref-book/reference/public-book.html">reference book</a>.</p>
-<p><b> This mojo has been developped and tested with the gwt version 2.8.0-SNAPSHOT </b></p>
-<p><b> <a href="./whats_new.html">What's new in 2.8.0-SNAPSHOT ?</a> </b></p></div>
+            <div class="section">
+<h2><a name="Plugin_Documentation"></a>Plugin Documentation</h2><a name="Plugin_Documentation"></a>
+<p>Goals available for this plugin:</p>
+<table border="0" class="table table-striped">
+<tr class="a">
+<th>Goal</th>
+<th>Report?</th>
+<th>Description</th></tr>
+<tr class="b">
+<td><a href="clean-mojo.html">gwt:clean</a></td>
+<td>No</td>
+<td>Cleanup the webapp directory for GWT module compilation output</td></tr>
+<tr class="a">
+<td><a href="compile-mojo.html">gwt:compile</a></td>
+<td>No</td>
+<td>Invokes the GWT Compiler for the project source. See compiler
+options :
+http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions</td></tr>
+<tr class="b">
+<td><a href="compile-report-mojo.html">gwt:compile-report</a></td>
+<td>Yes</td>
+<td>see
+http://code.google.com/webtoolkit/doc/latest/DevGuideCompileReport.html#Usage</td></tr>
+<tr class="a">
+<td><a href="css-mojo.html">gwt:css</a></td>
+<td>No</td>
+<td>Creates CSS interfaces for css files. Will use the utility tool
+provided in gwt sdk which create a corresponding Java interface for
+accessing the classnames used in the file.</td></tr>
+<tr class="b">
+<td><a href="debug-mojo.html">gwt:debug</a></td>
+<td>No</td>
+<td>Runs the project with a debugger port hook (optionally suspended).</td></tr>
+<tr class="a">
+<td><a href="eclipse-mojo.html">gwt:eclipse</a></td>
+<td>No</td>
+<td>Goal which creates Eclipse lauch configurations for GWT modules.</td></tr>
+<tr class="b">
+<td><a href="eclipseTest-mojo.html">gwt:eclipseTest</a></td>
+<td>No</td>
+<td><strong>Deprecated.</strong> use google eclipse plugin
+http://code.google.com/intl/fr-FR/eclipse/docs/users_guide.html</td></tr>
+<tr class="a">
+<td><a href="generateAsync-mojo.html">gwt:generateAsync</a></td>
+<td>No</td>
+<td>Goal which generate Async interface.</td></tr>
+<tr class="b">
+<td><a href="help-mojo.html">gwt:help</a></td>
+<td>No</td>
+<td>Display help information on gwt-maven-plugin.<br />
+Call <code>mvn gwt:help -Ddetail=true
+-Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr>
+<tr class="a">
+<td><a href="i18n-mojo.html">gwt:i18n</a></td>
+<td>No</td>
+<td>Creates I18N interfaces for constants and messages files.</td></tr>
+<tr class="b">
+<td><a href="mergewebxml-mojo.html">gwt:mergewebxml</a></td>
+<td>No</td>
+<td>Merges GWT servlet elements into deployment descriptor (and non GWT
+servlets into shell). 
+<p><b>If you use
+<code>scanRemoteServiceRelativePathAnnotation</code> you must bind
+this mojo to at least compile phase</b> Because the classpath
+scanner need to see compile classes</p></td></tr>
+<tr class="a">
+<td><a href="resources-mojo.html">gwt:resources</a></td>
+<td>No</td>
+<td>Copy GWT java source code and module descriptor as resources in the
+build outputDirectory. Alternative to declaring a &lt;resource&gt;
+in the POM with finer filtering as the module descriptor is read to
+detect sources to be copied.</td></tr>
+<tr class="b">
+<td><a href="run-mojo.html">gwt:run</a></td>
+<td>No</td>
+<td>Runs the project in the GWT (Classic or Super) Dev Mode for
+development.</td></tr>
+<tr class="a">
+<td><a href="run-codeserver-mojo.html">gwt:run-codeserver</a></td>
+<td>No</td>
+<td>Runs GWT modules with Super Dev Mode.</td></tr>
+<tr class="b">
+<td><a href="source-jar-mojo.html">gwt:source-jar</a></td>
+<td>No</td>
+<td>Add GWT java source code and module descriptor as resources to
+project jar. Alternative to gwt:resources for better Eclipse
+projects synchronization.</td></tr>
+<tr class="a">
+<td><a href="test-mojo.html">gwt:test</a></td>
+<td>No</td>
+<td>Mimic surefire to run GWTTestCases during integration-test phase,
+until SUREFIRE-508 is fixed</td></tr></table>
 <div class="section">
-<h2><a name="Mojos_Maven_Plugin_for_GWT_supports:"></a>Mojo's Maven Plugin for GWT supports:</h2>
-<ul>
-<li>GWT compiler execution for packaging your application into a WAR <a href="./user-guide/compile.html">Compile and Debug</a></li>
-<li>generate GWT internationalization (&quot;i18n&quot;) interfaces from bundles <a href="./user-guide/i18n.html">Internationalization</a></li>
-<li>running tests (or test suites) based on GWTTestCase framework as part of Maven build, <a href="./user-guide/testing.html">Testing Support</a></li>
-<li>run (or debug) in DevMode from Maven <a href="./user-guide/hosted.html">DevMode</a></li>
-<li>generate boiler code for GWT-RPC Async interface from synchronous server-side interfaces <a href="./user-guide/async.html">Generate Async interfaces for GWT-RPC</a></li>
-<li>integrate nicelly into Eclipse, thanks to M2Eclipse and the Google Plugin for Eclipse. </li></ul></div>
+<h3><a name="System_Requirements"></a>System Requirements</h3><a name="System_Requirements"></a>
+<p>The following specifies the minimum requirements to run this Maven plugin:</p>
+<table border="0" class="table table-striped">
+<tr class="a">
+<td>Maven</td>
+<td>3</td></tr>
+<tr class="b">
+<td>JDK</td>
+<td>1.6</td></tr>
+<tr class="a">
+<td>Memory</td>
+<td>No minimum requirement.</td></tr>
+<tr class="b">
+<td>Disk Space</td>
+<td>No minimum requirement.</td></tr></table></div>
 <div class="section">
-<h2><a name="TIPS"></a>TIPS</h2>
-<ul>
-<li><a href="./user-guide/archetype.html">Using the archetype</a></li>
-<li><a href="./user-guide/project.html">Organize project</a></li>
-<li><a href="./plugin-info.html">Goals and Parameters Reference</a></li>
-<li><a href="./faq.html">Frequently Asked Questions</a> </li></ul></div>
-<div class="section">
-<h2><a name="WANT_TO_CONTRIBUTE_"></a>WANT TO CONTRIBUTE ?</h2>
-<p>We are big fans of the <a class="externalLink" href="http://jenkins-ci.org/">Jenkins</a> community model, and want to apply it to lower the contribution barrier. Code is hosted on <a class="externalLink" href="https://github.com/gwt-maven-plugin/gwt-maven-plugin">GitHub</a>: fork it, improve it, and send pull requests. Just please log what you're working for in <a class="externalLink" href="http://jira.codehaus.org/browse/MGWT">JIRA</a> and use the JIRA ID as a prefix for your commits. If you feel comfortable with the code, just ask for commit permission to apply changes by yourself.</p>
-<p><tt></tt></p>
-<p>Development builds are tested on next GWT SDK milestones on <a class="externalLink" href="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/">BuildHive</a> </p><img src="https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/badge/icon" alt="" /></div>
+<h3><a name="Usage"></a>Usage</h3><a name="Usage"></a>
+<p>You should specify the version in your project's plugin configuration:</p>
+<div class="source"><pre class="prettyprint">&lt;project&gt;
+  ...
+  &lt;build&gt;
+    &lt;!-- To define the plugin version in your parent POM --&gt;
+    &lt;pluginManagement&gt;
+      &lt;plugins&gt;
+        &lt;plugin&gt;
+          &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+          &lt;artifactId&gt;gwt-maven-plugin&lt;/artifactId&gt;
+          &lt;version&gt;2.8.0-SNAPSHOT&lt;/version&gt;
+        &lt;/plugin&gt;
+        ...
+      &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+    &lt;!-- To use the plugin goals in your POM or parent POM --&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+        &lt;artifactId&gt;gwt-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.8.0-SNAPSHOT&lt;/version&gt;
+      &lt;/plugin&gt;
+      ...
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  ...
+  &lt;!-- To use the report goals in your POM or parent POM --&gt;
+  &lt;reporting&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+        &lt;artifactId&gt;gwt-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.8.0-SNAPSHOT&lt;/version&gt;
+      &lt;/plugin&gt;
+      ...
+    &lt;/plugins&gt;
+  &lt;/reporting&gt;
+  ...
+&lt;/project&gt;
+</pre></div>
+<p>For more information, see <a class="externalLink" href="http://maven.apache.org/guides/mini/guide-configuring-plugins.html">&quot;Guide to Configuring Plug-ins&quot;</a></p></div></div>
                   </div>
             </div>
           </div>
