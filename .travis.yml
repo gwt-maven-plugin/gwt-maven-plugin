@@ -5,7 +5,7 @@ jdk:
   - openjdk7
   - oraclejdk8
 
-install: mvn -U install clean --fail-never --quiet -DskipTests
+install: mvn -U verify clean --fail-never --quiet -DskipTests -Dinvoker.skip
 
 script:  mvn -U verify --fail-at-end
 
