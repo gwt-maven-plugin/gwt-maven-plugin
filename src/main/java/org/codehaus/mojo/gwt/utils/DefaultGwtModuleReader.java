@@ -29,11 +29,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
+import org.codehaus.mojo.gwt.AbstractGwtMojo;
 import org.codehaus.mojo.gwt.ClasspathBuilder;
 import org.codehaus.mojo.gwt.ClasspathBuilderException;
 import org.codehaus.mojo.gwt.GwtModule;
@@ -148,7 +147,7 @@ public class DefaultGwtModuleReader
 
         try
         {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
+            Collection<File> classpath = getClasspath( AbstractGwtMojo.SCOPE_COMPILE );
             URL[] urls = new URL[classpath.size()];
             int i = 0;
             for ( File file : classpath )

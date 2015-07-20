@@ -147,18 +147,16 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.addToClasspath( getGwtUserJar() )
-                .addToClasspath( getGwtDevJar() );
+            cmd.addToClasspath(getAdditionalJars());
         }
 
-        cmd.addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) );
+        cmd.addToClasspath( getClasspath( SCOPE_COMPILE ) );
         addCompileSourceArtifacts( cmd );
         addPersistentUnitCache(cmd);
 
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.addToClasspath( getGwtUserJar() )
-                .addToClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getAdditionalJars() );
         }
 
         cmd.arg( "-logLevel", getLogLevel() );

@@ -26,11 +26,8 @@ import static org.apache.maven.artifact.Artifact.SCOPE_SYSTEM;
 import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
@@ -49,6 +46,8 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 public class ClasspathBuilder
     extends AbstractLogEnabled
 {
+
+    private static final Pattern scopePattern = Pattern.compile("\\+");
 
     /**
      * Build classpath list using either gwtHome (if present) or using *project* dependencies. Note that this is ONLY
@@ -82,55 +81,50 @@ public class ClasspathBuilder
         }
         addSources( items, project.getCompileSourceRoots() );
         if ( isGenerator ) {
-        	addResources( items, project.getResources() );
+            addResources( items, project.getResources() );
         }
-        // Use our own ClasspathElements fitering, as for RUNTIME we need to include PROVIDED artifacts,
+        // Use our own ClasspathElements filtering, as for RUNTIME we need to include PROVIDED artifacts,
         // that is not the default Maven policy, as RUNTIME is used here to build the GWTShell execution classpath
 
-        if ( scope.equals( SCOPE_TEST ) )
-        {
+        String[] scopeList =  scopePattern.split(scope);
+        if(Arrays.asList(scopeList).contains(SCOPE_TEST)) {
             addSources( items, project.getTestCompileSourceRoots() );
             addResources( items, project.getTestResources() );
             items.add( new File( project.getBuild().getTestOutputDirectory() ) );
-
-            // Add all project dependencies in classpath
-            for ( Artifact artifact : artifacts )
-            {
-                items.add( artifact.getFile() );
-            }
         }
-        else if ( scope.equals( SCOPE_COMPILE ) )
+
+        for ( Artifact artifact : filteredArtifacts(artifacts, scope) )
         {
-            // Add all project dependencies in classpath
-            getLogger().debug( "candidate artifacts : " + artifacts.size() );
+            items.add(artifact.getFile());
+        }
+
+        return items;
+    }
+
+    public Set<Artifact> filteredArtifacts(Set<Artifact> artifacts, String scope) throws ClasspathBuilderException {
+        Set<Artifact> filteredArtifacts = new LinkedHashSet<Artifact>();
+        String[] scopeList =  scopePattern.split(scope);
+
+        getLogger().debug( "candidate artifacts : " + artifacts.size() );
+        for ( String s : scopeList )
+        {
             for ( Artifact artifact : artifacts )
             {
                 String artifactScope = artifact.getScope();
-                if ( SCOPE_COMPILE.equals( artifactScope ) || SCOPE_PROVIDED.equals( artifactScope )
-                    || SCOPE_SYSTEM.equals( artifactScope ) )
+                if ( s.equals( artifactScope ) )
                 {
-                    items.add( artifact.getFile() );
+                    if( s.equals(SCOPE_RUNTIME) )
+                    {
+                        if( !artifact.getArtifactHandler().isAddedToClasspath() )
+                        {
+                            continue;
+                        }
+                    }
+                    filteredArtifacts.add(artifact);
                 }
             }
         }
-        else if ( scope.equals( SCOPE_RUNTIME ) )
-        {
-            // Add all dependencies BUT "TEST" as we need PROVIDED ones to setup the execution
-            // GWTShell that is NOT a full JEE server
-            for ( Artifact artifact : artifacts )
-            {
-                getLogger().debug( "candidate artifact : " + artifact );
-                if ( !artifact.getScope().equals( SCOPE_TEST ) && artifact.getArtifactHandler().isAddedToClasspath() )
-                {
-                    items.add( artifact.getFile() );
-                }
-            }
-        }
-        else
-        {
-            throw new ClasspathBuilderException( "unsupported scope " + scope );
-        }
-        return items;
+        return filteredArtifacts;
     }
 
     /**

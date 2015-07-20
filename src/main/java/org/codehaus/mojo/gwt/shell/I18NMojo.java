@@ -98,9 +98,8 @@ public class I18NMojo
                     ensureTargetPackageExists( getGenerateDirectory(), target );
                     createJavaCommand()
                         .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
-                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
-                        .addToClasspath( getGwtUserJar() )
-                        .addToClasspath( getGwtDevJar() )
+                        .addToClasspath( getClasspath( SCOPE_COMPILE ) )
+                        .addToClasspath( getAdditionalJars() )
                         .arg( "-out", getGenerateDirectory().getAbsolutePath() )
                         .arg( "-createConstantsWithLookup" )
                         .arg( target )
@@ -116,9 +115,8 @@ public class I18NMojo
                     ensureTargetPackageExists( getGenerateDirectory(), target );
                     createJavaCommand()
                         .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
-                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
-                        .addToClasspath( getGwtUserJar() )
-                        .addToClasspath( getGwtDevJar() )
+                        .addToClasspath( getClasspath( SCOPE_COMPILE ) )
+                        .addToClasspath( getAdditionalJars() )
                         .arg( "-out", getGenerateDirectory().getAbsolutePath() )
                         .arg( target )
                         .execute();
@@ -133,9 +131,8 @@ public class I18NMojo
                     ensureTargetPackageExists( getGenerateDirectory(), target );
                     createJavaCommand()
                         .setMainClass( "com.google.gwt.i18n.tools.I18NSync" )
-                        .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
-                        .addToClasspath( getGwtUserJar() )
-                        .addToClasspath( getGwtDevJar() )
+                        .addToClasspath( getClasspath( SCOPE_COMPILE ) )
+                        .addToClasspath( getAdditionalJars() )
                         .arg( "-out", getGenerateDirectory().getAbsolutePath() )
                         .arg( "-createMessages" )
                         .arg( target )

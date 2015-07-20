@@ -399,17 +399,15 @@ public class CompileMojo
             .setMainClass( "com.google.gwt.dev.Compiler" );
         if ( gwtSdkFirstInClasspath )
         {
-            cmd.addToClasspath( getGwtUserJar() )
-               .addToClasspath( getGwtDevJar() );
+            cmd.addToClasspath( getAdditionalJars() );
         }
-        cmd.addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) );
+        cmd.addToClasspath( getClasspath( SCOPE_COMPILE) );
         if ( !gwtSdkFirstInClasspath )
         {
-            cmd.addToClasspath( getGwtUserJar() )
-               .addToClasspath( getGwtDevJar() );
+            cmd.addToClasspath(getAdditionalJars());
         }
 
-        cmd.arg( "-logLevel", getLogLevel() )
+        cmd.arg("-logLevel", getLogLevel() )
             .arg( "-style", getStyle() )
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )

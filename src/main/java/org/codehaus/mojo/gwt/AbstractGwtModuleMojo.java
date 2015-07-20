@@ -174,7 +174,7 @@ public abstract class AbstractGwtModuleMojo
 
         try
         {
-            Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
+            Collection<File> classpath = getClasspath( SCOPE_COMPILE );
             URL[] urls = new URL[classpath.size()];
             int i = 0;
             for ( File file : classpath )
