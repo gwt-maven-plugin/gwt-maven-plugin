@@ -64,6 +64,9 @@ public final class JarFileScanner extends AbstractScanner
 
         try
         {
+            setupDefaultFilters();
+            setupMatchPatterns();
+
             scanJarFileEntries();
         }
         catch ( IOException e )
