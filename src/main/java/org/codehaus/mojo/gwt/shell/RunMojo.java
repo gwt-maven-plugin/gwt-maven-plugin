@@ -259,6 +259,14 @@ public class RunMojo
     private boolean incremental;
 
     /**
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @since 2.7.0-rc1
@@ -345,6 +353,7 @@ public class RunMojo
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
             .arg( !superDevMode, "-nosuperDevMode" )
             .arg( !incremental, "-noincremental" )
+            .arg( generateJsInteropExports, "-generateJsInteropExports" )
             .arg( "-sourceLevel", sourceLevel );
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )

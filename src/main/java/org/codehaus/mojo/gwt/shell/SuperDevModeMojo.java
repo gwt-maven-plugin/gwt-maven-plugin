@@ -107,6 +107,14 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private boolean incremental;
 
     /**
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @since 2.7.0-rc1
@@ -167,6 +175,7 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         cmd.arg( "-sourceLevel", sourceLevel );
         cmd.arg( failOnError, "-failOnError" );
         cmd.arg( !incremental, "-noincremental" );
+        cmd.arg( generateJsInteropExports, "-generateJsInteropExports" );
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
         {

@@ -268,6 +268,14 @@ public class CompileMojo
     private boolean optimizeDataflow;
 
     /**
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
      * EXPERIMENTAL: Ordinalize enums to reduce some large strings.
      *
      * @since 2.6.0-rc1
@@ -436,6 +444,7 @@ public class CompileMojo
             .arg( "-sourceLevel", sourceLevel )
             .arg( enableJsonSoyc, "-XenableJsonSoyc" )
             .arg( incremental, "-incremental" )
+            .arg( generateJsInteropExports, "-generateJsInteropExports" )
         ;
 
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )

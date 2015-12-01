@@ -374,6 +374,14 @@ public class TestMojo
     private boolean incremental;
 
     /**
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
      * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
      * 
      * @since 2.7.0-rc1
@@ -494,6 +502,7 @@ public class TestMojo
         sb.append( " -testMethodTimeout ").append( testMethodTimeout );
         sb.append( " -Xtries " ).append( tries );
         sb.append( incremental ? " -incremental" : " -noincremental" );
+        sb.append( generateJsInteropExports ? " -generateJsInteropExports" : " -nogenerateJsInteropExports" );
 
         if ( optimizationLevel >= 0 )
         {
