@@ -72,15 +72,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private boolean precompile;
 
     /**
-     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public"
-     * for modules that don't define any dependencies.
-     * 
-     * @since 2.6.0-rc1
-     */
-    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
-    private boolean enforceStrictResources;
-
-    /**
      * Specifies Java source level.
      *
      * @since 2.6.0-rc1
@@ -171,7 +162,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         cmd.arg( "-logLevel", getLogLevel() );
         cmd.arg( !precompile, "-noprecompile" );
-        cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
         cmd.arg( failOnError, "-failOnError" );
         cmd.arg( !incremental, "-noincremental" );

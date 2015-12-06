@@ -242,15 +242,6 @@ public class CompileMojo
     private boolean clusterFunctions;
 
     /**
-     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public" for
-     * modules that don't define any dependencies.
-     *
-     * @since 2.6.0-rc1
-     */
-    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
-    private boolean enforceStrictResources;
-
-    /**
      * EXPERIMENTAL: Inline literal parameters to shrink function declarations and
      * provide more deadcode elimination possibilities.
      *
@@ -435,7 +426,6 @@ public class CompileMojo
             .arg( compilerMetrics, "-XcompilerMetrics" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
             .arg( !clusterFunctions, "-XnoclusterFunctions" )
-            .arg( enforceStrictResources, "-XenforceStrictResources" )
             .arg( !inlineLiteralParameters, "-XnoinlineLiteralParameters" )
             .arg( !optimizeDataflow, "-XnooptimizeDataflow" )
             .arg( !ordinalizeEnums, "-XnoordinalizeEnums" )
