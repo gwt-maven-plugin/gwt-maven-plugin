@@ -267,11 +267,11 @@ public class RunMojo
     private boolean generateJsInteropExports;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /**
@@ -356,7 +356,7 @@ public class RunMojo
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
             .arg( "-sourceLevel", sourceLevel );
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }

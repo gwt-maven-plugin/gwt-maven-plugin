@@ -382,11 +382,11 @@ public class TestMojo
     private boolean generateJsInteropExports;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /** failures counter */
@@ -525,7 +525,7 @@ public class TestMojo
         {
             sb.append( " -Xnamespace " ).append( quote( namespace ) );
         }
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             sb.append( " -XjsInteropMode " ).append( quote( jsInteropMode ) );
         }

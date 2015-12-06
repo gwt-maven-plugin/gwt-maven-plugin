@@ -311,11 +311,11 @@ public class CompileMojo
     private String sourceLevel;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /**
@@ -437,7 +437,7 @@ public class CompileMojo
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
         ;
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }
