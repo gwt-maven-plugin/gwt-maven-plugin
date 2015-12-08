@@ -259,11 +259,19 @@ public class RunMojo
     private boolean incremental;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /**
@@ -345,9 +353,10 @@ public class RunMojo
             .arg( !cacheGeneratorResults, "-XnocacheGeneratorResults" )
             .arg( !superDevMode, "-nosuperDevMode" )
             .arg( !incremental, "-noincremental" )
+            .arg( generateJsInteropExports, "-generateJsInteropExports" )
             .arg( "-sourceLevel", sourceLevel );
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }

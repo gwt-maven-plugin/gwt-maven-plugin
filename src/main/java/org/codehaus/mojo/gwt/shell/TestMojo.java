@@ -374,11 +374,19 @@ public class TestMojo
     private boolean incremental;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /** failures counter */
@@ -494,6 +502,7 @@ public class TestMojo
         sb.append( " -testMethodTimeout ").append( testMethodTimeout );
         sb.append( " -Xtries " ).append( tries );
         sb.append( incremental ? " -incremental" : " -noincremental" );
+        sb.append( generateJsInteropExports ? " -generateJsInteropExports" : " -nogenerateJsInteropExports" );
 
         if ( optimizationLevel >= 0 )
         {
@@ -516,7 +525,7 @@ public class TestMojo
         {
             sb.append( " -Xnamespace " ).append( quote( namespace ) );
         }
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             sb.append( " -XjsInteropMode " ).append( quote( jsInteropMode ) );
         }

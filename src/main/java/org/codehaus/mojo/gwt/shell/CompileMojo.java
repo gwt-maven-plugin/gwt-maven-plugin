@@ -242,15 +242,6 @@ public class CompileMojo
     private boolean clusterFunctions;
 
     /**
-     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public" for
-     * modules that don't define any dependencies.
-     *
-     * @since 2.6.0-rc1
-     */
-    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
-    private boolean enforceStrictResources;
-
-    /**
      * EXPERIMENTAL: Inline literal parameters to shrink function declarations and
      * provide more deadcode elimination possibilities.
      *
@@ -266,6 +257,14 @@ public class CompileMojo
      */
     @Parameter(defaultValue = "true", property = "gwt.compiler.optimizeDataflow")
     private boolean optimizeDataflow;
+
+    /**
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
 
     /**
      * EXPERIMENTAL: Ordinalize enums to reduce some large strings.
@@ -312,11 +311,11 @@ public class CompileMojo
     private String sourceLevel;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /**
@@ -427,7 +426,6 @@ public class CompileMojo
             .arg( compilerMetrics, "-XcompilerMetrics" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )
             .arg( !clusterFunctions, "-XnoclusterFunctions" )
-            .arg( enforceStrictResources, "-XenforceStrictResources" )
             .arg( !inlineLiteralParameters, "-XnoinlineLiteralParameters" )
             .arg( !optimizeDataflow, "-XnooptimizeDataflow" )
             .arg( !ordinalizeEnums, "-XnoordinalizeEnums" )
@@ -436,9 +434,10 @@ public class CompileMojo
             .arg( "-sourceLevel", sourceLevel )
             .arg( enableJsonSoyc, "-XenableJsonSoyc" )
             .arg( incremental, "-incremental" )
+            .arg( generateJsInteropExports, "-generateJsInteropExports" )
         ;
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }

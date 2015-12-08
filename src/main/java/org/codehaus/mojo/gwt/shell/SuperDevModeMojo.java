@@ -72,15 +72,6 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private boolean precompile;
 
     /**
-     * EXPERIMENTAL: Avoid adding implicit dependencies on "client" and "public"
-     * for modules that don't define any dependencies.
-     * 
-     * @since 2.6.0-rc1
-     */
-    @Parameter(defaultValue = "false", property = "gwt.compiler.enforceStrictResources")
-    private boolean enforceStrictResources;
-
-    /**
      * Specifies Java source level.
      *
      * @since 2.6.0-rc1
@@ -107,11 +98,19 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
     private boolean incremental;
 
     /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either NONE, JS, or CLOSURE.
+     * Enable the generation of JsInterop exports
+     *
+     * @since 2.8.0-rc1
+     */
+    @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
+    private boolean generateJsInteropExports;
+
+    /**
+     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
      * 
      * @since 2.7.0-rc1
      */
-    @Parameter(defaultValue = "NONE")
+    @Parameter(defaultValue = "JS_RC")
     private String jsInteropMode;
 
     /**
@@ -163,12 +162,12 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
 
         cmd.arg( "-logLevel", getLogLevel() );
         cmd.arg( !precompile, "-noprecompile" );
-        cmd.arg( enforceStrictResources, "-XenforceStrictResources" );
         cmd.arg( "-sourceLevel", sourceLevel );
         cmd.arg( failOnError, "-failOnError" );
         cmd.arg( !incremental, "-noincremental" );
+        cmd.arg( generateJsInteropExports, "-generateJsInteropExports" );
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "NONE" ) )
+        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             cmd.arg( "-XjsInteropMode", jsInteropMode );
         }

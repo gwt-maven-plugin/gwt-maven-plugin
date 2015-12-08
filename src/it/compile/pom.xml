@@ -57,7 +57,6 @@
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
           <clusterFunctions>false</clusterFunctions>
-          <enforceStrictResources>true</enforceStrictResources>
           <inlineLiteralParameters>false</inlineLiteralParameters>
           <optimizeDataflow>false</optimizeDataflow>
           <ordinalizeEnums>false</ordinalizeEnums>
