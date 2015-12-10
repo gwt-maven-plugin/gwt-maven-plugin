@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mojohaus.org/gwt-maven-plugin</link>
     <description>Mojo's Maven Plugin for GWT - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2007 - 2015 Codehaus</copyright>
+    <copyright>&#169;2007 - 2015 MojoHaus</copyright>
     <item>
       <title>File: 44,
-             Errors: 698,
-             Warnings: 157,
+             Errors: 697,
+             Warnings: 154,
              Infos: 7
       </title>
             <link>http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html</link>
@@ -66,7 +66,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  3
                 </td>
                 <td>
                   1
@@ -332,7 +332,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   20
@@ -405,7 +405,7 @@ under the License.
                   4
                 </td>
                 <td>
-                  14
+                  13
                 </td>
               </tr>
                           <tr>
