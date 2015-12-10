@@ -37,6 +37,7 @@
           <draftCompile>true</draftCompile>
           <optimizationLevel>1</optimizationLevel>          
           <mode>htmlunit</mode>
+          <productionMode>true</productionMode>
         </configuration>
         <executions>
           <execution>
