@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>34</version>
+    <version>38</version>
   </parent>
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.8.0-SNAPSHOT</version>
@@ -104,8 +104,8 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:git:git@github.com:gwt-maven-plugin/gwt-maven-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:gwt-maven-plugin/gwt-maven-plugin.git</developerConnection>
+    <connection>scm:git:https://github.com/gwt-maven-plugin/gwt-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</developerConnection>
     <url>https://github.com/gwt-maven-plugin/gwt-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
