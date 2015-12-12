@@ -17,6 +17,7 @@ matrix:
   fast_finish: true
 
 after_success:
+  - ci/deploy-snapshot.sh
   - ci/deploy-site.sh
 
 sudo: false
