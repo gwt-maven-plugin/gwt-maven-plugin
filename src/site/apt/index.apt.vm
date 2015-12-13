@@ -79,10 +79,8 @@ WANT TO CONTRIBUTE ?
   Just please log what you're working for in {{{http://jira.codehaus.org/browse/MGWT}JIRA}} and use the JIRA ID as a prefix for 
   your commits. If you feel comfortable with the code, just ask for commit permission to apply changes by yourself.
 
+  Development builds are tested on next GWT SDK milestones on
+  {{{https://travis-ci.org/gwt-maven-plugin/gwt-maven-plugin/}Travis CI}}
 
-  <<<>>>
+[https://travis-ci.org/gwt-maven-plugin/gwt-maven-plugin.svg]
 
-  Development builds are tested on next GWT SDK milestones on 
-  {{{https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/}BuildHive}} 
-
-[https://buildhive.cloudbees.com/job/gwt-maven-plugin/job/gwt-maven-plugin/badge/icon]
