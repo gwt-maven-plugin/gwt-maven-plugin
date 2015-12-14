@@ -21,6 +21,18 @@ under the License.
 
 <project xmlns="http://maven.apache.org/DECORATION/1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd">
+    <custom>
+      <fluidoSkin>
+        <googleSearch>
+          <sitesearch>gwt-maven-plugin.github.io/${project.artifactId}/</sitesearch>
+        </googleSearch>
+        <gitHub>
+          <projectId>gwt-maven-plugin/${project.artifactId}</projectId>
+          <ribbonOrientation>right</ribbonOrientation>
+          <ribbonColor>gray</ribbonColor>
+        </gitHub>
+      </fluidoSkin>
+    </custom>
     <bannerLeft>
       <name>Mojo</name>
       <src>images/mojo_logo.png</src>
@@ -29,7 +41,7 @@ under the License.
     <bannerRight>
       <name>Github</name>
       <src>images/gwt-maven-logo.png</src>
-      <href>http://github.com/gwt-maven-plugin/gwt-maven-plugin</href>
+      <href>http://www.gwtproject.org</href>
     </bannerRight>
     <body>
     <links>

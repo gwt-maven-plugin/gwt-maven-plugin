@@ -13,5 +13,5 @@ if [ "$TRAVIS_REPO_SLUG" == "gwt-maven-plugin/gwt-maven-plugin" ] && \
   git config --global user.email "gwt-maven-plugin@travis-ci.org"
   git config --global user.name "GWT Maven Plugin at Travis CI"
 
-  mvn -s ci/settings.xml site site:stage-deploy
+  mvn -s ci/settings.xml -DrelativizeDecorationLinks=false site site:stage-deploy
 fi
