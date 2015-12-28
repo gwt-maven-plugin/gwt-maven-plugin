@@ -465,7 +465,7 @@ public class TestMojo
 
                 cmd.arg( test );
                 cmd.systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() );
-                cmd.systemProperty( "gwt.args", getGwtArgs() );
+                cmd.systemProperty( "gwt.args", StringUtils.escape(getGwtArgs()) );
 
                 cmd.execute();
             }
