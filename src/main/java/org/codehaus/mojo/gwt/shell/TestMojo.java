@@ -502,7 +502,6 @@ public class TestMojo
         sb.append( " -testMethodTimeout ").append( testMethodTimeout );
         sb.append( " -Xtries " ).append( tries );
         sb.append( incremental ? " -incremental" : " -noincremental" );
-        sb.append( generateJsInteropExports ? " -generateJsInteropExports" : " -nogenerateJsInteropExports" );
 
         if ( optimizationLevel >= 0 )
         {
@@ -528,6 +527,10 @@ public class TestMojo
         if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
         {
             sb.append( " -XjsInteropMode " ).append( quote( jsInteropMode ) );
+        }
+        if ( generateJsInteropExports )
+        {
+            sb.append( " -generateJsInteropExports" );
         }
 
         if ( mode.equalsIgnoreCase( "manual" ) )
