@@ -30,6 +30,7 @@ assert new File(basedir, 'target/deploy').exists();
 assert new File(basedir, 'target/deploy/hello/symbolMaps').exists();
 assert new File(basedir, 'target/persistentunitcache').exists();
 // assert new File(basedir, 'target/savedSources').exists();
+assert new File(basedir, 'target/missingDeps').exists();
 
 assert !new File(basedir, 'target/.generated').exists();
 
@@ -38,19 +39,23 @@ assert new File(basedir, 'build.log').exists();
 content = new File(basedir, 'build.log').text;
 assert content.contains( '-draftCompile' );
 assert content.contains( '-failOnError' );
-assert content.contains( "'-optimize' '1'" );
+assert content.contains( "'-optimize' '1'" ) || content.contains("-optimize 1");
 assert content.contains( '-Dgwt.persistentunitcache=true' );
 assert content.contains( '-XclosureCompiler' );
+assert content.contains( '-XnoaggressiveOptimizations' );
 assert content.contains( '-XcompilerMetrics' );
-assert content.contains( "'-XfragmentCount' '2'" );
+assert content.contains( "'-XfragmentCount' '2'" ) || content.contains("-XfragmentCount 2");
 assert content.contains( '-XnoclusterFunctions' );
+assert content.contains( '-XenforceStrictResources' );
 assert content.contains( '-XnoinlineLiteralParameters' );
 assert content.contains( '-XnooptimizeDataflow' );
 assert content.contains( '-XnoordinalizeEnums' );
 assert content.contains( '-XnoremoveDuplicateFunctions' );
-assert content.contains( "'-sourceLevel' 'auto'" );
-assert content.contains( "'-XjsInteropMode' 'JS'" );
-assert content.contains( "'-Xnamespace' 'NONE'" );
-assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" );
+assert content.contains( "'-sourceLevel' 'auto'" ) || content.contains("-sourceLevel auto");
+assert content.contains( '-incrementalCompileWarnings' );
+assert content.contains( "'-XjsInteropMode' 'JS'" ) || content.contains("-XjsInteropMode JS");
+assert content.contains( "'-Xnamespace' 'NONE'" ) || content.contains("-Xnamespace NONE");
+assert content.contains( '-overlappingSourceWarnings' );
+assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" ) || content.contains("-XmethodNameDisplayMode FULL");
   
 return true;

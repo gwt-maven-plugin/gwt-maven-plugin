@@ -46,6 +46,9 @@ import java.util.List;
 public abstract class AbstractGwtShellMojo
     extends AbstractGwtModuleMojo
 {
+    @Parameter(defaultValue = "${plugin.version}")
+    private String version;
+
     /**
      * Location on filesystem where GWT will write generated content for review (-gen option to GWT Compiler).
      * <p>
@@ -249,6 +252,9 @@ public abstract class AbstractGwtShellMojo
             .setJvm( getJvm() )
             .setJvmArgs( getJvmArgs() )
             .setTimeOut( timeOut )
+            .setArtifactFactory( artifactFactory )
+            .setLocalRepository( localRepository )
+            .setVersion( version )
             .addClassPathProcessors( new ClassPathProcessor()
             {
                 @Override

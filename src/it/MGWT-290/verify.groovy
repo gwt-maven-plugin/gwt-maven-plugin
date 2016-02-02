@@ -46,11 +46,11 @@ assert new File(basedir, 'build.log').exists();
 content = new File(basedir, 'build.log').text;
 assert content.contains( '-draftCompile' );
 assert content.contains( '-failOnError' );
-assert content.contains( "'-optimize' '1'" );
+assert content.contains( "'-optimize' '1'" ) || content.contains("-optimize 1");
 assert content.contains( '-Dgwt.persistentunitcache=true' );
 assert content.contains( '-XclosureCompiler' );
 assert content.contains( '-XcompilerMetrics' );
-assert content.contains( "'-XfragmentCount' '2'" );
+assert content.contains( "'-XfragmentCount' '2'" ) || content.contains("-XfragmentCount 2");
   
 return true;
 
