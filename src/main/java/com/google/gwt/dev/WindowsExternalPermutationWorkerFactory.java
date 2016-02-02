@@ -19,31 +19,17 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.dev.jjs.PermutationResult;
 import com.google.gwt.dev.jjs.UnifiedAst;
-import com.google.gwt.dev.util.FileBackedObject;
+import com.google.gwt.dev.util.PersistenceBackedObject;
 import com.google.gwt.dev.util.Util;
 import com.google.gwt.util.tools.shared.StringUtils;
 import org.codehaus.mojo.gwt.shell.WindowsCommandLineLauncher;
 
-import java.io.BufferedReader;
-import java.io.EOFException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A PermutationWorkerFactory designed to launch instances of
@@ -131,8 +117,9 @@ public class WindowsExternalPermutationWorkerFactory
             this.serverSocket = sock;
         }
 
-        public void compile( TreeLogger logger, Permutation permutation,
-                             FileBackedObject<PermutationResult> resultFile )
+        @Override
+        public void compile( TreeLogger logger, CompilerContext compilerContext,
+                             Permutation permutation, PersistenceBackedObject<PermutationResult> resultFile )
             throws TransientWorkerException, UnableToCompleteException
         {
 
