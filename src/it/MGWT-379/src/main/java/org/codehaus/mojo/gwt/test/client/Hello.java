@@ -16,9 +16,6 @@
 
 package org.codehaus.mojo.gwt.test.client;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.RootPanel;
