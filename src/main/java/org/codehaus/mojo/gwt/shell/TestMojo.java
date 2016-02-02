@@ -418,7 +418,7 @@ public class TestMojo
             }
             else
             {
-                throw new MojoExecutionException( "There was test failures." );
+                throw new MojoExecutionException( "There were test failures." );
             }
         }
     }
