@@ -117,6 +117,12 @@
     <system>travis-ci</system>
     <url>https://travis-ci.org/gwt-maven-plugin/gwt-maven-plugin/</url>
   </ciManagement>
+  <distributionManagement>
+	<repository>
+		<id>syndatis</id>
+		<url>http://192.168.11.13:8080/nexus/content/repositories/releases</url>
+	</repository>
+</distributionManagement>
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -384,7 +390,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>linkcheck</id>
       <reporting>
@@ -546,7 +552,7 @@
       </snapshots>
     </repository>
   </repositories>
-  
+
   <pluginRepositories>
     <pluginRepository>
       <id>apache.snapshots</id>

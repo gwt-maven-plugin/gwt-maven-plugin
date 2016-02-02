@@ -24,6 +24,6 @@ assert new File(basedir, 'target/hello/hello/hello.nocache.js').exists();
 content = new File(basedir, 'build.log').text;
 assert content.contains('BUILD SUCCESS');
 assert !content.contains('BUILD FAILURE');
-assert !content.contains('ERROR');
+assert !content.contains('[ERROR]');
 
 return true;
