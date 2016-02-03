@@ -44,7 +44,6 @@ assert content.contains( '-XclosureCompiler' );
 assert content.contains( '-XcompilerMetrics' );
 assert content.contains( '-XfragmentCount 2' );
 assert content.contains( '-XnoclusterFunctions' );
-assert content.contains( '-XenforceStrictResources' );
 assert content.contains( '-XnoinlineLiteralParameters' );
 assert content.contains( '-XnooptimizeDataflow' );
 assert content.contains( '-XnoordinalizeEnums' );
