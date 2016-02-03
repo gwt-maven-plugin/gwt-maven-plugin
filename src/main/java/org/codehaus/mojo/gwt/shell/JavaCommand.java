@@ -19,6 +19,7 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -29,9 +30,7 @@ import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -380,7 +379,7 @@ public class JavaCommand
     {
         //Write classpath to temporary file
         final File classPathFile = FileUtils.createTempFile( "gwt-maven-plugin", "classpath", null );
-        classPathFile.deleteOnExit();
+        //classPathFile.deleteOnExit();
 
         PrintWriter writer = null;
         try
@@ -436,6 +435,14 @@ public class JavaCommand
         command.add( classPathFile.getAbsolutePath() );
         command.add( mainClass );
         command.addAll( args );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            IOUtils.copy(new FileInputStream(classPathFile), baos);
+            log.info("Windows class path written to file is: " + baos.toString());
+        } catch (IOException e) {
+            log.error("Unable to open Windows class path file.");
+        }
         return command;
     }
 

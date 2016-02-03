@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -48,9 +49,8 @@ public class WindowsCommandLineLauncher
 {
 
     public static void main( String[] args )
-        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException,
-        IOException, InstantiationException
-    {
+            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException,
+            IOException, InstantiationException, NoSuchFieldException {
 
         //Extract arguments
         final String classPathFileName = args[0];
@@ -105,8 +105,15 @@ public class WindowsCommandLineLauncher
 
         //Invoke real class's main method
         Thread.currentThread().setContextClassLoader( loader );
+
         final Class mainMethodArgumentsType = String[].class;
         final Method mainMethod = mainClass.getMethod( "main", new Class[]{ mainMethodArgumentsType } );
+
+        // this is SO UGLY...
+        Field scl = ClassLoader.class.getDeclaredField("scl");
+        scl.setAccessible(true);
+        scl.set(null, loader); // needed due to the possible Xerces conflicts as GWT uses system classloader to load these
+
         mainMethod.invoke( null, new Object[]{ additionalArguments } );
     }
 
