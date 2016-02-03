@@ -23,7 +23,7 @@ under the License.
     <link>http://www.mojohaus.org/gwt-maven-plugin</link>
     <description>Mojo's Maven Plugin for GWT - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2007 - 2015 MojoHaus</copyright>
+    <copyright>&#169;2007 - 2016 MojoHaus</copyright>
     <item>
       <title>File: 44,
              Errors: 699,
