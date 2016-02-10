@@ -26,7 +26,7 @@ under the License.
     <copyright>&#169;2007 - 2016 MojoHaus</copyright>
     <item>
       <title>File: 44,
-             Errors: 699,
+             Errors: 697,
              Warnings: 154,
              Infos: 7
       </title>
@@ -46,7 +46,35 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ExitException.java">org/codehaus/mojo/gwt/webxml/ExitException.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.AbstractGwtMojo.java">org/codehaus/mojo/gwt/AbstractGwtMojo.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  11
+                </td>
+                <td>
+                  45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.ClasspathBuilderException.java">org/codehaus/mojo/gwt/ClasspathBuilderException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.ClassPathProcessor.java">org/codehaus/mojo/gwt/shell/ClassPathProcessor.java</a>
                 </td>
                 <td>
                   0
@@ -55,7 +83,21 @@ under the License.
                   1
                 </td>
                 <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtResourcesMojo.java">org/codehaus/mojo/gwt/GwtResourcesMojo.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                           <tr>
@@ -74,7 +116,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.CSSMojo.java">org/codehaus/mojo/gwt/shell/CSSMojo.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo.java">org/codehaus/mojo/gwt/shell/AbstractGwtShellMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo.java">org/codehaus/mojo/gwt/shell/AbstractGwtWebMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ExitException.java">org/codehaus/mojo/gwt/webxml/ExitException.java</a>
                 </td>
                 <td>
                   0
@@ -83,110 +153,26 @@ under the License.
                   1
                 </td>
                 <td>
-                  10
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.SuperDevModeMojo.java">org/codehaus/mojo/gwt/shell/SuperDevModeMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  32
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.ClasspathBuilder.java">org/codehaus/mojo/gwt/ClasspathBuilder.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-                <td>
-                  7
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#archetype-resources.src.main.resources.client.Messages_fr.properties">archetype-resources/src/main/resources/client/Messages_fr.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
                   0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.ForkedProcessExecutionException.java">org/codehaus/mojo/gwt/shell/ForkedProcessExecutionException.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.AbstractGwtModuleMojo.java">org/codehaus/mojo/gwt/AbstractGwtModuleMojo.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  8
+                  4
                 </td>
                 <td>
-                  0
+                  13
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtSourcesJarMojo.java">org/codehaus/mojo/gwt/GwtSourcesJarMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#compile-report.properties">compile-report.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.MavenProjectContext.java">org/codehaus/mojo/gwt/MavenProjectContext.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.GwtWebInfProcessor.java">org/codehaus/mojo/gwt/webxml/GwtWebInfProcessor.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaCommandException.java">org/codehaus/mojo/gwt/shell/JavaCommandException.java</a>
                 </td>
                 <td>
                   0
@@ -200,30 +186,16 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaCommand.java">org/codehaus/mojo/gwt/shell/JavaCommand.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtCleanMojo.java">org/codehaus/mojo/gwt/GwtCleanMojo.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  42
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ServletDescriptor.java">org/codehaus/mojo/gwt/webxml/ServletDescriptor.java</a>
-                </td>
-                <td>
                   0
                 </td>
                 <td>
-                  8
-                </td>
-                <td>
-                  0
+                  2
                 </td>
               </tr>
                           <tr>
@@ -242,30 +214,100 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader.java">org/codehaus/mojo/gwt/utils/DefaultGwtModuleReader.java</a>
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ServletAnnotationFinder.java">org/codehaus/mojo/gwt/webxml/ServletAnnotationFinder.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtSourcesJarMojo.java">org/codehaus/mojo/gwt/GwtSourcesJarMojo.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  5
+                  0
                 </td>
                 <td>
-                  103
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaShell.java">org/codehaus/mojo/gwt/shell/JavaShell.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.test.TestTemplate.java">org/codehaus/mojo/gwt/test/TestTemplate.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.MavenProjectContext.java">org/codehaus/mojo/gwt/MavenProjectContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#archetype-resources.src.main.resources.client.Messages_fr.properties">archetype-resources/src/main/resources/client/Messages_fr.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.RunMojo.java">org/codehaus/mojo/gwt/shell/RunMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  70
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.eclipse.EclipseMojo.java">org/codehaus/mojo/gwt/eclipse/EclipseMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  26
                 </td>
               </tr>
                           <tr>
@@ -312,13 +354,41 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.ClasspathBuilderException.java">org/codehaus/mojo/gwt/ClasspathBuilderException.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.ClasspathBuilder.java">org/codehaus/mojo/gwt/ClasspathBuilder.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  2
+                  7
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#compile-report.properties">compile-report.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#compile-report_fr.properties">compile-report_fr.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -340,188 +410,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.AbstractGwtMojo.java">org/codehaus/mojo/gwt/AbstractGwtMojo.java</a>
-                </td>
-                <td>
-                  6
-                </td>
-                <td>
-                  11
-                </td>
-                <td>
-                  45
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.AbstractGwtWebMojo.java">org/codehaus/mojo/gwt/shell/AbstractGwtWebMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaShell.java">org/codehaus/mojo/gwt/shell/JavaShell.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtCleanMojo.java">org/codehaus/mojo/gwt/GwtCleanMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.AbstractGwtModuleMojo.java">org/codehaus/mojo/gwt/AbstractGwtModuleMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  13
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.RunMojo.java">org/codehaus/mojo/gwt/shell/RunMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  70
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.test.TestTemplate.java">org/codehaus/mojo/gwt/test/TestTemplate.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaCommandException.java">org/codehaus/mojo/gwt/shell/JavaCommandException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.ClassPathProcessor.java">org/codehaus/mojo/gwt/shell/ClassPathProcessor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#compile-report_fr.properties">compile-report_fr.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.eclipse.EclipseUtil.java">org/codehaus/mojo/gwt/eclipse/EclipseUtil.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GwtResourcesMojo.java">org/codehaus/mojo/gwt/GwtResourcesMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.AbstractGwtShellMojo.java">org/codehaus/mojo/gwt/shell/AbstractGwtShellMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
-                </td>
-                <td>
-                  35
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.GenerateAsyncMojo.java">org/codehaus/mojo/gwt/GenerateAsyncMojo.java</a>
                 </td>
                 <td>
@@ -536,7 +424,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.TestMojo.java">org/codehaus/mojo/gwt/shell/TestMojo.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.CSSMojo.java">org/codehaus/mojo/gwt/shell/CSSMojo.java</a>
                 </td>
                 <td>
                   0
@@ -545,12 +433,12 @@ under the License.
                   1
                 </td>
                 <td>
-                  89
+                  10
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.eclipse.EclipseMojo.java">org/codehaus/mojo/gwt/eclipse/EclipseMojo.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.CompileMojo.java">org/codehaus/mojo/gwt/shell/CompileMojo.java</a>
                 </td>
                 <td>
                   0
@@ -559,18 +447,46 @@ under the License.
                   1
                 </td>
                 <td>
-                  26
+                  115
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.test.MavenTestRunner.java">org/codehaus/mojo/gwt/test/MavenTestRunner.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ServletAnnotationFinder.java">org/codehaus/mojo/gwt/webxml/ServletAnnotationFinder.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  5
+                </td>
+                <td>
+                  103
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.ServletDescriptor.java">org/codehaus/mojo/gwt/webxml/ServletDescriptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.mojoGwtVersion.properties">org/codehaus/mojo/gwt/mojoGwtVersion.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -592,21 +508,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.mojoGwtVersion.properties">org/codehaus/mojo/gwt/mojoGwtVersion.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.MergeWebXmlMojo.java">org/codehaus/mojo/gwt/webxml/MergeWebXmlMojo.java</a>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.TestMojo.java">org/codehaus/mojo/gwt/shell/TestMojo.java</a>
                 </td>
                 <td>
                   0
@@ -615,7 +517,91 @@ under the License.
                   1
                 </td>
                 <td>
-                  12
+                  87
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.eclipse.EclipseUtil.java">org/codehaus/mojo/gwt/eclipse/EclipseUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.test.MavenTestRunner.java">org/codehaus/mojo/gwt/test/MavenTestRunner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.JavaCommand.java">org/codehaus/mojo/gwt/shell/JavaCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.ForkedProcessExecutionException.java">org/codehaus/mojo/gwt/shell/ForkedProcessExecutionException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.SuperDevModeMojo.java">org/codehaus/mojo/gwt/shell/SuperDevModeMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  32
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.GwtWebInfProcessor.java">org/codehaus/mojo/gwt/webxml/GwtWebInfProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -634,6 +620,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.webxml.MergeWebXmlMojo.java">org/codehaus/mojo/gwt/webxml/MergeWebXmlMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.DebugMojo.java">org/codehaus/mojo/gwt/shell/DebugMojo.java</a>
                 </td>
                 <td>
@@ -648,16 +648,16 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.CompileMojo.java">org/codehaus/mojo/gwt/shell/CompileMojo.java</a>
-                </td>
-                <td>
-                  0
+                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.utils.DefaultGwtModuleReader.java">org/codehaus/mojo/gwt/utils/DefaultGwtModuleReader.java</a>
                 </td>
                 <td>
                   1
                 </td>
                 <td>
-                  115
+                  4
+                </td>
+                <td>
+                  5
                 </td>
               </tr>
                       </tbody>
