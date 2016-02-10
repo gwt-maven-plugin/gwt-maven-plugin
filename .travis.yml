@@ -18,7 +18,7 @@ matrix:
 
 after_success:
   - ci/deploy-snapshot.sh
-  - ci/deploy-site.sh
+#  - ci/deploy-site.sh
 
 sudo: false
 cache:
