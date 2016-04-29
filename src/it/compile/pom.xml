@@ -66,6 +66,10 @@
           <jsInteropMode>JS</jsInteropMode>
           <namespace>NONE</namespace>
           <methodNameDisplayMode>FULL</methodNameDisplayMode>
+          <extraJvmArgs>
+            -Xms64m
+            -Xmx1g
+          </extraJvmArgs>
         </configuration>
         <executions>
           <execution>

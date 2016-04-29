@@ -199,6 +199,8 @@ public abstract class AbstractGwtShellMojo
         {
             try
             {
+                // cleanup new lines bc removeDuplicateWhitespace leaves the first isWhitespace character found
+                userExtraJvmArgs = userExtraJvmArgs.replace('\n', ' ').replace('\r', ' ');
                 return new ArrayList<String>(Arrays.asList( CommandLineUtils.translateCommandline( StringUtils.removeDuplicateWhitespace( userExtraJvmArgs ) ) ) );
             }
             catch ( Exception e )
