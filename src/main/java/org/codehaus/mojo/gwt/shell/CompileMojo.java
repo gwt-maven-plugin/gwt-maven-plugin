@@ -359,6 +359,16 @@ public class CompileMojo
     @Parameter(defaultValue = "NONE", property = "gwt.compiler.methodNameDisplayMode")
     private String methodNameDisplayMode;
 
+    /**
+     * Indicates whether to print the whole Java command used for GWT compilation, in case of an error. If set to false,
+     * the command is not printed.
+     *
+     * Ability to disable the command comes handy in case the build uses big number (hundreds) of jars. In that case the
+     * classpath string is huge and the printed command is polluting the Maven build log.
+     */
+    @Parameter(defaultValue = "true", property = "gwt.compiler.printJavaCommandOnError" )
+    private boolean printJavaCommandOnError;
+
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
@@ -494,6 +504,9 @@ public class CompileMojo
             cmd.arg( target );
             upToDate = false;
         }
+
+        cmd.setPrintCommandOnError(printJavaCommandOnError);
+
         if ( !upToDate )
         {
             try
