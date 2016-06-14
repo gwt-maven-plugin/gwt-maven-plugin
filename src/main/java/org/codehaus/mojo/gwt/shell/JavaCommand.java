@@ -84,6 +84,11 @@ public class JavaCommand
         }
     };
 
+    /**
+     * Indicates whether to print the full command (as part of exception message) when encountering error.
+     */
+    private boolean printCommandOnError = true;
+
     public String getMainClass()
     {
         return mainClass;
@@ -210,6 +215,10 @@ public class JavaCommand
         return this;
     }
 
+    public void setPrintCommandOnError( boolean printCommandOnError ) {
+        this.printCommandOnError = printCommandOnError;
+    }
+
     public JavaCommand addToClasspath( File file )
     {
         return addToClasspath( Collections.singleton( file ) );
@@ -324,8 +333,9 @@ public class JavaCommand
 
             if ( status != 0 )
             {
-                throw new JavaCommandException( "Command [[\n" + cmd.toString()
-                    + "\n]] failed with status " + status );
+                throw new JavaCommandException( "Command "
+                        + ( printCommandOnError ? "[[\n" + cmd.toString() + "\n]] " : "" )
+                        + "failed with status "  + status );
             }
         }
         catch ( CommandLineTimeOutException e )
@@ -335,11 +345,13 @@ public class JavaCommand
                 log.warn( "Forked JVM has been killed on time-out after " + timeOut + " seconds" );
                 return;
             }
-            throw new JavaCommandException( "Time-out on command line execution :\n" + command, e );
+            throw new JavaCommandException(
+                    "Time-out on command line execution" + (printCommandOnError ? ":\n" + command : ""), e );
         }
         catch ( CommandLineException e )
         {
-            throw new JavaCommandException( "Failed to execute command line :\n" + command, e );
+            throw new JavaCommandException(
+                    "Failed to execute command line" + (printCommandOnError ? ":\n" + command : ""), e );
         }
     }
 
@@ -357,7 +369,7 @@ public class JavaCommand
         if ( !jvmFile.exists() )
         {
             throw new JavaCommandException( "the configured jvm " + jvm
-                + " doesn't exists please check your environnement" );
+                + " doesn't exists please check your environment" );
         }
         if ( jvmFile.isDirectory() )
         {
