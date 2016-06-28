@@ -19,22 +19,19 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.cli.CommandLineException;
-import org.codehaus.plexus.util.cli.CommandLineTimeOutException;
-import org.codehaus.plexus.util.cli.CommandLineUtils;
-import org.codehaus.plexus.util.cli.Commandline;
-import org.codehaus.plexus.util.cli.StreamConsumer;
+import org.codehaus.plexus.util.cli.*;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 /**
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
@@ -42,6 +39,8 @@ import java.util.Properties;
  */
 public class JavaCommand
 {
+    private static final int MAX_INLINE_CLASSPATH_LENGTH = 4096;
+
     private String mainClass;
 
     private List<File> classpath = new ArrayList<File>();
@@ -83,6 +82,19 @@ public class JavaCommand
             log.error( line );
         }
     };
+    private ArtifactFactory artifactFactory;
+    private ArtifactRepository localRepository;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public JavaCommand setVersion(String version) {
+        this.version = version;
+        return this;
+    }
+
+    private String version;
 
     /**
      * Indicates whether to print the full command (as part of exception message) when encountering error.
@@ -278,27 +290,21 @@ public class JavaCommand
             classPathProcessor.postProcessClassPath( classpath );
         }
 
-        List<String> command = new ArrayList<String>();
-        if (this.jvmArgs != null)
+        List<String> command = null;
+        if ( Os.isFamily( Os.FAMILY_WINDOWS ) && getClassPathLength() > MAX_INLINE_CLASSPATH_LENGTH )
         {
-            command.addAll( this.jvmArgs );
-        }
-        command.add( "-classpath" );
-        List<String> path = new ArrayList<String>( classpath.size() );
-        for ( File file : classpath )
-        {
-            path.add( file.getAbsolutePath() );
-        }
-        command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
-        if ( systemProperties != null )
-        {
-            for ( Map.Entry<?, ?> entry : systemProperties.entrySet() )
-            {
-                command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+            getLog().debug(
+                    "Microsoft Windows and long classpath detected. Using org.codehaus.mojo.gwt.shell.WindowsCommandLineLauncher" );
+            try {
+                command = prepareCommandForWindows();
+            } catch (MojoExecutionException e) {
+                throw new JavaCommandException("Error creating long-path command for Windows: ", e);
             }
         }
-        command.add( mainClass );
-        command.addAll( args );
+        else
+        {
+            command = prepareCommand();
+        }
 
         try
         {
@@ -378,5 +384,134 @@ public class JavaCommand
         }
         log.debug( "use jvm " + jvm );
         return jvm;
+    }
+
+    private List<String> prepareCommandForWindows()
+            throws MojoExecutionException
+    {
+        //Write classpath to temporary file
+        final File classPathFile = FileUtils.createTempFile( "gwt-maven-plugin", "classpath", null );
+        //classPathFile.deleteOnExit();
+
+        PrintWriter writer = null;
+        try
+        {
+            writer = new PrintWriter( classPathFile );
+            for ( File file : classpath )
+            {
+                writer.println( file.getAbsolutePath() );
+            }
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Failed to write classpath to temporary file", e );
+
+        }
+        finally
+        {
+            if ( writer != null )
+            {
+                writer.close();
+            }
+        }
+
+        //Redirect Shell execution via proxy that can handle classpath defined in an external file
+        List<String> command = new ArrayList<String>();
+        if (getJvmArgs() != null) {
+            command.addAll( getJvmArgs() );
+        }
+        command.add( "-classpath" );
+
+        //Setup the minimial System ClassLoader classpath needed for:-
+        // 1) org.codehaus.mojo:gwt-maven-plugin for org.codehaus.mojo.gwt.shell.WindowsCommandLineLauncher
+        // 2) org.codehaus.mojo:gwt-maven-plugin for overriding com.google.gwt.dev.WindowsExternalPermutationWorkerFactory
+        // 3) com.google.gwt:gwt-dev for com.google.gwt.dev.ThreadedPermutationWorkerFactory
+        // 4) com.google.gwt:gwt-dev for com.google.gwt.dev.PermutationWorkerFactory
+        final List<String> minimalClassPath = new ArrayList<String>( 2 );
+        Artifact plugin1 = artifactFactory.createArtifact( "org.codehaus.mojo", "gwt-maven-plugin", version,
+                Artifact.SCOPE_COMPILE, "maven-plugin" );
+        Artifact plugin2 =
+                artifactFactory.createArtifact( "com.google.gwt", "gwt-dev", version, Artifact.SCOPE_COMPILE, "jar" );
+        minimalClassPath.add( localRepository.getBasedir() + "/" + localRepository.pathOf( plugin1 ) );
+        minimalClassPath.add( localRepository.getBasedir() + "/" + localRepository.pathOf( plugin2 ) );
+        command.add( StringUtils.join( minimalClassPath.iterator(), File.pathSeparator ) );
+
+        if ( systemProperties != null )
+        {
+            for ( Map.Entry entry : systemProperties.entrySet() )
+            {
+                command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+            }
+        }
+        command.add( WindowsCommandLineLauncher.class.getName() );
+        command.add( classPathFile.getAbsolutePath() );
+        command.add( mainClass );
+        command.addAll( args );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            IOUtils.copy(new FileInputStream(classPathFile), baos);
+            log.info("Windows class path written to file is: " + baos.toString());
+        } catch (IOException e) {
+            log.error("Unable to open Windows class path file.");
+        }
+        return command;
+    }
+
+    private List<String> prepareCommand()
+    {
+        List<String> command = new ArrayList<String>();
+        command.addAll( getJvmArgs() );
+        command.add( "-classpath" );
+
+        List<String> path = new ArrayList<String>( classpath.size() );
+        for ( File file : classpath )
+        {
+            path.add( file.getAbsolutePath() );
+        }
+        command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
+        if ( systemProperties != null )
+        {
+            for ( Map.Entry entry : systemProperties.entrySet() )
+            {
+                command.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+            }
+        }
+        command.add( mainClass );
+        command.addAll( args );
+        return command;
+    }
+
+    private int getClassPathLength()
+    {
+        List<String> path = new ArrayList<String>( classpath.size() );
+        for ( File file : classpath )
+        {
+            path.add( file.getAbsolutePath() );
+        }
+        return StringUtils.join( path.iterator(), File.pathSeparator ).length();
+    }
+
+    public void withinClasspathFirst( File oophmJar )
+    {
+        classpath.add( 0, oophmJar );
+    }
+
+    public JavaCommand setArtifactFactory(ArtifactFactory artifactFactory) {
+        this.artifactFactory = artifactFactory;
+        return this;
+    }
+
+    public ArtifactFactory getArtifactFactory() {
+        return artifactFactory;
+    }
+
+    public JavaCommand setLocalRepository(ArtifactRepository artifactRepository) {
+        this.localRepository = artifactRepository;
+        return this;
+    }
+
+    public ArtifactRepository getLocalRepository() {
+        return localRepository;
     }
 }

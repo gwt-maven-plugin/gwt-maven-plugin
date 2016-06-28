@@ -26,6 +26,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.mojo.gwt.AbstractGwtModuleMojo;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.StreamConsumer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.List;
 /**
  * Support running GWT SDK Tools as forked JVM with classpath set according to project source/resource directories and
  * dependencies.
- * 
+ *
  * @author ccollins
  * @author cooper
  * @author willpugh
@@ -45,6 +46,9 @@ import java.util.List;
 public abstract class AbstractGwtShellMojo
     extends AbstractGwtModuleMojo
 {
+    @Parameter(defaultValue = "${plugin.version}")
+    private String version;
+
     /**
      * Location on filesystem where GWT will write generated content for review (-gen option to GWT Compiler).
      * <p>
@@ -114,11 +118,10 @@ public abstract class AbstractGwtShellMojo
     private int timeOut;
 
     /**
-     *
      * Artifacts to be included as source-jars in GWTCompiler Classpath. Removes the restriction that source code must
      * be bundled inside of the final JAR when dealing with external utility libraries not designed exclusivelly for
      * GWT. The plugin will download the source.jar if necessary.
-     *
+     * <p/>
      * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
      * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
      * desirable).
@@ -128,7 +131,7 @@ public abstract class AbstractGwtShellMojo
 
     /**
      * Whether to use the persistent unit cache or not.
-     * <p>
+     * <p/>
      * Can be set from command line using '-Dgwt.persistentunitcache=...'
      *
      * @since 2.5.0-rc1
@@ -138,7 +141,7 @@ public abstract class AbstractGwtShellMojo
 
     /**
      * The directory where the persistent unit cache will be created if enabled.
-     * <p>
+     * <p/>
      * Can be set from command line using '-Dgwt.persistentunitcachedir=...'
      *
      * @since 2.5.0-rc1
@@ -211,6 +214,32 @@ public abstract class AbstractGwtShellMojo
         return extra;
     }
 
+    private String getJavaCommand()
+        throws MojoExecutionException
+    {
+        if ( StringUtils.isEmpty( jvm ) )
+        {
+            // use the same JVM as the one used to run Maven (the "java.home" one)
+            jvm = System.getProperty( "java.home" );
+        }
+
+        // does-it exists ? is-it a directory or a path to a java executable ?
+        File jvmFile = new File( jvm );
+        if ( !jvmFile.exists() )
+        {
+            throw new MojoExecutionException(
+                "the configured jvm " + jvm + " doesn't exists please check your environnement" );
+        }
+        if ( jvmFile.isDirectory() )
+        {
+            // it's a directory we construct the path to the java executable
+            return jvmFile.getAbsolutePath() + File.separator + "bin" + File.separator + "java";
+        }
+        getLog().debug( "use jvm " + jvm );
+        return jvm;
+    }
+
+
     /**
      * @param timeOut the timeOut to set
      */
@@ -225,6 +254,9 @@ public abstract class AbstractGwtShellMojo
             .setJvm( getJvm() )
             .setJvmArgs( getJvmArgs() )
             .setTimeOut( timeOut )
+            .setArtifactFactory( artifactFactory )
+            .setLocalRepository( localRepository )
+            .setVersion( version )
             .addClassPathProcessors( new ClassPathProcessor()
             {
                 @Override
@@ -239,12 +271,12 @@ public abstract class AbstractGwtShellMojo
      * packaging java source files into JAR when sharing code between server and client. Typically, some domain model
      * classes or business rules may be packaged as a separate Maven module. With GWT packaging this requires to
      * distribute such classes with code, that may not be desirable.
-     * <p>
+     * <p/>
      * The hack can also be used to include utility code from external librariries that may not have been designed for
      * GWT.
      */
-    protected void addCompileSourceArtifacts(JavaCommand cmd)
-            throws MojoExecutionException
+    protected void addCompileSourceArtifacts( JavaCommand cmd )
+        throws MojoExecutionException
     {
         if ( compileSourcesArtifacts == null )
         {
@@ -253,7 +285,7 @@ public abstract class AbstractGwtShellMojo
         for ( String include : compileSourcesArtifacts )
         {
             List<String> parts = new ArrayList<String>();
-            parts.addAll( Arrays.asList(include.split(":")) );
+            parts.addAll( Arrays.asList( include.split( ":" ) ) );
             if ( parts.size() == 2 )
             {
                 // type is optional as it will mostly be "jar"
@@ -277,12 +309,15 @@ public abstract class AbstractGwtShellMojo
                 }
             }
             if ( !found )
+            {
                 getLog().warn(
-                        "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
+                    "Declared compileSourcesArtifact was not found in project dependencies " + dependencyId );
+            }
         }
     }
 
-    protected void addArgumentDeploy(JavaCommand cmd) {
+    protected void addArgumentDeploy( JavaCommand cmd )
+    {
         if ( deploy != null )
         {
             cmd.arg( "-deploy" ).arg( String.valueOf( deploy ) );
@@ -301,7 +336,8 @@ public abstract class AbstractGwtShellMojo
         }
     }
 
-    protected void addPersistentUnitCache(JavaCommand cmd) {
+    protected void addPersistentUnitCache( JavaCommand cmd )
+    {
         if ( persistentunitcache != null )
         {
             cmd.systemProperty( "gwt.persistentunitcache", String.valueOf( persistentunitcache.booleanValue() ) );
@@ -311,5 +347,27 @@ public abstract class AbstractGwtShellMojo
             cmd.systemProperty( "gwt.persistentunitcachedir", persistentunitcachedir.getAbsolutePath() );
         }
     }
+
+    /**
+     * A plexus-util StreamConsumer to redirect messages to plugin log
+     */
+    protected StreamConsumer out = new StreamConsumer()
+    {
+        public void consumeLine( String line )
+        {
+            getLog().info( line );
+        }
+    };
+
+    /**
+     * A plexus-util StreamConsumer to redirect errors to plugin log
+     */
+    private StreamConsumer err = new StreamConsumer()
+    {
+        public void consumeLine( String line )
+        {
+            getLog().error( line );
+        }
+    };
 
 }

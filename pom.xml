@@ -384,7 +384,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>linkcheck</id>
       <reporting>
@@ -546,7 +546,7 @@
       </snapshots>
     </repository>
   </repositories>
-  
+
   <pluginRepositories>
     <pluginRepository>
       <id>apache.snapshots</id>

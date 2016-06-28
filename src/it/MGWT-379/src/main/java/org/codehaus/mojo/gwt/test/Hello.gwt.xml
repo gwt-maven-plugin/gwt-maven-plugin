@@ -1,3 +1,4 @@
+<!--
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,16 +17,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.google.gwt.sample.hello.Hello.nocache.js').exists();
-assert new File(basedir, 'target/extra').exists();
-
-assert new File(basedir, 'build.log').exists();
-
-content = new File(basedir, 'build.log').text;
-assert content.contains( '-draftCompile' );
-assert content.contains( '-failOnError' );
-assert content.contains( "'-optimize' '1'" ) || content.contains("-optimize 1");
-  
-return true;
+-->
+<!DOCTYPE module PUBLIC "//gwt-module/" "http://google-web-toolkit.googlecode.com/svn/tags/1.6.2/distro-source/core/src/gwt-module.dtd">
+<module rename-to="hello">
+  <inherits name="com.google.gwt.user.User"/>
+  <entry-point class="org.codehaus.mojo.gwt.test.client.Hello"/>
+  <set-property name="user.agent" value="gecko1_8,ie9"/>
+</module>

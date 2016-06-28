@@ -16,16 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello').exists();
-assert new File(basedir, 'src/main/webapp/com.google.gwt.sample.hello.Hello/com.google.gwt.sample.hello.Hello.nocache.js').exists();
-assert new File(basedir, 'target/extra').exists();
 
-assert new File(basedir, 'build.log').exists();
+assert new File(basedir, 'target/classes').exists();
+assert new File(basedir, 'target/hello/hello').exists();
+assert new File(basedir, 'target/hello/hello/hello.nocache.js').exists();
 
 content = new File(basedir, 'build.log').text;
-assert content.contains( '-draftCompile' );
-assert content.contains( '-failOnError' );
-assert content.contains( "'-optimize' '1'" ) || content.contains("-optimize 1");
-  
+assert content.contains('BUILD SUCCESS');
+assert !content.contains('BUILD FAILURE');
+assert !content.contains('[ERROR]');
+
 return true;

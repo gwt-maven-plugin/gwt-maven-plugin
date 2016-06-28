@@ -160,7 +160,7 @@ public abstract class AbstractGwtMojo
     public File getOutputDirectory()
     {
         File out = inplace ? warSourceDirectory : webappDirectory;
-        if ( !StringUtils.isBlank( modulePathPrefix ) ) 
+        if ( !StringUtils.isBlank( modulePathPrefix ) )
         {
             out = new File(out, modulePathPrefix);
         }
