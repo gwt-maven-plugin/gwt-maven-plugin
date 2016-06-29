@@ -40,7 +40,6 @@ assert content.contains( '-draftCompile' );
 assert content.contains( '-failOnError' );
 assert content.contains( "'-optimize' '1'" );
 assert content.contains( '-Dgwt.persistentunitcache=true' );
-assert content.contains( '-XclosureCompiler' );
 assert content.contains( '-XcompilerMetrics' );
 assert content.contains( "'-XfragmentCount' '2'" );
 assert content.contains( '-XnoclusterFunctions' );
@@ -49,7 +48,6 @@ assert content.contains( '-XnooptimizeDataflow' );
 assert content.contains( '-XnoordinalizeEnums' );
 assert content.contains( '-XnoremoveDuplicateFunctions' );
 assert content.contains( "'-sourceLevel' 'auto'" );
-assert content.contains( "'-XjsInteropMode' 'JS'" );
 assert content.contains( "'-Xnamespace' 'NONE'" );
 assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" );
   

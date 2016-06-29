@@ -374,20 +374,12 @@ public class TestMojo
     private boolean incremental;
 
     /**
-     * Enable the generation of JsInterop exports
+     * Generate exports for JsInterop purposes.
      *
      * @since 2.8.0-rc1
      */
     @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
     private boolean generateJsInteropExports;
-
-    /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
-     * 
-     * @since 2.7.0-rc1
-     */
-    @Parameter(defaultValue = "JS_RC")
-    private String jsInteropMode;
 
     /** failures counter */
     private int failures;
@@ -519,20 +511,14 @@ public class TestMojo
         {
             sb.append( " -workDir " ).append( quote( workDir.getAbsolutePath() ) );
         }
-
         if ( namespace != null && !namespace.trim().isEmpty() )
         {
             sb.append( " -Xnamespace " ).append( quote( namespace ) );
-        }
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
-        {
-            sb.append( " -XjsInteropMode " ).append( quote( jsInteropMode ) );
         }
         if ( generateJsInteropExports )
         {
             sb.append( " -generateJsInteropExports" );
         }
-
         if ( mode.equalsIgnoreCase( "manual" ) )
         {
             sb.append( " -runStyle Manual:1" );

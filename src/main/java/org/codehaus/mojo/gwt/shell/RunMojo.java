@@ -259,20 +259,12 @@ public class RunMojo
     private boolean incremental;
 
     /**
-     * Enable the generation of JsInterop exports
+     * Generate exports for JsInterop purposes.
      *
      * @since 2.8.0-rc1
      */
     @Parameter(alias = "generateJsInteropExports", defaultValue = "false", property = "gwt.compiler.generateJsInteropExports")
     private boolean generateJsInteropExports;
-
-    /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS.
-     * 
-     * @since 2.7.0-rc1
-     */
-    @Parameter(defaultValue = "JS_RC")
-    private String jsInteropMode;
 
     /**
      * EXPERIMENTAL: Emit extra information allow chrome dev tools to display Java identifiers in many places instead of JavaScript functions.
@@ -356,10 +348,6 @@ public class RunMojo
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
             .arg( "-sourceLevel", sourceLevel );
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
-        {
-            cmd.arg( "-XjsInteropMode", jsInteropMode );
-        }
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
             cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );

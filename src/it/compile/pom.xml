@@ -53,7 +53,6 @@
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
           <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
-          <enableClosureCompiler>true</enableClosureCompiler>
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
           <clusterFunctions>false</clusterFunctions>
@@ -63,7 +62,6 @@
           <removeDuplicateFunctions>false</removeDuplicateFunctions>
           <saveSource>true</saveSource>
           <saveSourceOutput>${project.build.directory}/savedSources</saveSourceOutput>
-          <jsInteropMode>JS</jsInteropMode>
           <namespace>NONE</namespace>
           <methodNameDisplayMode>FULL</methodNameDisplayMode>
           <extraJvmArgs>

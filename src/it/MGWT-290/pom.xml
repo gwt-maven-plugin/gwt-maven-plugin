@@ -77,7 +77,6 @@
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
           <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
-          <enableClosureCompiler>true</enableClosureCompiler>
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
         </configuration>

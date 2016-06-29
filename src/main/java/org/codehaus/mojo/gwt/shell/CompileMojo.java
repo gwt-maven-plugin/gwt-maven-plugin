@@ -259,7 +259,7 @@ public class CompileMojo
     private boolean optimizeDataflow;
 
     /**
-     * Enable the generation of JsInterop exports
+     * Generate exports for JsInterop purposes.
      *
      * @since 2.8.0-rc1
      */
@@ -309,14 +309,6 @@ public class CompileMojo
      */
     @Parameter(defaultValue = "auto", property = "maven.compiler.source")
     private String sourceLevel;
-
-    /**
-     * EXPERIMENTAL: Specifies JsInterop mode, either JS_RC or JS
-     * 
-     * @since 2.7.0-rc1
-     */
-    @Parameter(defaultValue = "JS_RC")
-    private String jsInteropMode;
 
     /**
      * Puts most JavaScript globals into namespaces.
@@ -447,10 +439,6 @@ public class CompileMojo
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
         ;
 
-        if ( jsInteropMode != null && jsInteropMode.length() > 0 && !jsInteropMode.equals( "JS_RC" ) )
-        {
-            cmd.arg( "-XjsInteropMode", jsInteropMode );
-        }
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
             cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );
