@@ -408,7 +408,7 @@ public class GenerateAsyncMojo
 
     private ClassLoader getProjectClassLoader() throws MojoExecutionException
     {
-        Collection<File> classpath = getClasspath( Artifact.SCOPE_COMPILE );
+        Collection<File> classpath = getClasspath( SCOPE_COMPILE );
         URL[] urls = new URL[classpath.size()];
         try
         {

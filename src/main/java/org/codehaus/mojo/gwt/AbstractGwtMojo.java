@@ -19,9 +19,6 @@ package org.codehaus.mojo.gwt;
  * under the License.
  */
 
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -29,10 +26,12 @@ import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -42,6 +41,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.artifact.MavenMetadataSource;
+import org.apache.maven.repository.RepositorySystem;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -73,6 +74,10 @@ public abstract class AbstractGwtMojo
 
     private static final String GWT_DEV = "com.google.gwt:gwt-dev";
 
+    public static final String SCOPE_COMPILE = Artifact.SCOPE_COMPILE + "+" + Artifact.SCOPE_PROVIDED + "+" + Artifact.SCOPE_SYSTEM;
+    public static final String SCOPE_RUNTIME = SCOPE_COMPILE + "+" + Artifact.SCOPE_RUNTIME;
+    public static final String SCOPE_TEST = SCOPE_RUNTIME + "+" + Artifact.SCOPE_TEST;
+
     /** GWT artifacts groupId */
     public static final String GWT_GROUP_ID = "com.google.gwt";
 
@@ -92,6 +97,12 @@ public abstract class AbstractGwtMojo
 
     @Component
     protected ClasspathBuilder classpathBuilder;
+
+    @Component
+    private RepositorySystem repositorySystem;
+
+    @Component
+    private MavenSession mavenSession;
 
     // --- Some MavenSession related structures --------------------------------
 
@@ -156,6 +167,9 @@ public abstract class AbstractGwtMojo
     @Deprecated
     @Parameter(defaultValue = "false", property = "gwt.gwtSdkFirstInClasspath")
     protected boolean gwtSdkFirstInClasspath;
+
+    @Parameter(property = "gwt.additionalJars")
+    private ArtifactItem[] additionalJars;
 
     public File getOutputDirectory()
     {
@@ -254,6 +268,59 @@ public abstract class AbstractGwtMojo
     protected Collection<File> getGwtUserJar() throws MojoExecutionException
     {
         return getJarFiles( GWT_USER );
+    }
+
+    protected Collection<File> getAdditionalJars() throws MojoExecutionException {
+        Collection<File> files = new LinkedList<File>();
+        if (additionalJars != null && additionalJars.length != 0) {
+            getLog().debug("Add additional JARs");
+            for ( ArtifactItem artifactItem : additionalJars ) {
+                Artifact searchedArtifact = repositorySystem.createArtifactWithClassifier(artifactItem.getGroupId(),
+                        artifactItem.getArtifactId(), artifactItem.getVersion(), artifactItem.getType(),
+                        artifactItem.getClassifier());
+                searchedArtifact.setScope(artifactItem.getScope());
+
+                ArtifactResolutionRequest request = new ArtifactResolutionRequest();
+                request.setArtifact(searchedArtifact);
+
+                request.setResolveTransitively(artifactItem.isTransitive());
+                request.setServers(mavenSession.getRequest().getServers());
+                request.setMirrors(mavenSession.getRequest().getMirrors());
+                request.setProxies(mavenSession.getRequest().getProxies());
+                request.setLocalRepository(mavenSession.getLocalRepository());
+                request.setRemoteRepositories(mavenSession.getRequest().getRemoteRepositories());
+                ArtifactResolutionResult result = repositorySystem.resolve(request);
+                if ( result.hasExceptions() ) {
+                    for ( Exception exception : result.getExceptions() ) {
+                        throw new MojoExecutionException("Can't get artifactItem: " + artifactItem, exception);
+                    }
+                }
+                if ( result.hasMissingArtifacts() ) {
+                    String message = "Missing artifacts:\n";
+                    for ( Artifact artifact : result.getMissingArtifacts() ) {
+                        message += "\t" + artifact + "\n";
+                    }
+                    throw new MojoExecutionException(message);
+                }
+                try
+                {
+                    Set<Artifact> artifacts = classpathBuilder.filteredArtifacts(result.getArtifacts(), Artifact.SCOPE_COMPILE_PLUS_RUNTIME);
+                    for ( Artifact artifact : artifacts )
+                    {
+                        files.add(artifact.getFile());
+                    }
+                }
+                catch ( ClasspathBuilderException e )
+                {
+                    throw new MojoExecutionException( e.getMessage(), e );
+                }
+            }
+        } else {
+            getLog().debug("Add default JARs");
+            files.addAll(getJarFiles( GWT_DEV ));
+            files.addAll(getJarFiles( GWT_USER ));
+        }
+        return files;
     }
 
     private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException

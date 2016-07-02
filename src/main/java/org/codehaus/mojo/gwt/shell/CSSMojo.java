@@ -110,14 +110,13 @@ public class CSSMojo
                             final StringBuilder content = new StringBuilder();
                             createJavaCommand()
                                 .setMainClass( "com.google.gwt.resources.css.InterfaceGenerator" )
-                                .addToClasspath( getClasspath( Artifact.SCOPE_COMPILE ) )
+                                .addToClasspath( getClasspath( SCOPE_COMPILE ) )
                                 .arg( "-standalone" )
                                 .arg( "-typeName" )
                                 .arg( typeName )
                                 .arg( "-css" )
                                 .arg( candidate.getAbsolutePath() )
-                                .addToClasspath( getGwtDevJar() )
-                                .addToClasspath( getGwtUserJar() )
+                                .addToClasspath( getAdditionalJars() )
                                 .setOut( new StreamConsumer()
                                     {
                                         public void consumeLine( String line )

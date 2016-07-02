@@ -443,14 +443,12 @@ public class TestMojo
                     .setMainClass( MavenTestRunner.class.getName() );
                 if ( gwtSdkFirstInClasspath )
                 {
-                    cmd.addToClasspath( getGwtUserJar() )
-                       .addToClasspath( getGwtDevJar() );
+                    cmd.addToClasspath( getAdditionalJars() );
                 }
-                cmd.addToClasspath( getClasspath( Artifact.SCOPE_TEST ) );
+                cmd.addToClasspath( getClasspath( SCOPE_TEST ) );
                 if ( !gwtSdkFirstInClasspath )
                 {
-                    cmd.addToClasspath( getGwtUserJar() )
-                       .addToClasspath( getGwtDevJar() );
+                    cmd.addToClasspath( getAdditionalJars() );
                 }
 
                 addCompileSourceArtifacts( cmd );
