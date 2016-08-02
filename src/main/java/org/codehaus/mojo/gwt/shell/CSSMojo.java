@@ -116,8 +116,8 @@ public class CSSMojo
                                 .arg( typeName )
                                 .arg( "-css" )
                                 .arg( candidate.getAbsolutePath() )
-                                .addToClasspath( getGwtDevJar() )
-                                .addToClasspath( getGwtUserJar() )
+                                .addToClasspath( getJarFiles(GWT_DEV, false) )
+                                .addToClasspath( getJarFiles(GWT_USER, false) )
                                 .setOut( new StreamConsumer()
                                     {
                                         public void consumeLine( String line )
