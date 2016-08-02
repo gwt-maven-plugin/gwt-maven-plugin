@@ -24,6 +24,7 @@ import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -69,9 +70,9 @@ import java.util.Set;
 public abstract class AbstractGwtMojo
     extends AbstractMojo
 {
-    private static final String GWT_USER = "com.google.gwt:gwt-user";
+    protected static final String GWT_USER = "com.google.gwt:gwt-user";
 
-    private static final String GWT_DEV = "com.google.gwt:gwt-dev";
+    protected static final String GWT_DEV = "com.google.gwt:gwt-dev";
 
     /** GWT artifacts groupId */
     public static final String GWT_GROUP_ID = "com.google.gwt";
@@ -248,17 +249,24 @@ public abstract class AbstractGwtMojo
 
     protected Collection<File> getGwtDevJar() throws MojoExecutionException
     {
-        return getJarFiles( GWT_DEV );
+        return getJarFiles( GWT_DEV, true );
     }
 
     protected Collection<File> getGwtUserJar() throws MojoExecutionException
     {
-        return getJarFiles( GWT_USER );
+        return getJarFiles( GWT_USER, true );
     }
 
-    private Collection<File> getJarFiles(String artifactId) throws MojoExecutionException
+    protected Collection<File> getJarFiles(String artifactId, boolean detectProjectDependencies) throws MojoExecutionException
     {
         checkGwtUserVersion();
+
+        if (detectProjectDependencies) for (Artifact artifact : project.getArtifacts()) {
+            String dependencyKey = ArtifactUtils.versionlessKey(artifact.getGroupId(), artifact.getArtifactId());
+            // if the project contains this GWT lib do not returns any jar, maven resolution should do that
+            if (dependencyKey.equals(artifactId)) return Collections.emptyList();
+        }
+
         Artifact rootArtifact = pluginArtifactMap.get( artifactId );
 
         ArtifactResolutionResult result;

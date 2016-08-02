@@ -129,7 +129,7 @@ public class EclipseTestMojo
         try
         {
             Collection<String> gwtDevJarPath = new ArrayList<String>();
-            for (File f : getGwtDevJar())
+            for (File f : getJarFiles(GWT_DEV, false))
             {
                 gwtDevJarPath.add( f.getAbsolutePath().replace( '\\', '/' ) );
             }
