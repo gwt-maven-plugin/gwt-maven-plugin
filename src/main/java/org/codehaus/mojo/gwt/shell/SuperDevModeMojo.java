@@ -159,6 +159,11 @@ public class SuperDevModeMojo extends AbstractGwtShellMojo
         cmd.arg( !incremental, "-noincremental" );
         cmd.arg( generateJsInteropExports, "-generateJsInteropExports" );
 
+        if ( style != null && style.length() > 0 )
+        {
+            cmd.arg( "-style", style );
+        }
+
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
             cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );

@@ -348,6 +348,11 @@ public class RunMojo
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
             .arg( "-sourceLevel", sourceLevel );
 
+        if ( style != null && style.length() > 0 )
+        {
+            cmd.arg( "-style", style );
+        }
+
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
             cmd.arg( "-XmethodNameDisplayMode", methodNameDisplayMode );

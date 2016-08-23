@@ -76,8 +76,8 @@ public abstract class AbstractGwtShellMojo
      * <p>
      * Can be set from command line using '-Dgwt.style=...'
      */
-    @Parameter(defaultValue = "OBF", property = "gwt.style")
-    private String style;
+    @Parameter(property = "gwt.style")
+    protected String style;
 
     /**
      * The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the webappDirectory directory/jar, and may be the same as the extra directory/jar)

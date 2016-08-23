@@ -411,7 +411,6 @@ public class CompileMojo
         }
 
         cmd.arg( "-logLevel", getLogLevel() )
-            .arg( "-style", getStyle() )
             .arg( "-war", getOutputDirectory().getAbsolutePath() )
             .arg( "-localWorkers", String.valueOf( getLocalWorkers() ) )
             // optional advanced arguments
@@ -438,6 +437,11 @@ public class CompileMojo
             .arg( incremental, "-incremental" )
             .arg( generateJsInteropExports, "-generateJsInteropExports" )
         ;
+
+        if ( style != null && style.length() > 0 )
+        {
+            cmd.arg( "-style", style );
+        }
 
         if ( methodNameDisplayMode != null && methodNameDisplayMode.length() > 0 && !methodNameDisplayMode.equals( "NONE" ))
         {
