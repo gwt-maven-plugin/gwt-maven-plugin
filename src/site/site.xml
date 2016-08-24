@@ -50,7 +50,6 @@ under the License.
     </links>
     <menu name="User Guide">
       <item name="Introduction" href="index.html"/>
-      <item name="What's new in ${project.version}" href="whats_new.html"/>
       <item name="Using the archetype" href="user-guide/archetype.html"/>
       <item name="Project organization" href="user-guide/project.html"/>
       <item name="Compile and Debug" href="user-guide/compile.html"/>

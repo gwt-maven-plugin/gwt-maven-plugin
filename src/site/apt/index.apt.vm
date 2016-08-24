@@ -42,9 +42,7 @@ Mojo's Maven Plugin for GWT
  
  << This mojo has been developped and tested with the gwt version ${gwtVersion} >>
  
- << {{{./whats_new.html}What's new in ${project.version} ?}} >>
-  
- 
+
   
   
 Mojo's Maven Plugin for GWT supports:
