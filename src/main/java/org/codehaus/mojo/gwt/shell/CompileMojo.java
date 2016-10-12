@@ -207,9 +207,18 @@ public class CompileMojo
      * </p>
      *
      * @since 2.5.0-rc1
+     * @deprecated https://github.com/gwtproject/gwt/commit/162ccc9c9112a09bf9ea046da95760f5f1886b72
      */
     @Parameter(alias = "enableClosureCompiler", defaultValue = "false", property = "gwt.compiler.enableClosureCompiler")
     private boolean closureCompiler;
+
+    /**
+     * Enables Javascript output suitable for post-compilation by Closure Compiler.
+     *
+     * @since 2.8.0
+     */
+    @Parameter(defaultValue = "false", property = "gwt.compiler.closureFormattedOutput")
+    private boolean closureFormattedOutput;
 
     /**
      * EXPERIMENTAL: Gather compiler metrics.
@@ -423,6 +432,7 @@ public class CompileMojo
             .arg( failOnError, "-failOnError" )
             .arg( detailedSoyc, "-XdetailedSoyc" )
             .arg( closureCompiler, "-XclosureCompiler" )
+            .arg( closureFormattedOutput, "-XclosureFormattedOutput" )
             .arg( compileReport, "-compileReport" )
             .arg( compilerMetrics, "-XcompilerMetrics" )
             .arg( "-XfragmentCount", String.valueOf( fragmentCount ) )

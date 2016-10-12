@@ -53,6 +53,7 @@
           <deploy>${project.build.directory}/deploy</deploy>
           <persistentunitcache>true</persistentunitcache>
           <persistentunitcachedir>${project.build.directory}/persistentunitcache</persistentunitcachedir>
+          <closureFormattedOutput>true</closureFormattedOutput>
           <compilerMetrics>true</compilerMetrics>
           <fragmentCount>2</fragmentCount>
           <clusterFunctions>false</clusterFunctions>

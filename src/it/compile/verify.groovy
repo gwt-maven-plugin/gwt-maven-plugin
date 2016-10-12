@@ -40,6 +40,7 @@ assert content.contains( '-draftCompile' );
 assert content.contains( '-failOnError' );
 assert content.contains( "'-optimize' '1'" );
 assert content.contains( '-Dgwt.persistentunitcache=true' );
+assert content.contains( '-XclosureFormattedOutput' );
 assert content.contains( '-XcompilerMetrics' );
 assert content.contains( "'-XfragmentCount' '2'" );
 assert content.contains( '-XnoclusterFunctions' );
