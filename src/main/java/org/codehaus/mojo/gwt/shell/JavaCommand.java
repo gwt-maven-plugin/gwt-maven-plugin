@@ -20,7 +20,6 @@ package org.codehaus.mojo.gwt.shell;
  */
 
 import org.apache.maven.plugin.logging.Log;
-import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineTimeOutException;
@@ -283,13 +282,6 @@ public class JavaCommand
         {
             command.addAll( this.jvmArgs );
         }
-        command.add( "-classpath" );
-        List<String> path = new ArrayList<String>( classpath.size() );
-        for ( File file : classpath )
-        {
-            path.add( file.getAbsolutePath() );
-        }
-        command.add( StringUtils.join( path.iterator(), File.pathSeparator ) );
         if ( systemProperties != null )
         {
             for ( Map.Entry<?, ?> entry : systemProperties.entrySet() )
@@ -300,17 +292,17 @@ public class JavaCommand
         command.add( mainClass );
         command.addAll( args );
 
+        List<String> path = new ArrayList<String>( classpath.size() );
+        for ( File file : classpath ) path.add( file.getAbsolutePath() );
+        String classpath = StringUtils.join( path.iterator(), File.pathSeparator );
+
         try
         {
             String[] arguments = command.toArray( new String[command.size()] );
 
-            // On windows, the default Shell will fall into command line length limitation issue
-            // On Unixes, not using a Shell breaks the classpath (NoClassDefFoundError:
-            // com/google/gwt/dev/Compiler).
-            Commandline cmd =
-                Os.isFamily( Os.FAMILY_WINDOWS ) ? new Commandline( new JavaShell() ) : new Commandline();
-
+            Commandline cmd = new Commandline();
             cmd.setExecutable( this.getJavaCommand() );
+            cmd.addEnvironment( "CLASSPATH", classpath );
             cmd.addArguments( arguments );
             if ( env != null )
             {
@@ -321,6 +313,7 @@ public class JavaCommand
                 }
             }
             log.debug( "Execute command :\n" + cmd.toString() );
+            log.debug( "With CLASSPATH :\n" + classpath );
             int status;
             if ( timeOut > 0 )
             {
