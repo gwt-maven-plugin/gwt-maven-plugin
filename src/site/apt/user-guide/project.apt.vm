@@ -134,29 +134,19 @@ parent/                                     (aggregating parent project)
 
 %{snippet|id=domain-module|file=src/it/reactor/jar/src/main/java/org/codehaus/mojo/gwt/test/Domain.gwt.xml}
 
-  The domain project it not yet a valid GWT module : GWT compiler requires Java source files.
+  The domain project is not yet a valid GWT module: GWT compiler requires Java source files.
 
-  First option is to use the {{{../resources-mojo.html}gwt:resources}} or {{{../source-jar-mojo.html}gwt:source-jar}} goals to attach java sources and resources
-  in the generated jar. The side effect is that this jar will include java sources, that may not be what you
-  want to do if you use it elsewhere, typically in the webapp servlets.
-
-  Second option is to configure Maven to {{{http://maven.apache.org/plugins/maven-source-plugin/usage.html}package a source-jar}}
-  for domain project. In the <<<webapp>>> project, configure gwt-maven-plugin to use it as additional source
-  for the domain dependency :
+  Configure Maven to {{{http://maven.apache.org/plugins/maven-source-plugin/usage.html}package a sources JAR}}
+  for <<<domain>>> project. In the <<<webapp>>> project, add a dependency to the ''sources JAR'' package:
 
 +---+
-  <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>gwt-maven-plugin</artifactId>
-    <version>${project.version}</version>
-    <executions>
-        ...
-    </executions>
-      <configuration>
-        <compileSourcesArtifacts>
-          <artifact>org.codehaus.mojo:domain</artifact>
-        </compileSourcesArtifacts>
-      </configuration>
-  </plugin>
-
+<dependencies>
+  <dependency>
+    <groupId>com.mycompany</groupId>
+    <artifactId>domain</artifactId>
+    <version>\${project.version}</version>
+    <classifier>sources</classifier>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
 +---+

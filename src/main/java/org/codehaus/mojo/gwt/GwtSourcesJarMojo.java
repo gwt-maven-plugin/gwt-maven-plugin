@@ -41,7 +41,9 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
  * to gwt:resources for better Eclipse projects synchronization.
  * 
  * @author <a href="mailto:vlads@pyx4j.com">Vlad Skarzhevskyy</a>
+ * @deprecated use maven-source-plugin and sources classifier dependencies instead
  */
+@Deprecated
 @Mojo(name = "source-jar", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class GwtSourcesJarMojo
     extends GwtResourcesBaseMojo

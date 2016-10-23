@@ -36,7 +36,9 @@ import org.codehaus.plexus.util.FileUtils;
  * filtering as the module descriptor is read to detect sources to be copied.
  * 
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
+ * @deprecated use maven-source-plugin and sources classifier dependencies instead
  */
+@Deprecated
 @Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
 public class GwtResourcesMojo
     extends GwtResourcesBaseMojo

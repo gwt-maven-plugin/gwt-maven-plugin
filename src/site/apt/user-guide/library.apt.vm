@@ -26,7 +26,7 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-Writing a GWT library
+Writing a GWT library (a.k.a. gwt lib)
 
  A GWT library can be used to package classes for mutualization and/or modularization. A GWT library is just a
  java archive (JAR) containing both classes and java sources for later GWT compilation and a gwt.xml module
@@ -49,77 +49,50 @@ Writing a GWT library
     </resources>
 +---
 
- Another option is to let the plugin detect the required source to be included, based on the module descriptor.
- The benefict is that the plugin will not include java files that are not declared as GWT source by the module
- descriptor, avoiding end-user to reference your internal classes (usually for library that include both client
- and server side components).
-
-+---
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resources</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-+---
-
-Using general purpose JARs as GWT library
+Using general purpose JARs as GWT library (a.k.a. shared lib)
 
  Many users want to use common usage libraries as GWT modules. Some would like to reuse the server-side business classes
  on client side, using a shared Maven module. The requirement to include sources in the JAR can then be annoying : including
  sur JAR in the webapp means the source code will be distributed with the application.
 
- gwt-maven-plugin provides a convenient *hack* to work around this restriction using
- {{{http://maven.apache.org/plugins/maven-source-plugin/jar-mojo.html}Maven convention for source jars}}.
- The ''compileSourcesArtifacts'' parameter can be used to select a subset of project dependencies
- (using "groupId:artifactId" syntax). The plugin will download (or get from your local repository) the artifact
- sources and add them to the compiler Classpath.
+ As the sources are not included in the JAR, you need to use the
+ {{{http://maven.apache.org/plugins/maven-source-plugin/jar-mojo.html}maven convention for source jars}} to create
+ a ''sources'' package, and include it as a ''<clasifier>sources</clasifier>'' dependency.
 
 +---
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <compileSourcesArtifacts>
-          <compileSourcesArtifact>com.myCompany:domain</compileSourcesArtifact>
-        </compileSourcesArtifacts>
-      </plugin>
+<dependencies>
+  <dependency>
+    <groupId>com.mycompany</groupId>
+    <artifactId>domain</artifactId>
+    <version>\${project.version}</version>
+    <classifier>sources</classifier>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
 +---
 
  The only missing fragment to allow using this library from your GWT code is to create a ''gwt.xml'' module file.
- Create file ''com/mycompany/Domain.gwt.xml'' to match package ''com.mycompany.domain'' to be included as
- GWT code resource :
+ Create file ''com/mycompany/Domain.gwt.xml'' to match package ''com.mycompany.domain'':
 
-+---
-<module>
-  <inherits name="com.google.gwt.user.User" />
-  <source path="domain" />
-</module>
-+---
+%{snippet|id=domain-module|file=src/it/reactor/jar/src/main/java/org/codehaus/mojo/gwt/test/Domain.gwt.xml}
 
- You can include this file in the ''domain'' JAR (as it will reasonably "pollute" the artifact)
+ If you have control of the ''domain'' lib, include this file in the ''domain'' project:
 
 +---
   |_ domain
-  |  |_ src/main/java/com/mycompany/domain/SomeUseFullClass.java
+  |  |_ src/main/java/com/mycompany/domain/SomeDomainClass.java
   |  |_ src/main/resources/com/mycompany/Domain.gwt.xml
   |_ webapp
      |_ src/main/resources/com/mycompany/web/MyApp.gwt.xml
 +---
 
- ... or create one for your webapp by creating a phantom package to only contain this file.
+ …otherwise, add the GWT module in the ''webapp'' project:
 
 +---
   |_ domain
-  |  |_ src/main/java/com/mycompany/domain/SomeUseFullClass.java
+  |  |_ src/main/java/com/mycompany/domain/SomeDomainClass.java
   |_ webapp
   |  |_ src/main/resources
         |_ com/mycompany/Domain.gwt.xml
-        |_ com/mycompany/web/MyApp.gwt.xml
+        |_ com/mycompany/MyApp.gwt.xml
 +---

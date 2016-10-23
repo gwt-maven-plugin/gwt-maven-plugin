@@ -122,7 +122,10 @@ public abstract class AbstractGwtShellMojo
      * This option is a workaround to avoid packaging sources inside the same JAR when splitting and application into
      * modules. A smaller JAR can then be used on server classpath and distributed without sources (that may not be
      * desirable).
+     *
+     * @deprecated add a {@code <classifier>sources</classifier>} dependency instead
      */
+    @Deprecated
     @Parameter
     private String[] compileSourcesArtifacts;
 
