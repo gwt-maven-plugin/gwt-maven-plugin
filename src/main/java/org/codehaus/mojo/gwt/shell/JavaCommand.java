@@ -333,10 +333,6 @@ public class JavaCommand
         }
         catch ( CommandLineTimeOutException e )
         {
-            if ( timeOut > 0 )
-            {
-                log.error( "Forked JVM has been killed on time-out after " + timeOut + " seconds" );
-            }
             throw new JavaCommandException(
                     "Time-out on command line execution" + (printCommandOnError ? ":\n" + command : ""), e );
         }
