@@ -249,6 +249,8 @@ public class EclipseMojo
                 page += "?" + additionalPageParameters;
             }
 
+            context.put( "noserver", !noserver ? "true" : "false" );
+            context.put( "port", "" + port );
             context.put( "modulePath", readModule( module ).getPath() );
             context.put( "page", page );
             int basedir = getProject().getBasedir().getAbsolutePath().length();
