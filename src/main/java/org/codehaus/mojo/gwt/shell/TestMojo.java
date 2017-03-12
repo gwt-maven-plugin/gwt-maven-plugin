@@ -461,8 +461,9 @@ public class TestMojo
 
                 cmd.execute();
             }
-            catch ( ForkedProcessExecutionException e )
+            catch ( JavaCommandException e )
             {
+                getLog().warn("GWT test failure", e);
                 failures++;
             }
         }

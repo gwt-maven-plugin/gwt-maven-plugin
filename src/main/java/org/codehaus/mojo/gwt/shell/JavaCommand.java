@@ -314,21 +314,12 @@ public class JavaCommand
             }
             log.debug( "Execute command :\n" + cmd.toString() );
             log.debug( "With CLASSPATH :\n" + classpath );
-            int status;
-            if ( timeOut > 0 )
-            {
-                status = CommandLineUtils.executeCommandLine( cmd, out, err, timeOut );
-            }
-            else
-            {
-                status = CommandLineUtils.executeCommandLine( cmd, out, err );
-            }
+            int status = CommandLineUtils.executeCommandLine( cmd, out, err, timeOut );
 
             if ( status != 0 )
             {
-                throw new JavaCommandException( "Command "
-                        + ( printCommandOnError ? "[[\n" + cmd.toString() + "\n]] " : "" )
-                        + "failed with status "  + status );
+                throw new JavaCommandException( "Command failed with status "  + status
+                        + (printCommandOnError ? ":\n" + cmd : "" ) );
             }
         }
         catch ( CommandLineTimeOutException e )
