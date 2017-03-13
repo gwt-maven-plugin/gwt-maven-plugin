@@ -66,8 +66,6 @@ Comfortable debugging with GWT, Maven and Eclipse
 	* ensure that Workspace resolution is enabled
 
 
-    <<<>>>
-
 [../images/user-guide/guidelinesenabled_workspace_resolution.png]
 
 * Generating Launch configuration

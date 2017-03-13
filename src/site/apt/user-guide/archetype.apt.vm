@@ -54,8 +54,6 @@ Using the Archetype
 
   The generated project layout looks like following figure :
 
-  <<<>>>
-
 [../images/user-guide/projectLayout.png]
 
   It uses M2Eclipse for classpath management and Google Eclipse Plugin for nice GWT
