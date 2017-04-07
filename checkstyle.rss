@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mojohaus.org/gwt-maven-plugin</link>
     <description>Mojo's Maven Plugin for GWT - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2007 - 2016 MojoHaus</copyright>
+    <copyright>&#169;2007 - 2017 MojoHaus</copyright>
     <item>
-      <title>File: 43,
-             Errors: 728,
-             Warnings: 156,
+      <title>File: 42,
+             Errors: 731,
+             Warnings: 148,
              Infos: 9
       </title>
             <link>http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html</link>
@@ -503,7 +503,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  87
+                  89
                 </td>
               </tr>
                           <tr>
@@ -545,21 +545,7 @@ under the License.
                   44
                 </td>
                 <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mojohaus.org/gwt-maven-plugin/checkstyle.html#org.codehaus.mojo.gwt.shell.ForkedProcessExecutionException.java">org/codehaus/mojo/gwt/shell/ForkedProcessExecutionException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
-                </td>
-                <td>
-                  0
+                  12
                 </td>
               </tr>
                           <tr>
