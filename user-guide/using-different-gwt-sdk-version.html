@@ -288,7 +288,7 @@ Thomas Broyer" />
                                   
             <!-- Licensed to the Apache Software Foundation (ASF) under one --><!-- or more contributor license agreements.  See the NOTICE file --><!-- distributed with this work for additional information --><!-- regarding copyright ownership.  The ASF licenses this file --><!-- to you under the Apache License, Version 2.0 (the --><!-- "License"); you may not use this file except in compliance --><!-- with the License.  You may obtain a copy of the License at --><!--  --><!-- http://www.apache.org/licenses/LICENSE-2.0 --><!--  --><!-- Unless required by applicable law or agreed to in writing, --><!-- software distributed under the License is distributed on an --><!-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY --><!-- KIND, either express or implied.  See the License for the --><!-- specific language governing permissions and limitations --><!-- under the License. --><!-- NOTE: For help with the syntax of this file, see: --><!-- http://maven.apache.org/doxia/references/apt-format.html --><div class="section">
 <h2><a name="Using_a_different_GWT_SDK_version"></a>Using a different GWT SDK version</h2>
-<p>Currently the plugin uses and has been tested with GWT $<a name="gwt.version">gwt.version</a>. This version is defined in the plugin dependencies, so if you want another (newer) version you must change your pom as follows:</p>
+<p>Currently the plugin uses and has been tested with GWT 2.8.0. This version is defined in the plugin dependencies, so if you want another (newer) version you must change your pom as follows:</p>
 <div class="source"><pre class="prettyprint">&lt;project&gt;
   &lt;properties&gt;
     &lt;gwt.version&gt;your preferred GWT SDK version here&lt;/gwt.version&gt;
@@ -300,22 +300,22 @@ Thomas Broyer" />
       &lt;plugin&gt;
         &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
         &lt;artifactId&gt;gwt-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;${site.plugin.version}&lt;/version&gt;
+        &lt;version&gt;2.8.0&lt;/version&gt;
         &lt;dependencies&gt;
           &lt;dependency&gt;
             &lt;groupId&gt;com.google.gwt&lt;/groupId&gt;
             &lt;artifactId&gt;gwt-user&lt;/artifactId&gt;
-            &lt;version&gt;${gwt.version}&lt;/version&gt;
+            &lt;version&gt;2.8.0&lt;/version&gt;
           &lt;/dependency&gt;
           &lt;dependency&gt;
             &lt;groupId&gt;com.google.gwt&lt;/groupId&gt;
             &lt;artifactId&gt;gwt-dev&lt;/artifactId&gt;
-            &lt;version&gt;${gwt.version}&lt;/version&gt;
+            &lt;version&gt;2.8.0&lt;/version&gt;
           &lt;/dependency&gt;
           &lt;dependency&gt;
             &lt;groupId&gt;com.google.gwt&lt;/groupId&gt;
             &lt;artifactId&gt;gwt-codeserver&lt;/artifactId&gt;
-            &lt;version&gt;${gwt.version}&lt;/version&gt;
+            &lt;version&gt;2.8.0&lt;/version&gt;
           &lt;/dependency&gt;
         &lt;/dependencies&gt;
       &lt;/plugin&gt;
