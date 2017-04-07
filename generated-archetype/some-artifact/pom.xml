@@ -15,9 +15,9 @@
     <!-- Convenience property to set the GWT version -->
     <gwtVersion>2.8.0-SNAPSHOT</gwtVersion>
 
-    <!-- GWT needs at least java 1.7 -->
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <!-- GWT needs at least java 1.8 -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
