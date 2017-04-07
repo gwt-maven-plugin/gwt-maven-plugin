@@ -3,6 +3,8 @@
  -------
  -------
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Configuring DevMode
 
   Another aspect of gwt-maven-plugin to be familiar with it can help you configure the

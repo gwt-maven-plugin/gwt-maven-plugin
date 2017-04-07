@@ -25,6 +25,8 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Easy Integration of the GWT Compile Report in your Maven Site
 
   You must activate the {{{../compile-mojo.html}compiler mojo}} option <<<compileReport>>> 
@@ -38,7 +40,7 @@ Easy Integration of the GWT Compile Report in your Maven Site
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <configuration>
           <compileReport>true</compileReport>
         </configuration>
@@ -52,7 +54,7 @@ Easy Integration of the GWT Compile Report in your Maven Site
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <reportSets>
           <reportSet>
             <reports>

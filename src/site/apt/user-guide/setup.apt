@@ -3,6 +3,8 @@
  ------
  ------
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Setup Maven for GWT development
 
  In order to use gwt-maven-plugin, you will need to configure it using the plugin configuration in your POM.
@@ -17,13 +19,13 @@ Setup Maven for GWT development
 	  <dependency>
 	    <groupId>com.google.gwt</groupId>
 	    <artifactId>gwt-servlet</artifactId>
-	    <version>${project.version}</version>
+	    <version>${sitePluginVersion}</version>
 	    <scope>compile</scope>
 	  </dependency>
 	  <dependency>
 	    <groupId>com.google.gwt</groupId>
 	    <artifactId>gwt-user</artifactId>
-	    <version>${project.version}</version>
+	    <version>${sitePluginVersion}</version>
 	    <scope>provided</scope>
 	  </dependency>
   <dependencies>
@@ -33,7 +35,7 @@ Setup Maven for GWT development
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <executions>
           <execution>
             <goals>

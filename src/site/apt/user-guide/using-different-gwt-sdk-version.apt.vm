@@ -26,9 +26,11 @@ Thomas Broyer
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Using a different GWT SDK version
 
-  Currently the plugin uses and has been tested with GWT ${gwtVersion}.
+  Currently the plugin uses and has been tested with GWT ${siteGwtVersion}.
   This version is defined in the plugin dependencies, so if you want another (newer) version you must change
   your pom as follows:
   
@@ -44,22 +46,22 @@ Using a different GWT SDK version
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <dependencies>
           <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>${gwt.version}</version>
+            <version>${siteGwtVersion}</version>
           </dependency>
           <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
-            <version>${gwt.version}</version>
+            <version>${siteGwtVersion}</version>
           </dependency>
           <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-codeserver</artifactId>
-            <version>${gwt.version}</version>
+            <version>${siteGwtVersion}</version>
           </dependency>
         </dependencies>
       </plugin>

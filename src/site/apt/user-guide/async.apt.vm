@@ -25,6 +25,10 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html 
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
+%{snippet|file=src/site/async.html|verbatim=false}
+
 Generate Async interfaces for GWT-RPC services
 
 * About
@@ -79,7 +83,7 @@ public interface HelloWorldServiceAsync
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <executions>
           <execution>
             <configuration>

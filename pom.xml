@@ -122,8 +122,6 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
     <gwt.version>2.8.0</gwt.version>
-    <!--  apt filterting doesn't support dot -->
-    <gwtVersion>${gwt.version}</gwtVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <mavenPluginPluginVersion>3.4</mavenPluginPluginVersion>
     <mojo.java.target>1.6</mojo.java.target>
@@ -132,6 +130,9 @@
     <it.localWorkers>-1</it.localWorkers>
     <stagingSiteRepositoryId>github-ssh</stagingSiteRepositoryId>
     <stagingSiteURL>gitsite:git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</stagingSiteURL>
+    <!-- apt do not support dots in property names, and we use last plugin release on site -->
+    <siteGwtVersion>2.8.0</siteGwtVersion>
+    <sitePluginVersion>2.8.0</sitePluginVersion>
   </properties>
 
   <dependencies>
@@ -365,10 +366,10 @@
               <settingsFile>src/it/settings.xml</settingsFile>
               <cloneProjectsTo>${project.build.directory}/it-tests</cloneProjectsTo>
               <extraArtifacts>
-                <extraArtifact>com.google.gwt:gwt-servlet:${gwtVersion}:jar</extraArtifact>
+                <extraArtifact>com.google.gwt:gwt-servlet:${gwt.version}:jar</extraArtifact>
                 <!-- for some reason, com.google.web.bindery:requestfactory isn't installed,
                      whereas it's needed by com.google.gwt:gwt -->
-                <extraArtifact>com.google.web.bindery:requestfactory:${gwtVersion}:pom</extraArtifact>
+                <extraArtifact>com.google.web.bindery:requestfactory:${gwt.version}:pom</extraArtifact>
               </extraArtifacts>
             </configuration>
             <executions>

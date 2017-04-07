@@ -25,6 +25,8 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Multi-Project Setup
 
   Often, larger Maven projects will be divided into sub projects. How

@@ -25,6 +25,8 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
+%{snippet|file=src/site/legacy.html|verbatim=false}
+
 Compile GWT application
 
   You can use the following configuration in your pom.xml to run the GWT compiler
@@ -40,7 +42,7 @@ Compile GWT application
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <executions>
           <execution>
             <configuration>
@@ -106,7 +108,7 @@ Compile GWT application
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>${sitePluginVersion}</version>
         <executions>
           <execution>
             <configuration>
