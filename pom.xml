@@ -131,8 +131,8 @@
     <stagingSiteRepositoryId>github-ssh</stagingSiteRepositoryId>
     <stagingSiteURL>gitsite:git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</stagingSiteURL>
     <!-- apt do not support dots in property names, and we use last plugin release on site -->
-    <siteGwtVersion>2.8.0</siteGwtVersion>
-    <sitePluginVersion>2.8.0</sitePluginVersion>
+    <siteGwtVersion>2.8.1</siteGwtVersion>
+    <sitePluginVersion>2.8.1</sitePluginVersion>
   </properties>
 
   <dependencies>
