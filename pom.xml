@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>38</version>
+    <version>40</version>
   </parent>
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.8.2-SNAPSHOT</version>
@@ -121,9 +121,9 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
-    <gwt.version>2.8.1</gwt.version>
+    <gwt.version>2.8.2</gwt.version>
     <mavenVersion>3.0.5</mavenVersion>
-    <mavenPluginPluginVersion>3.4</mavenPluginPluginVersion>
+    <mavenPluginPluginVersion>3.5</mavenPluginPluginVersion>
     <mojo.java.target>1.6</mojo.java.target>
     <doxia-sitetoolsVersion>1.6</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
@@ -131,8 +131,8 @@
     <stagingSiteRepositoryId>github-ssh</stagingSiteRepositoryId>
     <stagingSiteURL>gitsite:git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</stagingSiteURL>
     <!-- apt do not support dots in property names, and we use last plugin release on site -->
-    <siteGwtVersion>2.8.1</siteGwtVersion>
-    <sitePluginVersion>2.8.1</sitePluginVersion>
+    <siteGwtVersion>2.8.2</siteGwtVersion>
+    <sitePluginVersion>2.8.2</sitePluginVersion>
   </properties>
 
   <dependencies>
@@ -219,7 +219,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.0.18</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>com.thoughtworks.qdox</groupId>
@@ -246,13 +246,13 @@
       <!-- used to unpack gwt native libs -->
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>2.6.3</version>
+      <version>3.5</version>
     </dependency>
 	<dependency>
       <!--  used for GwtSourcesJarMojo -->
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-archiver</artifactId>
-      <version>2.5</version>
+      <version>3.2.0</version>
 	</dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -347,7 +347,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.9</version>
+            <version>3.0.1</version>
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
@@ -527,7 +527,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- -->
     </plugins>
   </build>
 

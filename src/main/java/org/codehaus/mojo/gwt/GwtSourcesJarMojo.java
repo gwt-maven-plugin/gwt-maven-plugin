@@ -118,7 +118,7 @@ public class GwtSourcesJarMojo
             // Add the context of original jar excluding resources that we just added base on GWT descriptors
             jarArchiver.addArchivedFileSet( origJarFile, null, jarExcludes.toArray( new String[jarExcludes.size()] ) );
 
-            archiver.createArchive( getProject(), archive );
+            archiver.createArchive( session , getProject(), archive );
         }
         catch ( Exception e )
         {

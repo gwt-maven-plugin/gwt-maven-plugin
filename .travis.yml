@@ -1,26 +1,27 @@
 language: java
 
 jdk:
-  - oraclejdk7
   - openjdk7
   - oraclejdk8
+  - oraclejdk9
 
 install: mvn -U verify clean --fail-never --quiet -DskipTests -Dinvoker.skip
 
-script:  mvn -U verify --fail-at-end
+script:  mvn -U verify --fail-at-end -Dinvoker.streamLogs=true -Dinvoker.mavenOpts="-Djava.net.preferIPv4Stack=true"
 
 notifications:
-  email:
-    on_success: never
+  email: false
 
 matrix:
   fast_finish: true
 
 after_success:
   - ci/deploy-snapshot.sh
-#  - ci/deploy-site.sh
 
 sudo: false
+before_cache:
+  - shopt -s globstar && rm -fr $HOME/.m2/**/*-SNAPSHOT/
+  - shopt -s globstar && rm -fr target/it-repo/**/*-SNAPSHOT/
 cache:
   directories:
     - $HOME/.m2
