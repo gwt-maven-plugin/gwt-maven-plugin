@@ -7,7 +7,7 @@ jdk:
 
 install: mvn -U verify clean --fail-never --quiet -DskipTests -Dinvoker.skip
 
-script:  mvn -U verify --fail-at-end -Dinvoker.streamLogs=true -Dinvoker.mavenOpts="-Djava.net.preferIPv4Stack=true"
+script:  mvn -U verify --fail-at-end
 
 notifications:
   email: false
