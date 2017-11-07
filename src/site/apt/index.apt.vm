@@ -42,7 +42,7 @@ Mojo's Maven Plugin for GWT
  or by reading the online
  {{{http://www.sonatype.com/books/mvnref-book/reference/public-book.html}reference book}}.
  
- << This mojo has been developped and tested with the gwt version ${siteGwtVersion} >>
+ << This plugin has been developped and tested with the gwt version ${siteGwtVersion} >>
  
 
   
