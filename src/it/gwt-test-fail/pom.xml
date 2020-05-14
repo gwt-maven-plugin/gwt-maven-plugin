@@ -21,10 +21,10 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
-      </plugin>    
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -35,7 +35,7 @@
           <copyWebapp>true</copyWebapp>
           <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
           <draftCompile>true</draftCompile>
-          <optimizationLevel>1</optimizationLevel>          
+          <optimizationLevel>1</optimizationLevel>
           <mode>htmlunit</mode>
           <productionMode>true</productionMode>
         </configuration>

@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>40</version>
+    <version>50</version>
   </parent>
   <artifactId>gwt-maven-plugin</artifactId>
   <version>2.8.3-SNAPSHOT</version>
@@ -118,21 +118,21 @@
     <url>https://travis-ci.org/gwt-maven-plugin/gwt-maven-plugin/</url>
   </ciManagement>
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
-    <gwt.version>2.8.2</gwt.version>
+    <gwt.version>2.9.0</gwt.version>
     <mavenVersion>3.0.5</mavenVersion>
     <mavenPluginPluginVersion>3.5</mavenPluginPluginVersion>
-    <mojo.java.target>1.7</mojo.java.target>
+    <mojo.java.target>1.8</mojo.java.target>
     <doxia-sitetoolsVersion>1.6</doxia-sitetoolsVersion>
     <!--  to be able on powerfull ci machine to change it tru the cli :-) -->
     <it.localWorkers>-1</it.localWorkers>
     <stagingSiteRepositoryId>github-ssh</stagingSiteRepositoryId>
     <stagingSiteURL>gitsite:git@github.com/gwt-maven-plugin/gwt-maven-plugin.git</stagingSiteURL>
     <!-- apt do not support dots in property names, and we use last plugin release on site -->
-    <siteGwtVersion>2.8.2</siteGwtVersion>
-    <sitePluginVersion>2.8.2</sitePluginVersion>
+    <siteGwtVersion>${gwt.version}</siteGwtVersion>
+    <sitePluginVersion>${gwt.version}</sitePluginVersion>
   </properties>
 
   <dependencies>
@@ -179,19 +179,19 @@
       <artifactId>maven-reporting-impl</artifactId>
       <version>2.1</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
       <version>1.5.5</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-sink-api</artifactId>
       <version>${doxia-sitetoolsVersion}</version>
     </dependency>
-    
+
     <!-- Doxia-sitetools -->
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
@@ -207,8 +207,8 @@
           <artifactId>plexus-component-api</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>    
-    
+    </dependency>
+
     <!-- TODO: get rid of this! -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -280,7 +280,7 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
@@ -347,7 +347,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.2.1</version>
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
@@ -465,7 +465,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.11</version>
+        <version>1.18</version>
         <configuration>
           <signature>
             <groupId>org.codehaus.mojo.signature</groupId>
@@ -502,7 +502,7 @@
       </snapshots>
     </repository>
   </repositories>
-  
+
   <pluginRepositories>
     <pluginRepository>
       <id>apache.snapshots</id>
@@ -514,6 +514,6 @@
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
-  </pluginRepositories>  
+  </pluginRepositories>
 
 </project>

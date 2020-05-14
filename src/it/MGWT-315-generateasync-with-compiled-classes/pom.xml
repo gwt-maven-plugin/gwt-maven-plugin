@@ -32,8 +32,8 @@
         <version>@pom.version@</version>
         <configuration>
           <draftCompile>true</draftCompile>
-          <optimizationLevel>0</optimizationLevel>     
-          <soyc>false</soyc>   
+          <optimizationLevel>0</optimizationLevel>
+          <soyc>false</soyc>
         </configuration>
         <executions>
           <!-- Intentionally bind to a phase after compile -->
@@ -49,8 +49,8 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 

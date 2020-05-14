@@ -15,7 +15,7 @@
     <!-- Convenience property to set the GWT version -->
     <gwt.version>${gwt.version}</gwt.version>
 
-    <!-- GWT 2.8 requires 1.8 -->
+    <!-- GWT 2.9 support 8, 9 and 11 -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
@@ -78,7 +78,7 @@
             </goals>
           </execution>
         </executions>
-        <!-- Plugin configuration. There are many available options, see 
+        <!-- Plugin configuration. There are many available options, see
           gwt-maven-plugin documentation at codehaus.org -->
         <configuration>
           <runTarget>\${module}.html</runTarget>

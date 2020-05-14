@@ -31,8 +31,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -44,7 +44,7 @@
           <logLevel>INFO</logLevel>
           <style>OBF</style>
           <draftCompile>true</draftCompile>
-          <optimizationLevel>1</optimizationLevel>          
+          <optimizationLevel>1</optimizationLevel>
           <extraParam>true</extraParam>
           <soyc>false</soyc>
           <strict>true</strict>
@@ -67,7 +67,7 @@
             <goals>
               <goal>mergewebxml</goal>
             </goals>
-          </execution>          
+          </execution>
         </executions>
       </plugin>
     </plugins>
