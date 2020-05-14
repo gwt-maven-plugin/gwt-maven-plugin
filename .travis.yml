@@ -1,9 +1,9 @@
 language: java
 
 jdk:
-  - openjdk7
-  - oraclejdk8
-  - oraclejdk9
+  - openjdk8
+  - openjdk11
+  - openjdk-ea
 
 install: mvn -U verify clean --fail-never --quiet -DskipTests -Dinvoker.skip
 
@@ -14,6 +14,8 @@ notifications:
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - jdk: openjdk-ea
 
 after_success:
   - ci/deploy-snapshot.sh
