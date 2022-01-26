@@ -69,6 +69,10 @@
             -Xms64m
             -Xmx1g
           </extraJvmArgs>
+          <compilerArgs>
+            <arg>-setProperty</arg>
+            <arg>user.agent=gecko1_8</arg>
+          </compilerArgs>
         </configuration>
         <executions>
           <execution>

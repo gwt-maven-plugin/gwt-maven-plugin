@@ -25,5 +25,5 @@
   <public path="public"/>
   <entry-point class="org.codehaus.mojo.gwt.test.client.Hello"/>
   <servlet path="/HelloService" class="org.codehaus.mojo.gwt.test.server.HelloRemoteServlet"/>
-  <set-property name="user.agent" value="gecko1_8"/>  
+  <set-property name="user.agent" value="safari"/>  
 </module>
