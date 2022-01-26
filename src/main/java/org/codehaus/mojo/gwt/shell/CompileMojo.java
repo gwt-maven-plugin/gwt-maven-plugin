@@ -23,6 +23,7 @@ package org.codehaus.mojo.gwt.shell;
  *
  */
 
+import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -383,6 +384,14 @@ public class CompileMojo
     @Parameter
     private CoverageConfiguration coverage;
 
+    /**
+     * Additional arguments to be passed to the GWT compiler.
+     *
+     * @since 2.9.1 (since 2.7.0 of GWT compiler)
+     */
+    @Parameter
+    private List<String> compilerArgs;
+
     public void doExecute( )
         throws MojoExecutionException, MojoFailureException
     {
@@ -509,6 +518,13 @@ public class CompileMojo
         if ( workDir != null )
         {
             cmd.arg( "-workDir" ).arg( String.valueOf( workDir ) );
+        }
+
+        if (compilerArgs != null) {
+            for (String compilerArg : compilerArgs)
+            {
+                cmd.arg(compilerArg);
+            }
         }
 
         for ( String target : modules )

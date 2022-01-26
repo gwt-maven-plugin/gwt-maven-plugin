@@ -51,5 +51,6 @@ assert content.contains( '-XnoremoveDuplicateFunctions' );
 assert content.contains( "'-sourceLevel' 'auto'" ) || content.contains( "-sourceLevel auto" );
 assert content.contains( "'-Xnamespace' 'NONE'" ) || content.contains( "-Xnamespace NONE" );
 assert content.contains( "'-XmethodNameDisplayMode' 'FULL'" ) || content.contains( "-XmethodNameDisplayMode FULL" );
+assert content.contains( "'-setProperty' 'user.agent=gecko1_8'" ) || content.contains( "-setProperty user.agent=gecko1_8" );
   
 return true;

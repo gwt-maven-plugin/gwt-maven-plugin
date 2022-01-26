@@ -17,5 +17,5 @@
   <source path="client"/>
   <public path="public"/>
   <entry-point class="com.google.gwt.sample.hello.client.Hello"/>
-  <set-property name="user.agent" value="gecko1_8"/>  
+  <set-property name="user.agent" value="safari"/>  
 </module>
