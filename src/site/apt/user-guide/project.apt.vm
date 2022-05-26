@@ -32,13 +32,13 @@ Project organization
 +--
   <dependencies>
     <dependency>
-      <groupId>com.google.gwt</groupId>
+      <groupId>org.gwtproject</groupId>
       <artifactId>gwt-servlet</artifactId>
       <version>${sitePluginVersion}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.gwt</groupId>
+      <groupId>org.gwtproject</groupId>
       <artifactId>gwt-user</artifactId>
       <version>${sitePluginVersion}</version>
       <scope>provided</scope>
