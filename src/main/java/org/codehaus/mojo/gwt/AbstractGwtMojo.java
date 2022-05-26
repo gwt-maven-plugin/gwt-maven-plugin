@@ -71,12 +71,12 @@ import java.util.Set;
 public abstract class AbstractGwtMojo
     extends AbstractMojo
 {
-    protected static final String GWT_USER = "com.google.gwt:gwt-user";
+    protected static final String GWT_USER = "org.gwtproject:gwt-user";
 
-    protected static final String GWT_DEV = "com.google.gwt:gwt-dev";
+    protected static final String GWT_DEV = "org.gwtproject:gwt-dev";
 
     /** GWT artifacts groupId */
-    public static final String GWT_GROUP_ID = "com.google.gwt";
+    public static final String GWT_GROUP_ID = "org.gwtproject";
 
     // --- Some Maven tools ----------------------------------------------------
 
@@ -287,7 +287,7 @@ public abstract class AbstractGwtMojo
             result = resolver.resolveTransitively( dependencyArtifacts, rootArtifact,
                                                    Collections.EMPTY_MAP, localRepository,
                                                    remoteRepositories, artifactMetadataSource,
-                                                   null, Collections.EMPTY_LIST);
+                                                   null, Collections.emptyList());
         }
         catch (Exception e)
         {

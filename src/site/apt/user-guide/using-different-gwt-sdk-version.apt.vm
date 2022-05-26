@@ -49,17 +49,17 @@ Using a different GWT SDK version
         <version>${sitePluginVersion}</version>
         <dependencies>
           <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${siteGwtVersion}</version>
           </dependency>
           <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-dev</artifactId>
             <version>${siteGwtVersion}</version>
           </dependency>
           <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-codeserver</artifactId>
             <version>${siteGwtVersion}</version>
           </dependency>

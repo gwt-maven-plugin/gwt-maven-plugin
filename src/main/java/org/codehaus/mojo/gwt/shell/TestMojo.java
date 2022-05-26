@@ -109,11 +109,11 @@ public class TestMojo
 
     /**
      * Configure options to run tests with HTMLUnit. The value must describe the browser emulation
-     * to be used, FF31, FF38, IE8, IE11, Chrome or Edge (possible multiple values separated by comas).
+     * to be used, FF, Chrome, IE or Edge (possible multiple values separated by commas).
      * 
      * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideTestingHtmlUnit.html
      */
-    @Parameter(defaultValue = "FF38", property = "gwt.test.htmlunit")
+    @Parameter(defaultValue = "FF", property = "gwt.test.htmlunit")
     private String htmlunit;
 
     /**
