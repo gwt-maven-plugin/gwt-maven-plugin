@@ -246,7 +246,7 @@ public class GenerateAsyncMojo
             writer.println( "" );
             writer.println( "    /**" );
             writer.println( "     * GWT-RPC service  asynchronous (client-side) interface" );
-            writer.println( "     * @see " + clazz.getFullyQualifiedName() );
+            writer.println( "     * @see " + clazz.getFullyQualifiedName() + "#" + method.getName() );
             if ( deprecated )
                 writer.println( "     * @deprecated" );
             writer.println( "     */" );
@@ -258,7 +258,18 @@ public class GenerateAsyncMojo
             }
             else
             {
-                writer.print( "    void " + method.getName() + "( " );
+            	writer.print( "    ");
+            	if (method.getTypeParameters().length > 0) {
+            		writer.print("<");
+            		boolean comma = false;
+            		for (com.thoughtworks.qdox.model.TypeVariable type : method.getTypeParameters()) {
+            			writer.print((comma ? ", " : "") + type.getName() + " extends " + type.toString());
+            			comma = true;
+            		}
+            		writer.print("> ");
+            	}
+            	writer.print( "void ");
+            	writer.print(method.getName() + "( ");
             }
             JavaParameter[] params = method.getParameters();
             for ( int j = 0; j < params.length; j++ )
