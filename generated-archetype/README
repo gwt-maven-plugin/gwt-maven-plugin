@@ -12,7 +12,7 @@ Use the following command to generate the artifact :
 mvn archetype:generate \
    -DarchetypeGroupId=org.codehaus.mojo \
    -DarchetypeArtifactId=gwt-maven-plugin \
-   -DarchetypeVersion=2.3.0-1-SNAPSHOT \
+   -DarchetypeVersion=HEAD-SNAPSHOT \
    -DarchetypeCatalog=local \
    -DgroupId=com.company \
    -DartifactId=some-artifact \
