@@ -1,6 +1,6 @@
 package org.codehaus.mojo.gwt.utils;
 
-import org.apache.commons.logging.Log;
+import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.AbstractScanner;
 
 /*
