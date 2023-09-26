@@ -1,5 +1,8 @@
 package org.codehaus.mojo.gwt.utils;
 
+import org.apache.commons.logging.Log;
+import org.codehaus.plexus.util.AbstractScanner;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +21,17 @@ package org.codehaus.mojo.gwt.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import org.codehaus.plexus.util.AbstractScanner;
+import cern.colt.Arrays;
 
 /**
  * Scans jar files.
@@ -36,11 +42,13 @@ public final class JarFileScanner extends AbstractScanner
 {
     private final File jarFile;
     private final Set<String> matchingEntries;
+    private final Log log;
 
-    public JarFileScanner( File jarFile )
+    public JarFileScanner( File jarFile, Log log )
     {
         this.jarFile = jarFile;
         this.matchingEntries = new HashSet<String>();
+        this.log = log;
     }
 
     public String[] getIncludedFiles()
@@ -91,6 +99,22 @@ public final class JarFileScanner extends AbstractScanner
                 if ( !isExcluded( entryName ) )
                 {
                     matchingEntries.add(entryName);
+                }
+                else
+                {
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("entry " + entryName + " rejected; includes: " + Arrays.toString(
+                            includes) + "; excludes: " + Arrays.toString(excludes));
+                    }
+                }
+            }
+            else
+            {
+                if (log.isDebugEnabled())
+                {
+                    log.debug("entry " + entryName + " rejected; includes: " + Arrays.toString(
+                        includes) + "; excludes: " + Arrays.toString(excludes));
                 }
             }
             jarInputStream.closeEntry();

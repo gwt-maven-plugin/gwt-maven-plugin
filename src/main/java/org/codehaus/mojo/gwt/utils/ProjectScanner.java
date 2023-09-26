@@ -121,7 +121,7 @@ public final class ProjectScanner extends AbstractScanner
                 log.debug( "Scanning: " + fileOrDirectory.getPath() );
             }
 
-            AbstractScanner scanner = scannerFor( fileOrDirectory );
+            AbstractScanner scanner = scannerFor( fileOrDirectory, log );
             scanner.setIncludes( includes );
             scanner.setExcludes( excludes );
             scanner.scan();
@@ -142,7 +142,7 @@ public final class ProjectScanner extends AbstractScanner
         }
     }
 
-    private AbstractScanner scannerFor( File fileOrDirectory )
+    private AbstractScanner scannerFor( File fileOrDirectory, Log log )
             throws FileNotFoundException, IllegalArgumentException {
         if ( !fileOrDirectory.exists() )
         {
@@ -156,7 +156,7 @@ public final class ProjectScanner extends AbstractScanner
         }
         else if ( fileOrDirectory.getName().endsWith( ".jar") )
         {
-            return new JarFileScanner( fileOrDirectory );
+            return new JarFileScanner( fileOrDirectory, log );
         }
         else
         {
