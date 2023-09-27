@@ -101,7 +101,6 @@ public final class ProjectScanner extends AbstractScanner
         Collection<File> directories = new LinkedList<File>();
         if ( project != null )
         {
-            @SuppressWarnings("unchecked")
             Collection<String> roots = (Collection<String>) project.getCompileSourceRoots();
             for ( String root : roots )
             {
@@ -121,7 +120,7 @@ public final class ProjectScanner extends AbstractScanner
                 log.debug( "Scanning: " + fileOrDirectory.getPath() );
             }
 
-            AbstractScanner scanner = scannerFor( fileOrDirectory, log );
+            AbstractScanner scanner = scannerFor( fileOrDirectory );
             scanner.setIncludes( includes );
             scanner.setExcludes( excludes );
             scanner.scan();
@@ -142,7 +141,7 @@ public final class ProjectScanner extends AbstractScanner
         }
     }
 
-    private AbstractScanner scannerFor( File fileOrDirectory, Log log )
+    private AbstractScanner scannerFor( File fileOrDirectory )
             throws FileNotFoundException, IllegalArgumentException {
         if ( !fileOrDirectory.exists() )
         {
@@ -156,7 +155,7 @@ public final class ProjectScanner extends AbstractScanner
         }
         else if ( fileOrDirectory.getName().endsWith( ".jar") )
         {
-            return new JarFileScanner( fileOrDirectory, log );
+            return new JarFileScanner( fileOrDirectory );
         }
         else
         {
