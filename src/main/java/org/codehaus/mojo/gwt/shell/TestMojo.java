@@ -128,7 +128,7 @@ public class TestMojo
     /**
      * Time out (in seconds) for test execution in dedicated JVM
      */
-    @Parameter(defaultValue = "60")
+    @Parameter(defaultValue = "600")
     @SuppressWarnings("unused")
     private int testTimeOut;
 

@@ -21,17 +21,17 @@ assert new File(basedir, 'target/gwt-coverage.in').exists();
 content = new File(basedir, 'target/gwt-coverage.in').text;
 
 // From the project
-assert content.contains( 'org/codehaus/mojo/gwt/test/client/Hello.java' );
-assert content.contains( 'org/codehaus/mojo/gwt/test/client/HelloService.java' );
-assert content.contains( 'org/codehaus/mojo/gwt/test/client/HelloServiceAsync.java' );
+assert content.contains( 'org' + File.separator + 'codehaus' + File.separator + 'mojo' + File.separator + 'gwt' + File.separator + 'test' + File.separator + 'client' + File.separator + 'Hello.java' );
+assert content.contains( 'org' + File.separator + 'codehaus' + File.separator + 'mojo' + File.separator + 'gwt' + File.separator + 'test' + File.separator + 'client' + File.separator + 'HelloService.java' );
+assert content.contains( 'org' + File.separator + 'codehaus' + File.separator + 'mojo' + File.separator + 'gwt' + File.separator + 'test' + File.separator + 'client' + File.separator + 'HelloServiceAsync.java' );
 
 // From the dependencies
-assert content.contains( 'com/google/gwt/core/client/GWT.java' );
+assert content.contains( 'com' + File.separator + 'google' + File.separator + 'gwt' + File.separator + 'core' + File.separator + 'client' + File.separator + 'GWT.java' );
 
 assert new File(basedir, 'build.log').exists();
 
 content = new File(basedir, 'build.log').text;
 assert content.contains( '-Dgwt.coverage=' );
-assert content.contains( 'target/gwt-coverage.in' );
+assert content.contains( 'target' + File.separator + 'gwt-coverage.in' );
 
 return true;
