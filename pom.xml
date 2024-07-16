@@ -121,7 +121,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <!-- This property is used in a filtered resources to check the version compatibility -->
-    <gwt.version>2.10.0</gwt.version>
+    <gwt.version>2.11.0</gwt.version>
     <mavenVersion>3.0.5</mavenVersion>
     <mavenPluginPluginVersion>3.5</mavenPluginPluginVersion>
     <mojo.java.target>1.8</mojo.java.target>
