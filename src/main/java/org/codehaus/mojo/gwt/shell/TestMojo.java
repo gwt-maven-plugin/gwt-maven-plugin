@@ -19,9 +19,12 @@ package org.codehaus.mojo.gwt.shell;
  * under the License.
  */
 
+import java.util.List;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -454,6 +457,15 @@ public class TestMojo
                 }
 
                 addCompileSourceArtifacts( cmd );
+
+                // Adding explicitly defined plugin-dependencies to classpath
+                List<Dependency> dependencies = ((PluginDescriptor) this.getPluginContext().get("pluginDescriptor")).getPlugin().getDependencies();
+                getLog().info("Adding explicitly defined plugin-dependencies to classpath: " + dependencies.toString());
+                for (Dependency dependency : dependencies)
+                {
+                    Collection<File> jarFiles = getJarFiles(dependency.getGroupId() + ":" + dependency.getArtifactId(), false);
+                    cmd.addToClasspath(jarFiles);
+                }
 
                 cmd.arg( test );
                 cmd.systemProperty( "surefire.reports", reportsDirectory.getAbsolutePath() );
