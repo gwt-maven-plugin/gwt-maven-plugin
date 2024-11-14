@@ -85,7 +85,10 @@ public final class JarFileScanner extends AbstractScanner
         JarEntry jarEntry;
         while ( ( jarEntry = jarInputStream.getNextJarEntry() ) != null )
         {
-            String entryName = jarEntry.getName();
+            // replace all "/" characters in the JAR's entry name by the platform-specific
+            // File.separator because the patterns against which the entry name will be matched
+            // has undergone the same transformation already
+            String entryName = jarEntry.getName().replaceAll("/", File.separatorChar == '\\' ? "\\\\" : File.separator);
             if ( isIncluded( entryName ) )
             {
                 if ( !isExcluded( entryName ) )

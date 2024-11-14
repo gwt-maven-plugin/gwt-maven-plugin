@@ -101,7 +101,6 @@ public final class ProjectScanner extends AbstractScanner
         Collection<File> directories = new LinkedList<File>();
         if ( project != null )
         {
-            @SuppressWarnings("unchecked")
             Collection<String> roots = (Collection<String>) project.getCompileSourceRoots();
             for ( String root : roots )
             {
